@@ -1,7 +1,7 @@
 package com.lop;
 
 //import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatArcDarkIJTheme;
-import com.lop.View.*;
+import com.lop.View.ConnectionWindow;
 
 import javax.swing.SwingUtilities;
 
