@@ -35,6 +35,7 @@ public class Controller implements ErrorInitiator {
      */
     public Response add(Request request) {
 
+        System.out.println(request.getParameters());
         Evenements event = new Evenements(Integer.parseInt(request.get("idReservataire")),
                 Integer.parseInt(request.get("numSalle")), request.get("numBloc"), request.get("eventName"),
                 request.get("eventDate"));

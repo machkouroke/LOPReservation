@@ -3,6 +3,8 @@ package com.lop;
 
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialLighterIJTheme;
 
+import com.lop.Controller.Controller;
+import com.lop.Model.dao.Factory;
 import com.lop.View.src.source.MainWindow;
 
 import javax.swing.*;
@@ -24,7 +26,7 @@ public class Main {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 try {
-                    MainWindow frame = new MainWindow();
+                    MainWindow frame = new MainWindow(new Controller(Factory.getInstance()));
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();

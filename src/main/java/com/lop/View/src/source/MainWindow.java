@@ -7,19 +7,23 @@ import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.CardLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.TableRowSorter;
-import com.toedter.calendar.JDateChooser;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
-public class MainWindow extends JFrame {
+import com.lop.Controller.Controller;
+import com.lop.ErrorEvent.ErrorListener;
+import com.lop.communication.Request;
+import com.lop.communication.Response;
+import com.toedter.calendar.JDateChooser;
+
+public class MainWindow extends JFrame implements ErrorListener {
 
     JPanel contenu;
     CardLayout cardlayout;
@@ -37,10 +41,11 @@ public class MainWindow extends JFrame {
     private final JDateChooser addDateEvent;
     private final JTable tableDelete;
     private final JTextField deleteIdText;
+    private final Controller controller;
 
-
-    public MainWindow() throws IOException {
-
+    public MainWindow(Controller controller) throws IOException {
+        this.controller = controller;
+        this.controller.addListener(this);
         setTitle("GESTION DES EVENEMENTS");
         setResizable(false);
         setName("GESTION DES EVENEMENTS");
@@ -321,13 +326,7 @@ public class MainWindow extends JFrame {
         iconAddForm.setIcon(imgAddForm);
 
         JButton boutonAjout = new JButton("AJOUTER");
-        boutonAjout.addActionListener(e -> {
-
-            if (addNumSalle.getText().equals("") || addNumBloc.getText().equals("") || addIdReservataire.getText().equals("") || addNomEvent.getText().equals("") || addDateEvent.getDate() == null) {
-                JOptionPane.showMessageDialog(null, "Certaines cases sont vides.\nEntrez toutes les valeurs.");
-            }
-
-        });
+        boutonAjout.addActionListener(this::addEvent);
         boutonAjout.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
         boutonAjout.setBounds(383, 407, 114, 23);
         panAdd.add(boutonAjout);
@@ -674,6 +673,21 @@ public class MainWindow extends JFrame {
 
     }
 
+//    public void addEvent(ActionEvent action) {
+//        if (addNumSalle.getText().equals("") || addNumBloc.getText().equals("") || addIdReservataire.getText().equals("") || addNomEvent.getText().equals("") || addDateEvent.getDate() == null) {
+//            JOptionPane.showMessageDialog(null, "Certaines cases sont vides.\nEntrez toutes les valeurs.");
+//        }
+//        Map<String, String> params = new HashMap<>();
+//        params.put("idReservataire",  this.addIdReservataire.getText());
+//        params.put("numSalle",  this.addNumSalle.getText());
+//        params.put("numBloc",  this.addNumBloc.getText());
+//        params.put("eventName",  this.addNomEvent.getText());
+//        params.put("eventDate", new SimpleDateFormat("yyyy-MM-dd").format(this.addDateEvent.getDate()));
+////        System.out.println();
+//        Response response =  this.controller.add(new Request("Ajout d'un utilisateur", params));
+//
+//    }
+
     public void searchInTable(String str, JTable table) {
 
         MyTableModel model = (MyTableModel) table.getModel();
@@ -683,5 +697,15 @@ public class MainWindow extends JFrame {
         model.fireTableDataChanged();
 
 
+    }
+
+    @Override
+    public void errorOccurred(String message) {
+        System.out.println(message);
+    }
+
+    @Override
+    public void noError(String message) {
+        System.out.println(message);
     }
 }
