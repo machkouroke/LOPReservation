@@ -52,7 +52,7 @@ public class Controller implements ErrorInitiator {
      * @param request objet request qui doit contenir l'id de la réservation à supprimer sous le nom idEvent
      * @return un objet Responses qui retourne juste un message si tout est correcte et un message d'erreur sinon
      */
-    public Response delete(Request request) throws DataBaseException {
+    public Response delete(Request request)  {
         int idEvent = Integer.parseInt(request.get("idEvent"));
         try {
             new EventManager(this.factory).delete(idEvent);
@@ -69,7 +69,7 @@ public class Controller implements ErrorInitiator {
      *                idReservataire, numSalle, numBloc, eventName, eventDate
      * @return un objet Responses qui retourne juste un message si tout est correcte et un message d'erreur sinon
      */
-    public Response update(Request request) throws DataBaseException {
+    public Response update(Request request)  {
         Evenements event = new Evenements(Integer.parseInt(request.get("idReservataire")),
                 Integer.parseInt(request.get("numSalle")), request.get("numBloc"), request.get("eventName"),
                 request.get("eventDate"));
@@ -87,7 +87,7 @@ public class Controller implements ErrorInitiator {
      * @param request objet request sans paramètre particulier
      * @return un objet Responses qui retourne juste un message si tout est correcte et un message d'erreur sinon
      */
-    public Response listeSalleReservataire(Request request) throws DataBaseException {
+    public Response listeSalleReservataire(Request request)  {
         try {
             return new Response("Liste des Réservation d'un réservataires données",
                     new EventManager(factory).listeSalleReservataire(Integer.parseInt(request.get("idReservataire"))), this);
@@ -102,7 +102,7 @@ public class Controller implements ErrorInitiator {
      * @param request objet request qui doit contenir le numéro du bloc : idBloc
      * @return un objet Responses qui retourne juste un message si tout est correcte et un message d'erreur sinon
      */
-    public Response evtInBloc(Request request) throws DataBaseException {
+    public Response evtInBloc(Request request)  {
 
         try {
             return new Response("Évènements dans un bloc données",
@@ -161,7 +161,7 @@ public class Controller implements ErrorInitiator {
      */
     public Response getAllReservations() {
         try {
-            return new Response("Liste de tous les évènments",
+            return new Response("Liste de tous les évènements",
                     new EventManager(factory).getAllReservations(), this);
         } catch (SQLException e) {
             return new Response(e, this);
@@ -197,3 +197,4 @@ public class Controller implements ErrorInitiator {
         }
     }
 }
+//OK....
