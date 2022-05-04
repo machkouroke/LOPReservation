@@ -6,9 +6,12 @@ package com.lop.View;
  */
 
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author unknown
@@ -27,11 +30,15 @@ public class ConnectionWindow extends JFrame {
     private JButton connectButton;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
     public ConnectionWindow() {
-        initComponents();
+        try {
+            initComponents();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         myInit();
     }
 
-    private void initComponents() {
+    private void initComponents() throws IOException {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         panel1 = new JPanel();
         welcome = new JLabel();
@@ -47,6 +54,9 @@ public class ConnectionWindow extends JFrame {
         //======== this ========
         setMinimumSize(null);
         setMaximizedBounds(null);
+        File file =  new File("test");
+        System.out.println(file.getAbsolutePath());
+        setIconImage(ImageIO.read(new File("src/main/java/com/lop/View/picture/lop.png")));
         var contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
 
