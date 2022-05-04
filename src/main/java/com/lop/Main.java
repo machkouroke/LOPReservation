@@ -1,7 +1,7 @@
 package com.lop;
 
 
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatArcDarkIJTheme;
+import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatLightOwlIJTheme;
 import com.lop.View.ConnectionWindow;
 
 import javax.swing.*;
@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException, InvocationTargetException {
 
          try {
-             UIManager.setLookAndFeel( new FlatArcDarkIJTheme() );
+             UIManager.setLookAndFeel( new FlatLightOwlIJTheme() );
          } catch( Exception ex ) {
              System.err.println( "Failed to initialize LaF" );
          }
