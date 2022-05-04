@@ -1,6 +1,5 @@
-package com.lop.View.src.Evenements;
+package com.lop.View.src.source;
 
-import java.awt.EventQueue;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -14,24 +13,20 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.swing.border.EtchedBorder;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
-public class Evenements extends JFrame  {
+public class MainWindow extends JFrame  {
 
 	/**
 	 *
@@ -63,24 +58,12 @@ public class Evenements extends JFrame  {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Evenements frame = new Evenements();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
 	 */
 	@SuppressWarnings("unused")
-	public Evenements() throws IOException {
+	public MainWindow() throws IOException {
 		
 		/*Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		int locationX = (dim.width-this.getSize().width)/2;
@@ -98,7 +81,6 @@ public class Evenements extends JFrame  {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-//		ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/evenement.png")
 		JLabel icone_even = new JLabel("");
 		ImageIcon img_event = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/evenement.png")));
 		icone_even.setIcon((img_event));
