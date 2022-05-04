@@ -15,6 +15,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.TableRowSorter;
+
+import com.lop.Controller.Controller;
 import com.toedter.calendar.JDateChooser;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -39,7 +41,7 @@ public class MainWindow extends JFrame {
     private final JTextField deleteIdText;
 
 
-    public MainWindow() throws IOException {
+    public MainWindow(Controller controller) throws IOException {
 
         setTitle("GESTION DES EVENEMENTS");
         setResizable(false);
