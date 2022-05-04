@@ -1,12 +1,14 @@
 package com.lop.View;
 
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.*;
+
 /*
  * Created by JFormDesigner on Fri Apr 22 18:04:36 WET 2022
  */
 
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 
 /**
  * @author unknown
@@ -45,7 +47,6 @@ public class ConnectionWindow extends JFrame {
         //======== this ========
         setMinimumSize(null);
         setMaximizedBounds(null);
-        setIconImage(new ImageIcon(getClass().getResource("/com/lop/View/picture/lop.png")).getImage());
         var contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
 
