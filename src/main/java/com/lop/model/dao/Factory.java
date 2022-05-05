@@ -1,4 +1,4 @@
-package com.lop.Model.dao;
+package com.lop.model.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

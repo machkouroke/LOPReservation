@@ -1,4 +1,4 @@
-package com.lop.View.src.source;
+package com.lop.view.src.source;
 
 import java.awt.event.ActionEvent;
 

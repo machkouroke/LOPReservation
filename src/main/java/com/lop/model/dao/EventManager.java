@@ -1,7 +1,7 @@
-package com.lop.Model.dao;
+package com.lop.model.dao;
 
-import com.lop.Exception.DataBaseException;
-import com.lop.Model.Beans.Evenements;
+import com.lop.exception.DataBaseException;
+import com.lop.model.Beans.Evenements;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

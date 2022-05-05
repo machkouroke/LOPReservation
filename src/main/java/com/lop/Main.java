@@ -3,9 +3,9 @@ package com.lop;
 
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialLighterIJTheme;
 
-import com.lop.Controller.Controller;
-import com.lop.Model.dao.Factory;
-import com.lop.View.src.source.MainWindow;
+import com.lop.controller.Controller;
+import com.lop.model.dao.Factory;
+import com.lop.view.src.source.MainWindow;
 
 import javax.swing.*;
 

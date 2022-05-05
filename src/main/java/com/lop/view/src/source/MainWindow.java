@@ -1,4 +1,4 @@
-package com.lop.View.src.source;
+package com.lop.view.src.source;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -15,8 +15,8 @@ import java.util.Map;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.TableRowSorter;
 
-import com.lop.Controller.Controller;
-import com.lop.ErrorEvent.ErrorListener;
+import com.lop.controller.Controller;
+import com.lop.error_event.ErrorListener;
 import com.lop.communication.Request;
 import com.lop.communication.Response;
 import com.toedter.calendar.JDateChooser;

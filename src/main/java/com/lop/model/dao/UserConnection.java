@@ -1,9 +1,9 @@
-package com.lop.Model.dao;
+package com.lop.model.dao;
 
-import com.lop.Exception.DataBaseException;
-import com.lop.Exception.PasswordIncorrectException;
-import com.lop.Exception.UnknownUserNameException;
-import com.lop.Model.Beans.Users;
+import com.lop.exception.DataBaseException;
+import com.lop.exception.PasswordIncorrectException;
+import com.lop.exception.UnknownUserNameException;
+import com.lop.model.Beans.Users;
 
 
 import java.sql.PreparedStatement;

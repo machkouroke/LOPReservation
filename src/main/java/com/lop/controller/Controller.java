@@ -1,11 +1,11 @@
-package com.lop.Controller;
+package com.lop.controller;
 
-import com.lop.ErrorEvent.ErrorInitiator;
-import com.lop.ErrorEvent.ErrorListener;
-import com.lop.Exception.DataBaseException;
-import com.lop.Model.Beans.Evenements;
-import com.lop.Model.dao.EventManager;
-import com.lop.Model.dao.Factory;
+import com.lop.error_event.ErrorInitiator;
+import com.lop.error_event.ErrorListener;
+import com.lop.exception.DataBaseException;
+import com.lop.model.Beans.Evenements;
+import com.lop.model.dao.EventManager;
+import com.lop.model.dao.Factory;
 import com.lop.communication.Request;
 import com.lop.communication.Response;
 
