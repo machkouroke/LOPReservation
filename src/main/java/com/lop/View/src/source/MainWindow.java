@@ -325,10 +325,8 @@ public class MainWindow extends JFrame implements ErrorListener {
 
     public void panelAdd() throws IOException{
         JPanel panAdd = new JPanel();
-        panAdd.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-        panAdd.setBackground(new Color(250, 240, 230));
+        contenuPanel(panAdd);
         contenu.add(panAdd, "add");
-        panAdd.setLayout(null);
 
         JPanel formulaire = new JPanel();
         formulaire.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -432,10 +430,8 @@ public class MainWindow extends JFrame implements ErrorListener {
 
     public void panelUpdate(){
         JPanel panUpdate = new JPanel();
-        panUpdate.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-        panUpdate.setBackground(new Color(250, 240, 230));
+        contenuPanel(panUpdate);
         contenu.add(panUpdate, "update");
-        panUpdate.setLayout(null);
 
         JPanel formulaireUpdate = new JPanel();
         formulaireUpdate.setLayout(null);
@@ -556,10 +552,8 @@ public class MainWindow extends JFrame implements ErrorListener {
 
     public void panelDelete(){
         JPanel panDelete = new JPanel();
-        panDelete.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-        panDelete.setBackground(new Color(250, 240, 230));
+        contenuPanel(panDelete);
         contenu.add(panDelete, "delete");
-        panDelete.setLayout(null);
 
         JLabel idDelete = new JLabel("Entrez l'ID de l'evenement \r\n\u00E0 supprimer\r\n");
         idDelete.setFont(new Font("Tahoma", Font.PLAIN, 17));
@@ -620,9 +614,8 @@ public class MainWindow extends JFrame implements ErrorListener {
 
     public void panelAutres(){
         JPanel panAutres = new JPanel();
-        panAutres.setBackground(new Color(250, 240, 230));
+        contenuPanel(panAutres);
         contenu.add(panAutres, "autres");
-        panAutres.setLayout(null);
 
         JPanel questions = new JPanel();
         questions.setBounds(66, 90, 533, 76);
@@ -635,9 +628,8 @@ public class MainWindow extends JFrame implements ErrorListener {
         questions.add(autresReq, "autres");
 
         JPanel reservataireDonne = new JPanel();
-        reservataireDonne.setBackground(new Color(250, 240, 230));
+        displayQuestionsPanel(reservataireDonne);
         questions.add(reservataireDonne, "reservataireDonne");
-        reservataireDonne.setLayout(null);
 
         JLabel lblReservId = new JLabel("Entrez l'ID du reservataire .");
         lblReservId.setFont(new Font("Tahoma", Font.PLAIN, 17));
@@ -646,14 +638,17 @@ public class MainWindow extends JFrame implements ErrorListener {
         reservataireDonne.add(lblReservId);
 
         JTextField textReserveDonneId = new JTextField();
-        textReserveDonneId.setBounds(87, 38, 332, 33);
+        textReserveDonneId.setBounds(48, 35, 332, 33);
         reservataireDonne.add(textReserveDonneId);
         textReserveDonneId.setColumns(10);
 
+        JButton buttReserveDonne = new JButton("AFFICHER");
+        buttReserveDonne.setBounds(408, 39, 89, 23);
+        reservataireDonne.add(buttReserveDonne);
+
         JPanel blocDonne = new JPanel();
-        blocDonne.setBackground(new Color(250, 240, 230));
+        displayQuestionsPanel(blocDonne);
         questions.add(blocDonne, "bloc_donne");
-        blocDonne.setLayout(null);
 
         JLabel lblBlocDonne = new JLabel("Entrez le numero du bloc");
         lblBlocDonne.setFont(new Font("Tahoma", Font.PLAIN, 17));
@@ -662,14 +657,17 @@ public class MainWindow extends JFrame implements ErrorListener {
         blocDonne.add(lblBlocDonne);
 
         JTextField textBlocDonne = new JTextField();
-        textBlocDonne.setBounds(91, 36, 338, 29);
+        textBlocDonne.setBounds(48, 36, 338, 29);
         blocDonne.add(textBlocDonne);
         textBlocDonne.setColumns(10);
 
+        JButton buttBlocDonne = new JButton("AFFICHER");
+        buttBlocDonne.setBounds(408, 39, 89, 23);
+        blocDonne.add(buttBlocDonne);
+
         JPanel dateDonne = new JPanel();
-        dateDonne.setBackground(new Color(250, 240, 230));
+        displayQuestionsPanel(dateDonne);
         questions.add(dateDonne, "date_donne");
-        dateDonne.setLayout(null);
 
         JLabel lblDateDonne = new JLabel("Selectionnez la date");
         lblDateDonne.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -677,8 +675,12 @@ public class MainWindow extends JFrame implements ErrorListener {
         dateDonne.add(lblDateDonne);
 
         JDateChooser textDatedonne = new JDateChooser();
-        textDatedonne.setBounds(135, 36, 247, 28);
+        textDatedonne.setBounds(48, 36, 247, 28);
         dateDonne.add(textDatedonne);
+
+        JButton buttDateDonne = new JButton("AFFICHER");
+        buttDateDonne.setBounds(408, 39, 89, 23);
+        dateDonne.add(buttDateDonne);
 
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setBorder(null);
@@ -701,37 +703,44 @@ public class MainWindow extends JFrame implements ErrorListener {
             if (request.getSelectedIndex() == 1) {
                 modelLecture.setColumnIdentifiers(new String[]{"ID", "Nom"});
                 cardlayoutQuestions.show(questions, "reservataireDonne");
-
             }
 
             if (request.getSelectedIndex() == 2) {
                 modelLecture.setColumnIdentifiers(new String[]{"ID", "NomEven"});
                 cardlayoutQuestions.show(questions, "bloc_donne");
-
             }
 
             if (request.getSelectedIndex() == 3) {
                 modelLecture.setColumnIdentifiers(new String[]{"ID", "Age_Ind"});
                 cardlayoutQuestions.show(questions, "autres");
-
             }
-
             if (request.getSelectedIndex() == 4) {
                 modelLecture.setColumnIdentifiers(new String[]{"IDEvent", "Nom"});
                 cardlayoutQuestions.show(questions, "date_donne");
-
-
             }
 
             if (request.getSelectedIndex() == 5) {
                 modelLecture.setColumnIdentifiers(new String[]{"ID", "Nom", "Date"});
                 cardlayoutQuestions.show(questions, "autres");
-
             }
         });
         request.setBounds(66, 57, 533, 22);
         panAutres.add(request);
 
+        JLabel autreTitle = new JLabel(">> AFFICHAGE");
+        titleLabel(autreTitle);
+        panAutres.add(autreTitle);
+    }
+
+    public void displayQuestionsPanel(JPanel panel){
+        panel.setBackground(new Color(250, 240, 230));
+        panel.setLayout(null);
+    }
+
+    public void contenuPanel(JPanel panel){
+        panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
+        panel.setBackground(new Color(250, 240, 230));
+        panel.setLayout(null);
     }
     @Override
     public void errorOccurred(String message) {
