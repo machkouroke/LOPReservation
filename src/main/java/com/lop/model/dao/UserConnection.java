@@ -3,7 +3,7 @@ package com.lop.model.dao;
 import com.lop.exception.DataBaseException;
 import com.lop.exception.PasswordIncorrectException;
 import com.lop.exception.UnknownUserNameException;
-import com.lop.model.Beans.Users;
+import com.lop.model.beans.Users;
 
 
 import java.sql.PreparedStatement;

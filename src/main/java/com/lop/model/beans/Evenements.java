@@ -1,4 +1,4 @@
-package com.lop.model.Beans;
+package com.lop.model.beans;
 
 import java.util.List;
 

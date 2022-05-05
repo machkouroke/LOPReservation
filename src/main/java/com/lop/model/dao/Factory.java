@@ -7,28 +7,9 @@ import java.sql.SQLException;
 /**
  * This class create the connection with the database
  */
-public class Factory {
-    private final String url;
-    private final String name;
-    private final String password;
+public record Factory(String url, String name, String password) {
     private static Factory instance;
 
-    /**
-     * @param url Link to database
-     * @param name name of database's user
-     * @param password password
-     */
-    public Factory(String url, String name, String password) {
-
-        this.url = url;
-        this.name = name;
-        this.password = password;
-        try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-        } catch (ClassNotFoundException e) {
-            System.out.println("Erreur:" + e.getMessage());
-        }
-    }
 
     public static Factory getInstance() {
         if (instance == null) {

@@ -1,4 +1,4 @@
-package com.lop.model.Beans;
+package com.lop.model.beans;
 
 public class Users {
     private String userName;

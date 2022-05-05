@@ -1,10 +1,10 @@
-package com.lop.model.Beans;
+package com.lop.model.beans;
 
 public class Reservataire {
     private int idReservataire;
     private int idFonction;
     private String nom;
-    private String prenom;
+    private String surname;
 
     public int getIdReservataire() {
         return idReservataire;
@@ -30,11 +30,11 @@ public class Reservataire {
         this.nom = nom;
     }
 
-    public String getPrenom() {
-        return prenom;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 }

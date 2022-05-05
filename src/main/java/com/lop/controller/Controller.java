@@ -3,7 +3,7 @@ package com.lop.controller;
 import com.lop.error_event.ErrorInitiator;
 import com.lop.error_event.ErrorListener;
 import com.lop.exception.DataBaseException;
-import com.lop.model.Beans.Evenements;
+import com.lop.model.beans.Evenements;
 import com.lop.model.dao.EventManager;
 import com.lop.model.dao.Factory;
 import com.lop.communication.Request;
@@ -15,7 +15,6 @@ import java.util.List;
 
 public class Controller implements ErrorInitiator {
     Factory factory;
-    String dataBaseException = "Une erreur s'est produite lors de la connexion à la base de données";
     private final List<ErrorListener> listeners = new ArrayList<>();
 
     /**

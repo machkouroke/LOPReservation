@@ -1,4 +1,4 @@
-package com.lop.model.Beans;
+package com.lop.model.beans;
 
 public class Salle {
     private int nSalle;

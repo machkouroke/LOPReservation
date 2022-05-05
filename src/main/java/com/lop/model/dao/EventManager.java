@@ -1,7 +1,7 @@
 package com.lop.model.dao;
 
 import com.lop.exception.DataBaseException;
-import com.lop.model.Beans.Evenements;
+import com.lop.model.beans.Evenements;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,17 +10,10 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
-public class EventManager {
-    private final Factory factory;
+public record EventManager(Factory factory) {
     private static final String DATA_BASE_EXCEPTION =
             "Une erreur est subvenu lors de la connection à la base " +
                     "de données:";
-
-    public EventManager(Factory factory) {
-
-        this.factory = factory;
-
-    }
 
     public boolean reservataireAllowed(int idReservataire, Connection conn)
             throws DataBaseException {
@@ -70,10 +63,10 @@ public class EventManager {
     public void add(Evenements event) throws DataBaseException, SQLException {
         Connection conn = this.factory.getConnection();
         if (reservataireAllowed(event.getIdReservataire(), conn)) {
-            try (PreparedStatement requete = conn.prepareStatement(
+            try (PreparedStatement request = conn.prepareStatement(
                     "insert into SYSTEM.EVENEMENTS(ID_RESERVATAIRE, NUM_SALLE, ID_BLOC, NOM, DATE_EVT) " +
                             "values(?, ?, ?, ?, TO_DATE(?, 'YYYY-MM-DD'))")) {
-                requestSet(event, requete);
+                requestSet(event, request);
 
             } catch (SQLIntegrityConstraintViolationException e) {
                 throw new DataBaseException("La classe demandé n'est pas disponible en ce jour");
@@ -91,12 +84,12 @@ public class EventManager {
 
     public void delete(int id) throws DataBaseException, SQLException {
         Connection conn = this.factory.getConnection();
-        try (PreparedStatement requete = conn.prepareStatement(
+        try (PreparedStatement request = conn.prepareStatement(
                 "DELETE FROM SYSTEM.EVENEMENTS WHERE ID_EVENT = ?")) {
 
-            requete.setInt(1, id);
+            request.setInt(1, id);
 
-            requete.executeUpdate();
+            request.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -104,14 +97,15 @@ public class EventManager {
 
         }
     }
+
     public void update(Evenements event) throws DataBaseException, SQLException {
         Connection conn = this.factory.getConnection();
-        try (PreparedStatement requete = conn.prepareStatement(
+        try (PreparedStatement request = conn.prepareStatement(
                 "UPDATE SYSTEM.EVENEMENTS SET ID_RESERVATAIRE=?, NUM_SALLE=?, ID_BLOC=?, NOM=?, " +
                         "DATE_EVT=?" +
                         "WHERE ID_EVENT=? ")) {
 
-            requestSet(event, requete);
+            requestSet(event, request);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -119,11 +113,12 @@ public class EventManager {
 
         }
     }
+
     /**
      * Set parameter to add and update requests
-     * @param event Event Content
+     *
+     * @param event   Event Content
      * @param request A prepared statement with the request
-     * @throws SQLException
      */
     private void requestSet(Evenements event, PreparedStatement request) throws SQLException {
         request.setInt(1, event.getIdReservataire());
@@ -164,13 +159,15 @@ public class EventManager {
                 "SELECT NOM ,  NUM_SALLE , ID_BLOC FROM SYSTEM.EVENEMENTS WHERE DATE_EVT = "
                         + "TO_DATE('" + day + "','YYYY-MM-DD')");
     }
-    public List<List<String>> pastEvent() throws  SQLException {
+
+    public List<List<String>> pastEvent() throws SQLException {
         PrintEvent print = new PrintEvent(factory);
 
         return print.print(
                 "SELECT * FROM SYSTEM.EVENEMENTS WHERE DATE_EVT<CURRENT_DATE");
     }
-    public List<List<String>> getAllReservations() throws  SQLException {
+
+    public List<List<String>> getAllReservations() throws SQLException {
         PrintEvent print = new PrintEvent(factory);
 
         return print.print(
