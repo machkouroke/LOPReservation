@@ -25,6 +25,7 @@ import com.toedter.calendar.JDateChooser;
 
 public class MainWindow extends JFrame implements ErrorListener {
 
+    JPanel contentPane;
     JPanel contenu;
     CardLayout cardlayout;
 
@@ -51,7 +52,7 @@ public class MainWindow extends JFrame implements ErrorListener {
         setName("GESTION DES EVENEMENTS");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBounds(100, 100, 864, 542);
-        JPanel contentPane = new JPanel();
+        contentPane = new JPanel();
         contentPane.setBackground(new Color(250, 240, 230));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
@@ -75,158 +76,8 @@ public class MainWindow extends JFrame implements ErrorListener {
         lbltitreP.setForeground(Color.WHITE);
         titreP.add(lbltitreP);
 
-        JPanel menu = new JPanel();
-        menu.setBackground(new Color(255, 140, 0));
-        menu.setBounds(10, 114, 174, 380);
-        contentPane.add(menu);
-        menu.setLayout(null);
-
-        JLabel menuQuit = new JLabel("QUITTER ...");
-        menuQuit.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int rep = JOptionPane.showConfirmDialog(null, "Voulez vous vraiment quitter !?");
-                if (rep == JOptionPane.YES_OPTION) dispose();
-            }
-        });
-        menuQuit.setHorizontalAlignment(SwingConstants.CENTER);
-        menuQuit.setForeground(Color.WHITE);
-        menuQuit.setFont(new Font("Tahoma", Font.BOLD, 13));
-        menuQuit.setBackground(new Color(255, 140, 0));
-        menuQuit.setBounds(40, 341, 87, 28);
-        menu.add(menuQuit);
-
-        JPanel panMenuAdd = new JPanel();
-        panMenuAdd.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                cardlayout.show(contenu, "add");
-            }
-        });
-        panMenuAdd.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-        panMenuAdd.setBackground(new Color(255, 140, 0));
-        panMenuAdd.setBounds(7, 70, 160, 45);
-        menu.add(panMenuAdd);
-        panMenuAdd.setLayout(null);
-
-        JLabel menuAdd = new JLabel("AJOUT");
-        menuAdd.setBounds(58, 13, 44, 19);
-        menuAdd.setHorizontalAlignment(SwingConstants.CENTER);
-        menuAdd.setForeground(new Color(0, 0, 0));
-        menuAdd.setFont(new Font("Tahoma", Font.BOLD, 13));
-        menuAdd.setBackground(new Color(255, 140, 0));
-        panMenuAdd.add(menuAdd);
-
-        JLabel menuAddIcon = new JLabel("");
-        menuAddIcon.setBounds(8, 2, 37, 41);
-        panMenuAdd.add(menuAddIcon);
-        ImageIcon iconAdMenu = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/menu_ajout.png")));
-        menuAddIcon.setIcon(iconAdMenu);
-
-        JPanel panMenuUpdate = new JPanel();
-        panMenuUpdate.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                cardlayout.show(contenu, "update");
-            }
-        });
-        panMenuUpdate.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-        panMenuUpdate.setBackground(new Color(255, 140, 0));
-        panMenuUpdate.setBounds(7, 122, 160, 45);
-        menu.add(panMenuUpdate);
-        panMenuUpdate.setLayout(null);
-
-        JLabel menuUpdate = new JLabel("MODIFICATION");
-        menuUpdate.setBounds(44, 10, 106, 25);
-        menuUpdate.setHorizontalAlignment(SwingConstants.CENTER);
-        menuUpdate.setForeground(new Color(0, 0, 0));
-        menuUpdate.setFont(new Font("Tahoma", Font.BOLD, 13));
-        menuUpdate.setBackground(new Color(255, 140, 0));
-        panMenuUpdate.add(menuUpdate);
-
-        JLabel menuUpdateIcon = new JLabel("");
-        menuUpdateIcon.setBounds(8, 5, 38, 35);
-        panMenuUpdate.add(menuUpdateIcon);
-        ImageIcon updateMenuIcon = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/menu_modif.png")));
-        menuUpdateIcon.setIcon(updateMenuIcon);
-
-        JPanel panMenuDelete = new JPanel();
-        panMenuDelete.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                cardlayout.show(contenu, "delete");
-            }
-        });
-        panMenuDelete.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-        panMenuDelete.setBackground(new Color(255, 140, 0));
-        panMenuDelete.setBounds(7, 174, 160, 45);
-        menu.add(panMenuDelete);
-        panMenuDelete.setLayout(null);
-
-        JLabel menuDelete = new JLabel("SUPPRESSION");
-        menuDelete.setBounds(44, 14, 98, 17);
-        menuDelete.setHorizontalAlignment(SwingConstants.CENTER);
-        menuDelete.setForeground(new Color(0, 0, 0));
-        menuDelete.setFont(new Font("Tahoma", Font.BOLD, 13));
-        menuDelete.setBackground(new Color(255, 140, 0));
-        panMenuDelete.add(menuDelete);
-
-        JLabel menuDeleteIcon = new JLabel("");
-        menuDeleteIcon.setBounds(8, 8, 34, 29);
-        panMenuDelete.add(menuDeleteIcon);
-        ImageIcon deleteIconMenu = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/menu_sup.png")));
-        menuDeleteIcon.setIcon(deleteIconMenu);
-
-        JPanel panMenuHome = new JPanel();
-        panMenuHome.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                cardlayout.show(contenu, "home");
-            }
-        });
-        panMenuHome.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-        panMenuHome.setBackground(new Color(255, 140, 0));
-        panMenuHome.setBounds(7, 18, 160, 45);
-        menu.add(panMenuHome);
-        panMenuHome.setLayout(null);
-
-        JLabel menuHome = new JLabel("ACCUEIL");
-        menuHome.setBounds(56, 14, 59, 17);
-        menuHome.setForeground(new Color(0, 0, 0));
-        menuHome.setFont(new Font("Tahoma", Font.BOLD, 13));
-        panMenuHome.add(menuHome);
-
-        JLabel menuHomeIcon = new JLabel("New label");
-        menuHomeIcon.setBounds(8, 9, 36, 27);
-        panMenuHome.add(menuHomeIcon);
-        ImageIcon homeIconMenu = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/menu_home.png")));
-        menuHomeIcon.setIcon(homeIconMenu);
-
-        JPanel panMenuAutres = new JPanel();
-        panMenuAutres.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                cardlayout.show(contenu, "autres");
-            }
-        });
-        panMenuAutres.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-        panMenuAutres.setBackground(new Color(255, 140, 0));
-        panMenuAutres.setBounds(7, 226, 160, 45);
-        menu.add(panMenuAutres);
-        panMenuAutres.setLayout(null);
-
-        JLabel menuAutres = new JLabel("AUTRES");
-        menuAutres.setForeground(new Color(0, 0, 0));
-        menuAutres.setHorizontalAlignment(SwingConstants.CENTER);
-        menuAutres.setFont(new Font("Tahoma", Font.BOLD, 13));
-        menuAutres.setBounds(43, 15, 83, 15);
-        panMenuAutres.add(menuAutres);
-
-        JLabel menuAutresIcon = new JLabel("");
-        menuAutresIcon.setBounds(8, 6, 49, 33);
-        panMenuAutres.add(menuAutresIcon);
-        ImageIcon autresMenuIcon = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/menu_autres_.png")));
-        menuAutresIcon.setIcon(autresMenuIcon);
+        //menu
+        menu_func();
 
         contenu = new JPanel();
         contenu.setBounds(194, 16, 646, 478);
@@ -234,25 +85,8 @@ public class MainWindow extends JFrame implements ErrorListener {
         contenu.setLayout(new CardLayout(0, 0));
         cardlayout = (CardLayout) contenu.getLayout();
 
-        JPanel home = new JPanel();
-        home.setForeground(new Color(220, 220, 220));
-        home.setBackground(new Color(250, 240, 230));
-        contenu.add(home, "home");
-        home.setLayout(null);
-
-        JLabel iconHome = new JLabel("");
-        iconHome.setBounds(192, 68, 271, 256);
-        home.add(iconHome);
-        ImageIcon imgHome = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/home2.png")));
-        iconHome.setIcon(imgHome);
-
-        JLabel lblBienvenu = new JLabel("Bienvenue !!");
-        lblBienvenu.setForeground(new Color(128, 128, 128));
-        lblBienvenu.setHorizontalAlignment(SwingConstants.CENTER);
-        lblBienvenu.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 60));
-        lblBienvenu.setBounds(175, 322, 335, 94);
-        home.add(lblBienvenu);
-
+        //Affichage du panel de l'accueil
+        panelHome();
 
         JPanel panAdd = new JPanel();
         panAdd.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -673,20 +507,20 @@ public class MainWindow extends JFrame implements ErrorListener {
 
     }
 
-//    public void addEvent(ActionEvent action) {
-//        if (addNumSalle.getText().equals("") || addNumBloc.getText().equals("") || addIdReservataire.getText().equals("") || addNomEvent.getText().equals("") || addDateEvent.getDate() == null) {
-//            JOptionPane.showMessageDialog(null, "Certaines cases sont vides.\nEntrez toutes les valeurs.");
-//        }
-//        Map<String, String> params = new HashMap<>();
-//        params.put("idReservataire",  this.addIdReservataire.getText());
-//        params.put("numSalle",  this.addNumSalle.getText());
-//        params.put("numBloc",  this.addNumBloc.getText());
-//        params.put("eventName",  this.addNomEvent.getText());
-//        params.put("eventDate", new SimpleDateFormat("yyyy-MM-dd").format(this.addDateEvent.getDate()));
-////        System.out.println();
-//        Response response =  this.controller.add(new Request("Ajout d'un utilisateur", params));
-//
-//    }
+    public void addEvent(ActionEvent action) {
+        if (addNumSalle.getText().equals("") || addNumBloc.getText().equals("") || addIdReservataire.getText().equals("") || addNomEvent.getText().equals("") || addDateEvent.getDate() == null) {
+            JOptionPane.showMessageDialog(null, "Certaines cases sont vides.\nEntrez toutes les valeurs.");
+        }
+        Map<String, String> params = new HashMap<>();
+        params.put("idReservataire",  this.addIdReservataire.getText());
+        params.put("numSalle",  this.addNumSalle.getText());
+        params.put("numBloc",  this.addNumBloc.getText());
+        params.put("eventName",  this.addNomEvent.getText());
+        params.put("eventDate", new SimpleDateFormat("yyyy-MM-dd").format(this.addDateEvent.getDate()));
+//        System.out.println();
+        Response response =  this.controller.add(new Request("Ajout d'un utilisateur", params));
+
+    }
 
     public void searchInTable(String str, JTable table) {
 
@@ -697,6 +531,173 @@ public class MainWindow extends JFrame implements ErrorListener {
         model.fireTableDataChanged();
 
 
+    }
+
+    public void menu_func() throws IOException {
+
+        JPanel menu = new JPanel();
+        menu.setBackground(new Color(255, 140, 0));
+        menu.setBounds(10, 114, 174, 380);
+        contentPane.add(menu);
+        menu.setLayout(null);
+
+        JLabel menuQuit = new JLabel("QUITTER ...");
+        menuQuit.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int rep = JOptionPane.showConfirmDialog(null, "Voulez vous vraiment quitter !?");
+                if (rep == JOptionPane.YES_OPTION) dispose();
+            }
+        });
+        menuQuit.setHorizontalAlignment(SwingConstants.CENTER);
+        menuQuit.setForeground(Color.WHITE);
+        menuQuit.setFont(new Font("Tahoma", Font.BOLD, 13));
+        menuQuit.setBackground(new Color(255, 140, 0));
+        menuQuit.setBounds(40, 341, 87, 28);
+        menu.add(menuQuit);
+
+        JPanel panMenuAdd = new JPanel();
+        panMenuAdd.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cardlayout.show(contenu, "add");
+            }
+        });
+        menuPanelPosition(panMenuAdd,70);
+        menu.add(panMenuAdd);
+
+
+        JLabel menuAdd = new JLabel("AJOUT");
+        menuLabelFunction(menuAdd,new int[] {58,13,44,19});
+        panMenuAdd.add(menuAdd);
+
+        JLabel menuAddIcon = new JLabel("");
+        menuAddIcon.setBounds(8, 2, 37, 41);
+        panMenuAdd.add(menuAddIcon);
+        ImageIcon iconAdMenu = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/menu_ajout.png")));
+        menuAddIcon.setIcon(iconAdMenu);
+
+        JPanel panMenuUpdate = new JPanel();
+        panMenuUpdate.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cardlayout.show(contenu, "update");
+            }
+        });
+        menuPanelPosition(panMenuUpdate,122);
+        menu.add(panMenuUpdate);
+
+
+        JLabel menuUpdate = new JLabel("MODIFICATION");
+        menuLabelFunction(menuUpdate,new int[] {44,10,106,25});
+        panMenuUpdate.add(menuUpdate);
+
+        JLabel menuUpdateIcon = new JLabel("");
+        menuUpdateIcon.setBounds(8, 5, 38, 35);
+        panMenuUpdate.add(menuUpdateIcon);
+        ImageIcon updateMenuIcon = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/menu_modif.png")));
+        menuUpdateIcon.setIcon(updateMenuIcon);
+
+        JPanel panMenuDelete = new JPanel();
+        panMenuDelete.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cardlayout.show(contenu, "delete");
+            }
+        });
+        menuPanelPosition(panMenuDelete,174);
+        menu.add(panMenuDelete);
+
+
+        JLabel menuDelete = new JLabel("SUPPRESSION");
+        menuLabelFunction(menuDelete,new int[] {44,14,98,17});
+        panMenuDelete.add(menuDelete);
+
+        JLabel menuDeleteIcon = new JLabel("");
+        menuDeleteIcon.setBounds(8, 8, 34, 29);
+        panMenuDelete.add(menuDeleteIcon);
+        ImageIcon deleteIconMenu = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/menu_sup.png")));
+        menuDeleteIcon.setIcon(deleteIconMenu);
+
+        JPanel panMenuHome = new JPanel();
+        panMenuHome.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cardlayout.show(contenu, "home");
+            }
+        });
+        menuPanelPosition(panMenuHome,18);
+        menu.add(panMenuHome);
+
+
+        JLabel menuHome = new JLabel("ACCUEIL");
+        menuLabelFunction(menuHome,new int[] {56,14,59,17});
+        panMenuHome.add(menuHome);
+
+        JLabel menuHomeIcon = new JLabel("New label");
+        menuHomeIcon.setBounds(8, 9, 36, 27);
+        panMenuHome.add(menuHomeIcon);
+        ImageIcon homeIconMenu = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/menu_home.png")));
+        menuHomeIcon.setIcon(homeIconMenu);
+
+        JPanel panMenuAutres = new JPanel();
+        panMenuAutres.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cardlayout.show(contenu, "autres");
+            }
+        });
+        menuPanelPosition(panMenuAutres,226);
+        menu.add(panMenuAutres);
+
+
+        JLabel menuAutres = new JLabel("AUTRES");
+        menuLabelFunction(menuAutres,new int[] {43,15,83,15});
+        panMenuAutres.add(menuAutres);
+
+        JLabel menuAutresIcon = new JLabel("");
+        menuAutresIcon.setBounds(8, 6, 49, 33);
+        panMenuAutres.add(menuAutresIcon);
+        ImageIcon autresMenuIcon = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/menu_autres_.png")));
+        menuAutresIcon.setIcon(autresMenuIcon);
+
+
+    }
+
+
+    public void menuPanelPosition(JPanel panel, int y){
+        panel.setBorder(new BevelBorder(BevelBorder.RAISED));
+        panel.setBackground(new Color(255, 140, 0));
+        panel.setBounds(7,y,160,45);
+        panel.setLayout(null);
+    }
+
+    public void menuLabelFunction(JLabel label, int[] bounds){
+        label.setBounds(bounds[0],bounds[1],bounds[2],bounds[3] );
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setForeground(new Color(0, 0, 0));
+        label.setFont(new Font("Tahoma", Font.BOLD, 13));
+    }
+
+    public void panelHome() throws IOException {
+        JPanel home = new JPanel();
+        home.setForeground(new Color(220, 220, 220));
+        home.setBackground(new Color(250, 240, 230));
+        contenu.add(home, "home");
+        home.setLayout(null);
+
+        JLabel iconHome = new JLabel("");
+        iconHome.setBounds(192, 68, 271, 256);
+        home.add(iconHome);
+        ImageIcon imgHome = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/home2.png")));
+        iconHome.setIcon(imgHome);
+
+        JLabel lblBienvenu = new JLabel("Bienvenue !!");
+        lblBienvenu.setForeground(new Color(128, 128, 128));
+        lblBienvenu.setHorizontalAlignment(SwingConstants.CENTER);
+        lblBienvenu.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 60));
+        lblBienvenu.setBounds(175, 322, 335, 94);
+        home.add(lblBienvenu);
     }
 
     @Override
