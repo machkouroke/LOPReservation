@@ -38,8 +38,8 @@ public class MainWindow extends JFrame implements ErrorListener {
     private JTable updateTable;
     private JTextField rechercheUpdate;
     private JDateChooser addDateEvent;
-    private final JTable tableDelete;
-    private final JTextField deleteIdText;
+    private JTable tableDelete;
+    private JTextField deleteIdText;
     private final Controller controller;
 
     String [] salles = {"--Numero de Salle--","1","2","3","4"};
@@ -86,191 +86,15 @@ public class MainWindow extends JFrame implements ErrorListener {
         contenu.setLayout(new CardLayout(0, 0));
         cardlayout = (CardLayout) contenu.getLayout();
 
-        //Affichage du panel de l'accueil
         panelHome();
 
         panelAdd();
 
         panelUpdate();
 
+        panelDelete();
 
-        JPanel panDelete = new JPanel();
-        panDelete.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-        panDelete.setBackground(new Color(250, 240, 230));
-        contenu.add(panDelete, "delete");
-        panDelete.setLayout(null);
-
-        JLabel idDelete = new JLabel("Entrez l'ID de l'evenement \r\n\u00E0 supprimer\r\n");
-        idDelete.setFont(new Font("Tahoma", Font.PLAIN, 17));
-        idDelete.setBounds(22, 137, 306, 52);
-        panDelete.add(idDelete);
-
-        deleteIdText = new JTextField();
-        deleteIdText.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                String idToDelete = deleteIdText.getText();
-                searchInTable(idToDelete, tableDelete);
-            }
-        });
-        deleteIdText.setBounds(32, 200, 273, 37);
-        panDelete.add(deleteIdText);
-        deleteIdText.setColumns(10);
-
-        JScrollPane scrollpaneDelete = new JScrollPane();
-        scrollpaneDelete.setBounds(338, 66, 298, 331);
-        panDelete.add(scrollpaneDelete);
-
-        tableDelete = new JTable();
-        MyTableModel modelDel = new MyTableModel();
-        tableDelete.setModel(modelDel);
-        tableDelete.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-                int i = tableDelete.convertRowIndexToModel(tableDelete.getSelectedRow());
-                deleteIdText.setText((String) modelDel.getValueAt(i, 0));
-
-
-            }
-        });
-
-        scrollpaneDelete.setViewportView(tableDelete);
-
-
-        JButton btnDel = new JButton("SUPPRIMER\r\n");
-        btnDel.setBounds(32, 270, 132, 30);
-        panDelete.add(btnDel);
-
-        JButton btnCancel = new JButton("ANNULER\r\n");
-        btnCancel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                deleteIdText.setText("");
-            }
-        });
-        btnCancel.setBounds(173, 355, 132, 30);
-        panDelete.add(btnCancel);
-
-        JLabel lblnewlabel2 = new JLabel(">> SUPPRIMER UN EVENEMENT");
-        lblnewlabel2.setForeground(new Color(255, 140, 0));
-        lblnewlabel2.setFont(new Font("Comic Sans MS", Font.BOLD, 19));
-        lblnewlabel2.setBounds(60, 11, 333, 32);
-        panDelete.add(lblnewlabel2);
-
-        JPanel panAutres = new JPanel();
-        panAutres.setBackground(new Color(250, 240, 230));
-        contenu.add(panAutres, "autres");
-        panAutres.setLayout(null);
-
-        JPanel questions = new JPanel();
-        questions.setBounds(66, 90, 533, 76);
-        panAutres.add(questions);
-        questions.setLayout(new CardLayout(0, 0));
-        CardLayout cardlayoutQuestions = (CardLayout) questions.getLayout();
-
-        JPanel autresReq = new JPanel();
-        autresReq.setBackground(new Color(250, 240, 230));
-        questions.add(autresReq, "autres");
-
-        JPanel reservataireDonne = new JPanel();
-        reservataireDonne.setBackground(new Color(250, 240, 230));
-        questions.add(reservataireDonne, "reservataireDonne");
-        reservataireDonne.setLayout(null);
-
-        JLabel lblReservId = new JLabel("Entrez l'ID du reservataire .");
-        lblReservId.setFont(new Font("Tahoma", Font.PLAIN, 17));
-        lblReservId.setBackground(new Color(250, 240, 230));
-        lblReservId.setBounds(139, 11, 241, 21);
-        reservataireDonne.add(lblReservId);
-
-        JTextField textReserveDonneId = new JTextField();
-        textReserveDonneId.setBounds(87, 38, 332, 33);
-        reservataireDonne.add(textReserveDonneId);
-        textReserveDonneId.setColumns(10);
-
-        JPanel blocDonne = new JPanel();
-        blocDonne.setBackground(new Color(250, 240, 230));
-        questions.add(blocDonne, "bloc_donne");
-        blocDonne.setLayout(null);
-
-        JLabel lblBlocDonne = new JLabel("Entrez le numero du bloc");
-        lblBlocDonne.setFont(new Font("Tahoma", Font.PLAIN, 17));
-        lblBlocDonne.setHorizontalAlignment(SwingConstants.CENTER);
-        lblBlocDonne.setBounds(151, 5, 196, 29);
-        blocDonne.add(lblBlocDonne);
-
-        JTextField textBlocDonne = new JTextField();
-        textBlocDonne.setBounds(91, 36, 338, 29);
-        blocDonne.add(textBlocDonne);
-        textBlocDonne.setColumns(10);
-
-        JPanel dateDonne = new JPanel();
-        dateDonne.setBackground(new Color(250, 240, 230));
-        questions.add(dateDonne, "date_donne");
-        dateDonne.setLayout(null);
-
-        JLabel lblDateDonne = new JLabel("Selectionnez la date");
-        lblDateDonne.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lblDateDonne.setBounds(170, 5, 191, 28);
-        dateDonne.add(lblDateDonne);
-
-        JDateChooser textDatedonne = new JDateChooser();
-        textDatedonne.setBounds(135, 36, 247, 28);
-        dateDonne.add(textDatedonne);
-
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setBorder(null);
-        scrollPane.setBounds(66, 177, 533, 274);
-        panAutres.add(scrollPane);
-
-        JTable tableLecture = new JTable();
-        tableLecture.setBorder(null);
-        scrollPane.setViewportView(tableLecture);
-        MyTableModel modelLecture = new MyTableModel();
-        tableLecture.setModel(modelLecture);
-
-
-        String[] req = {"              -------Que voulez-vous afficher ?-------              ",
-                "Reservations d'un individu donne", "Reservations actifs dans un bloc donne",
-                "Individu ayant des reservations en cours", "Reservations d'un jour donne", "Evenements passés"};
-        JComboBox<String> request = new JComboBox<>(req);
-        request.addItemListener(e -> {
-
-            if (request.getSelectedIndex() == 1) {
-                modelLecture.setColumnIdentifiers(new String[]{"ID", "Nom"});
-                cardlayoutQuestions.show(questions, "reservataireDonne");
-
-            }
-
-            if (request.getSelectedIndex() == 2) {
-                modelLecture.setColumnIdentifiers(new String[]{"ID", "NomEven"});
-                cardlayoutQuestions.show(questions, "bloc_donne");
-
-            }
-
-            if (request.getSelectedIndex() == 3) {
-                modelLecture.setColumnIdentifiers(new String[]{"ID", "Age_Ind"});
-                cardlayoutQuestions.show(questions, "autres");
-
-            }
-
-            if (request.getSelectedIndex() == 4) {
-                modelLecture.setColumnIdentifiers(new String[]{"IDEvent", "Nom"});
-                cardlayoutQuestions.show(questions, "date_donne");
-
-
-            }
-
-            if (request.getSelectedIndex() == 5) {
-                modelLecture.setColumnIdentifiers(new String[]{"ID", "Nom", "Date"});
-                cardlayoutQuestions.show(questions, "autres");
-
-            }
-        });
-        request.setBounds(66, 57, 533, 22);
-        panAutres.add(request);
-
+        panelAutres();
 
     }
 
@@ -331,6 +155,12 @@ public class MainWindow extends JFrame implements ErrorListener {
             public void mouseClicked(MouseEvent e) {
                 cardlayout.show(contenu, "add");
             }
+            public void mouseEntered(MouseEvent e){
+                panMenuAdd.setBackground(Color.white);
+            }
+            public void mouseExited(MouseEvent e){
+                panMenuAdd.setBackground(new Color(255, 140, 0));
+            }
         });
         menuPanelPosition(panMenuAdd,70);
         menu.add(panMenuAdd);
@@ -351,6 +181,12 @@ public class MainWindow extends JFrame implements ErrorListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 cardlayout.show(contenu, "update");
+            }
+            public void mouseEntered(MouseEvent e){
+                panMenuUpdate.setBackground(Color.white);
+            }
+            public void mouseExited(MouseEvent e){
+                panMenuUpdate.setBackground(new Color(255, 140, 0));
             }
         });
         menuPanelPosition(panMenuUpdate,122);
@@ -373,6 +209,12 @@ public class MainWindow extends JFrame implements ErrorListener {
             public void mouseClicked(MouseEvent e) {
                 cardlayout.show(contenu, "delete");
             }
+            public void mouseEntered(MouseEvent e){
+                panMenuDelete.setBackground(Color.white);
+            }
+            public void mouseExited(MouseEvent e){
+                panMenuDelete.setBackground(new Color(255, 140, 0));
+            }
         });
         menuPanelPosition(panMenuDelete,174);
         menu.add(panMenuDelete);
@@ -394,6 +236,12 @@ public class MainWindow extends JFrame implements ErrorListener {
             public void mouseClicked(MouseEvent e) {
                 cardlayout.show(contenu, "home");
             }
+            public void mouseEntered(MouseEvent e){
+                panMenuHome.setBackground(Color.white);
+            }
+            public void mouseExited(MouseEvent e){
+                panMenuHome.setBackground(new Color(255, 140, 0));
+            }
         });
         menuPanelPosition(panMenuHome,18);
         menu.add(panMenuHome);
@@ -414,6 +262,12 @@ public class MainWindow extends JFrame implements ErrorListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 cardlayout.show(contenu, "autres");
+            }
+            public void mouseEntered(MouseEvent e){
+                panMenuAutres.setBackground(Color.white);
+            }
+            public void mouseExited(MouseEvent e){
+                panMenuAutres.setBackground(new Color(255, 140, 0));
             }
         });
         menuPanelPosition(panMenuAutres,226);
@@ -677,9 +531,9 @@ public class MainWindow extends JFrame implements ErrorListener {
         updateButtCancel.setBounds(525, 419, 111, 23);
         panUpdate.add(updateButtCancel);
 
-        JLabel lblNewLabel = new JLabel(">> MODIFIER UN EVENEMENT");
-        titleLabel(lblNewLabel);
-        panUpdate.add(lblNewLabel);
+        JLabel updateTitle = new JLabel(">> MODIFIER UN EVENEMENT");
+        titleLabel(updateTitle);
+        panUpdate.add(updateTitle);
 
         rechercheUpdate = new JTextField();
         rechercheUpdate.addKeyListener(new KeyAdapter() {
@@ -699,6 +553,186 @@ public class MainWindow extends JFrame implements ErrorListener {
         panUpdate.add(lblNewLabel1);
 
     }
+
+    public void panelDelete(){
+        JPanel panDelete = new JPanel();
+        panDelete.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+        panDelete.setBackground(new Color(250, 240, 230));
+        contenu.add(panDelete, "delete");
+        panDelete.setLayout(null);
+
+        JLabel idDelete = new JLabel("Entrez l'ID de l'evenement \r\n\u00E0 supprimer\r\n");
+        idDelete.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        idDelete.setBounds(22, 137, 306, 52);
+        panDelete.add(idDelete);
+
+        deleteIdText = new JTextField();
+        deleteIdText.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String idToDelete = deleteIdText.getText();
+                searchInTable(idToDelete, tableDelete);
+            }
+        });
+        deleteIdText.setBounds(32, 200, 273, 37);
+        panDelete.add(deleteIdText);
+        deleteIdText.setColumns(10);
+
+        JScrollPane scrollpaneDelete = new JScrollPane();
+        scrollpaneDelete.setBounds(338, 66, 298, 331);
+        panDelete.add(scrollpaneDelete);
+
+        tableDelete = new JTable();
+        MyTableModel modelDel = new MyTableModel();
+        tableDelete.setModel(modelDel);
+        tableDelete.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+                int i = tableDelete.convertRowIndexToModel(tableDelete.getSelectedRow());
+                deleteIdText.setText((String) modelDel.getValueAt(i, 0));
+
+
+            }
+        });
+
+        scrollpaneDelete.setViewportView(tableDelete);
+
+
+        JButton btnDel = new JButton("SUPPRIMER\r\n");
+        btnDel.setBounds(32, 270, 132, 30);
+        panDelete.add(btnDel);
+
+        JButton btnCancel = new JButton("ANNULER\r\n");
+        btnCancel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                deleteIdText.setText("");
+            }
+        });
+        btnCancel.setBounds(173, 355, 132, 30);
+        panDelete.add(btnCancel);
+
+        JLabel deleteTitle = new JLabel(">> SUPPRIMER UN EVENEMENT");
+        titleLabel(deleteTitle);
+        panDelete.add(deleteTitle);
+    }
+
+    public void panelAutres(){
+        JPanel panAutres = new JPanel();
+        panAutres.setBackground(new Color(250, 240, 230));
+        contenu.add(panAutres, "autres");
+        panAutres.setLayout(null);
+
+        JPanel questions = new JPanel();
+        questions.setBounds(66, 90, 533, 76);
+        panAutres.add(questions);
+        questions.setLayout(new CardLayout(0, 0));
+        CardLayout cardlayoutQuestions = (CardLayout) questions.getLayout();
+
+        JPanel autresReq = new JPanel();
+        autresReq.setBackground(new Color(250, 240, 230));
+        questions.add(autresReq, "autres");
+
+        JPanel reservataireDonne = new JPanel();
+        reservataireDonne.setBackground(new Color(250, 240, 230));
+        questions.add(reservataireDonne, "reservataireDonne");
+        reservataireDonne.setLayout(null);
+
+        JLabel lblReservId = new JLabel("Entrez l'ID du reservataire .");
+        lblReservId.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        lblReservId.setBackground(new Color(250, 240, 230));
+        lblReservId.setBounds(139, 11, 241, 21);
+        reservataireDonne.add(lblReservId);
+
+        JTextField textReserveDonneId = new JTextField();
+        textReserveDonneId.setBounds(87, 38, 332, 33);
+        reservataireDonne.add(textReserveDonneId);
+        textReserveDonneId.setColumns(10);
+
+        JPanel blocDonne = new JPanel();
+        blocDonne.setBackground(new Color(250, 240, 230));
+        questions.add(blocDonne, "bloc_donne");
+        blocDonne.setLayout(null);
+
+        JLabel lblBlocDonne = new JLabel("Entrez le numero du bloc");
+        lblBlocDonne.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        lblBlocDonne.setHorizontalAlignment(SwingConstants.CENTER);
+        lblBlocDonne.setBounds(151, 5, 196, 29);
+        blocDonne.add(lblBlocDonne);
+
+        JTextField textBlocDonne = new JTextField();
+        textBlocDonne.setBounds(91, 36, 338, 29);
+        blocDonne.add(textBlocDonne);
+        textBlocDonne.setColumns(10);
+
+        JPanel dateDonne = new JPanel();
+        dateDonne.setBackground(new Color(250, 240, 230));
+        questions.add(dateDonne, "date_donne");
+        dateDonne.setLayout(null);
+
+        JLabel lblDateDonne = new JLabel("Selectionnez la date");
+        lblDateDonne.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblDateDonne.setBounds(170, 5, 191, 28);
+        dateDonne.add(lblDateDonne);
+
+        JDateChooser textDatedonne = new JDateChooser();
+        textDatedonne.setBounds(135, 36, 247, 28);
+        dateDonne.add(textDatedonne);
+
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setBorder(null);
+        scrollPane.setBounds(66, 177, 533, 274);
+        panAutres.add(scrollPane);
+
+        JTable tableLecture = new JTable();
+        tableLecture.setBorder(null);
+        scrollPane.setViewportView(tableLecture);
+        MyTableModel modelLecture = new MyTableModel();
+        tableLecture.setModel(modelLecture);
+
+
+        String[] req = {"              -------Que voulez-vous afficher ?-------              ",
+                "Reservations d'un individu donne", "Reservations actifs dans un bloc donne",
+                "Individu ayant des reservations en cours", "Reservations d'un jour donne", "Evenements passés"};
+        JComboBox<String> request = new JComboBox<>(req);
+        request.addItemListener(e -> {
+
+            if (request.getSelectedIndex() == 1) {
+                modelLecture.setColumnIdentifiers(new String[]{"ID", "Nom"});
+                cardlayoutQuestions.show(questions, "reservataireDonne");
+
+            }
+
+            if (request.getSelectedIndex() == 2) {
+                modelLecture.setColumnIdentifiers(new String[]{"ID", "NomEven"});
+                cardlayoutQuestions.show(questions, "bloc_donne");
+
+            }
+
+            if (request.getSelectedIndex() == 3) {
+                modelLecture.setColumnIdentifiers(new String[]{"ID", "Age_Ind"});
+                cardlayoutQuestions.show(questions, "autres");
+
+            }
+
+            if (request.getSelectedIndex() == 4) {
+                modelLecture.setColumnIdentifiers(new String[]{"IDEvent", "Nom"});
+                cardlayoutQuestions.show(questions, "date_donne");
+
+
+            }
+
+            if (request.getSelectedIndex() == 5) {
+                modelLecture.setColumnIdentifiers(new String[]{"ID", "Nom", "Date"});
+                cardlayoutQuestions.show(questions, "autres");
+
+            }
+        });
+        request.setBounds(66, 57, 533, 22);
+        panAutres.add(request);
+
+    }
     @Override
     public void errorOccurred(String message) {
         System.out.println(message);
@@ -709,3 +743,5 @@ public class MainWindow extends JFrame implements ErrorListener {
         System.out.println(message);
     }
 }
+
+
