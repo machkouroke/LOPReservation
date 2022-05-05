@@ -27,12 +27,12 @@ public class MainWindow extends JFrame implements ErrorListener {
     JPanel contenu;
     CardLayout cardlayout;
 
-    private JComboBox addNumSalle;
-    private JComboBox addNumBloc;
+    private JComboBox<String> addNumSalle;
+    private JComboBox<String> addNumBloc;
     private JTextField addIdReservataire;
     private JTextField addNomEvent;
-    private JComboBox updateNumSalle;
-    private JComboBox updateNumBloc;
+    private JComboBox<String> updateNumSalle;
+    private JComboBox<String> updateNumBloc;
     private JTextField updateIdReservataire;
     private JTextField updateNomEvent;
     private JTable updateTable;
@@ -40,10 +40,10 @@ public class MainWindow extends JFrame implements ErrorListener {
     private JDateChooser addDateEvent;
     private JTable tableDelete;
     private JTextField deleteIdText;
-    private final Controller controller;
+    private final transient Controller controller;
 
-    String [] salles = {"--Numero de Salle--","1","2","3","4"};
-    String[] blocs = {"--Numero de Bloc--","A","B","C","D"};
+    String [] salles = {"--Numéro de Salle--","1","2","3","4"};
+    String[] blocs = {"--Numéro de Bloc--","A","B","C","D"};
 
     public MainWindow(Controller controller) throws IOException {
         this.controller = controller;
@@ -109,7 +109,7 @@ public class MainWindow extends JFrame implements ErrorListener {
             params.put("numBloc", (String) this.addNumBloc.getSelectedItem());
             params.put("eventName",  this.addNomEvent.getText());
             params.put("eventDate", new SimpleDateFormat("yyyy-MM-dd").format(this.addDateEvent.getDate()));
-//        System.out.println();
+
             Response response =  this.controller.add(new Request("Ajout d'un utilisateur", params));
 
         }
@@ -375,11 +375,11 @@ public class MainWindow extends JFrame implements ErrorListener {
         formulaire.add(labDateEvent);
 
 
-        addNumSalle = new JComboBox(salles);
+        addNumSalle = new JComboBox<>(salles);
         addNumSalle.setBounds(150,85,178,20);
         formulaire.add(addNumSalle);
 
-        addNumBloc = new JComboBox(blocs);
+        addNumBloc = new JComboBox<>(blocs);
         addNumBloc.setBounds(150,138,178,20);
         formulaire.add(addNumBloc);
 
