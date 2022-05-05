@@ -31,12 +31,12 @@ public class MainWindow extends JFrame implements ErrorListener {
     private JComboBox addNumBloc;
     private JTextField addIdReservataire;
     private JTextField addNomEvent;
-    private final JTextField updateNumSalle;
-    private final JTextField updateNumBloc;
-    private final JTextField updateIdReservataire;
-    private final JTextField updateNomEvent;
-    private final JTable updateTable;
-    private final JTextField rechercheUpdate;
+    private JComboBox updateNumSalle;
+    private JComboBox updateNumBloc;
+    private JTextField updateIdReservataire;
+    private JTextField updateNomEvent;
+    private JTable updateTable;
+    private JTextField rechercheUpdate;
     private JDateChooser addDateEvent;
     private final JTable tableDelete;
     private final JTextField deleteIdText;
@@ -91,142 +91,7 @@ public class MainWindow extends JFrame implements ErrorListener {
 
         panelAdd();
 
-        JPanel panUpdate = new JPanel();
-        panUpdate.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-        panUpdate.setBackground(new Color(250, 240, 230));
-        contenu.add(panUpdate, "update");
-        panUpdate.setLayout(null);
-
-        JPanel formulaireUpdate = new JPanel();
-        formulaireUpdate.setLayout(null);
-        formulaireUpdate.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-        formulaireUpdate.setBounds(27, 124, 276, 284);
-        panUpdate.add(formulaireUpdate);
-
-        JLabel labIdSalle1 = new JLabel("Numero de Salle ");
-        labIdSalle1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        labIdSalle1.setBounds(22, 46, 94, 17);
-        formulaireUpdate.add(labIdSalle1);
-
-        JLabel labIdBloc1 = new JLabel("Numero de Bloc");
-        labIdBloc1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        labIdBloc1.setBounds(22, 94, 106, 14);
-        formulaireUpdate.add(labIdBloc1);
-
-        JLabel labIdReservataire1 = new JLabel("ID du reservataire");
-        labIdReservataire1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        labIdReservataire1.setBounds(22, 134, 94, 20);
-        formulaireUpdate.add(labIdReservataire1);
-
-        JLabel labEvent1 = new JLabel("Nom Evenement");
-        labEvent1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        labEvent1.setBounds(22, 177, 80, 14);
-        formulaireUpdate.add(labEvent1);
-
-        JLabel labDateEvent1 = new JLabel("Date Evenement");
-        labDateEvent1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        labDateEvent1.setBounds(22, 214, 85, 17);
-        formulaireUpdate.add(labDateEvent1);
-
-        updateNumSalle = new JTextField();
-        updateNumSalle.setColumns(10);
-        updateNumSalle.setBorder(null);
-        updateNumSalle.setBounds(126, 45, 138, 20);
-        formulaireUpdate.add(updateNumSalle);
-
-        updateNumBloc = new JTextField();
-        updateNumBloc.setColumns(10);
-        updateNumBloc.setBorder(null);
-        updateNumBloc.setBounds(126, 92, 138, 20);
-        formulaireUpdate.add(updateNumBloc);
-
-        updateIdReservataire = new JTextField();
-        updateIdReservataire.setColumns(10);
-        updateIdReservataire.setBorder(null);
-        updateIdReservataire.setBounds(126, 135, 138, 20);
-        formulaireUpdate.add(updateIdReservataire);
-
-        updateNomEvent = new JTextField();
-        updateNomEvent.setColumns(10);
-        updateNomEvent.setBorder(null);
-        updateNomEvent.setBounds(126, 175, 138, 20);
-        formulaireUpdate.add(updateNomEvent);
-
-        JDateChooser updateDateEvent = new JDateChooser();
-        updateDateEvent.setBorder(null);
-        updateDateEvent.setBounds(126, 214, 138, 20);
-        formulaireUpdate.add(updateDateEvent);
-
-
-        JScrollPane scrollPaneUpdate = new JScrollPane();
-        scrollPaneUpdate.setBounds(338, 77, 298, 331);
-        panUpdate.add(scrollPaneUpdate);
-
-        updateTable = new JTable();
-        MyTableModel model = new MyTableModel();
-
-        updateTable.setModel(model);
-        updateTable.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-                int i = updateTable.convertRowIndexToModel(updateTable.getSelectedRow());
-                updateNumSalle.setText((String) model.getValueAt(i, 0));
-                updateNumBloc.setText((String) model.getValueAt(i, 1));
-                updateIdReservataire.setText((String) model.getValueAt(i, 2));
-                updateNomEvent.setText((String) model.getValueAt(i, 3));
-                try {
-                    updateDateEvent.setDate(new SimpleDateFormat("dd-MM-yyyy").parse((String) model.getValueAt(i, 4)));
-                } catch (ParseException e1) {
-                    e1.printStackTrace();
-                }
-
-
-            }
-        });
-
-
-        scrollPaneUpdate.setViewportView(updateTable);
-
-        JButton boutonUpdate = new JButton("MODIFIER ...");
-        boutonUpdate.setBounds(27, 419, 111, 23);
-        panUpdate.add(boutonUpdate);
-
-        JButton updateButtCancel = new JButton("ANNULER ...\r\n");
-        updateButtCancel.setBorder(new BevelBorder(BevelBorder.RAISED));
-        updateButtCancel.addActionListener(e -> {
-            updateNumSalle.setText("");
-            updateNumBloc.setText("");
-            updateIdReservataire.setText("");
-            updateNomEvent.setText("");
-            updateDateEvent.setDate(null);
-        });
-        updateButtCancel.setBounds(525, 419, 111, 23);
-        panUpdate.add(updateButtCancel);
-
-        JLabel lblNewLabel = new JLabel(">> MODIFIER UN EVENEMENT");
-        lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel.setForeground(new Color(255, 140, 0));
-        lblNewLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 19));
-        lblNewLabel.setBounds(53, 21, 318, 23);
-        panUpdate.add(lblNewLabel);
-
-        rechercheUpdate = new JTextField();
-        rechercheUpdate.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                String research = rechercheUpdate.getText();
-                searchInTable(research, updateTable);
-            }
-        });
-        rechercheUpdate.setBounds(27, 93, 276, 20);
-        panUpdate.add(rechercheUpdate);
-        rechercheUpdate.setColumns(10);
-
-        JLabel lblNewLabel1 = new JLabel("Recherchez un évènement ici");
-        lblNewLabel1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        lblNewLabel1.setBounds(53, 66, 250, 14);
-        panUpdate.add(lblNewLabel1);
+        panelUpdate();
 
 
         JPanel panDelete = new JPanel();
@@ -618,23 +483,23 @@ public class MainWindow extends JFrame implements ErrorListener {
         formulaire.setLayout(null);
 
         JLabel labIdSalle = new JLabel("Numero de Salle ");
-        addFormLabel(labIdSalle,83);
+        FormLabel(labIdSalle,83,118);
         formulaire.add(labIdSalle);
 
         JLabel labIdBloc = new JLabel("Numero de Bloc");
-        addFormLabel(labIdBloc,140);
+        FormLabel(labIdBloc,140,118);
         formulaire.add(labIdBloc);
 
         JLabel labIdReservataire = new JLabel("ID du reservataire");
-        addFormLabel(labIdReservataire,188);
+        FormLabel(labIdReservataire,188,118);
         formulaire.add(labIdReservataire);
 
         JLabel labEvent = new JLabel("Nom Evenement");
-        addFormLabel(labEvent,244);
+        FormLabel(labEvent,244,118);
         formulaire.add(labEvent);
 
         JLabel labDateEvent = new JLabel("Date Evenement");
-        addFormLabel(labDateEvent,292);
+        FormLabel(labDateEvent,292,118);
         formulaire.add(labDateEvent);
 
 
@@ -647,11 +512,11 @@ public class MainWindow extends JFrame implements ErrorListener {
         formulaire.add(addNumBloc);
 
         addIdReservataire = new JTextField();
-        addTextField(addIdReservataire,189);
+        formTextField(addIdReservataire,189,"add");
         formulaire.add(addIdReservataire);
 
         addNomEvent = new JTextField();
-        addTextField(addNomEvent,242);
+        formTextField(addNomEvent,242,"add");
         formulaire.add(addNomEvent);
 
         addDateEvent = new JDateChooser();
@@ -688,24 +553,152 @@ public class MainWindow extends JFrame implements ErrorListener {
         panAdd.add(boutonRestore);
 
         JLabel addTitle = new JLabel(">> AJOUTER UN EVENEMENT");
-        addTitle.setForeground(new Color(255, 140, 0));
-        addTitle.setHorizontalAlignment(SwingConstants.CENTER);
-        addTitle.setFont(new Font("Comic Sans MS", Font.BOLD, 19));
-        addTitle.setBounds(35, 11, 318, 42);
+        titleLabel(addTitle);
         panAdd.add(addTitle);
     }
 
-    public void addTextField(JTextField tf,int y){
+    public void formTextField(JTextField tf,int y,String namePanel){
         //tf.setBorder(null);
-        tf.setBounds(150,y,178,20);
+        if(namePanel.equals("add")) tf.setBounds(150,y,178,20);
+        if(namePanel.equals("update")) tf.setBounds(126,y,138,20);
         tf.setColumns(10);
     }
 
-    public void addFormLabel(JLabel label,int y){
+    public void FormLabel(JLabel label,int y,int width){
         label.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        label.setBounds(22,y,118,15);
+        label.setBounds(22,y,width,15);
     }
 
+    public void titleLabel(JLabel lb){
+        lb.setHorizontalAlignment(SwingConstants.CENTER);
+        lb.setForeground(new Color(255, 140, 0));
+        lb.setFont(new Font("Comic Sans MS", Font.BOLD, 19));
+        lb.setBounds(35, 11, 318, 42);
+    }
+
+    public void panelUpdate(){
+        JPanel panUpdate = new JPanel();
+        panUpdate.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+        panUpdate.setBackground(new Color(250, 240, 230));
+        contenu.add(panUpdate, "update");
+        panUpdate.setLayout(null);
+
+        JPanel formulaireUpdate = new JPanel();
+        formulaireUpdate.setLayout(null);
+        formulaireUpdate.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+        formulaireUpdate.setBounds(27, 124, 276, 284);
+        panUpdate.add(formulaireUpdate);
+
+        JLabel labIdSalle1 = new JLabel("Numero de Salle ");
+        FormLabel(labIdSalle1,46,94);
+        formulaireUpdate.add(labIdSalle1);
+
+        JLabel labIdBloc1 = new JLabel("Numero de Bloc");
+        FormLabel(labIdBloc1,94,106);
+        formulaireUpdate.add(labIdBloc1);
+
+        JLabel labIdReservataire1 = new JLabel("ID du reservataire");
+        FormLabel(labIdReservataire1,134,94);
+        formulaireUpdate.add(labIdReservataire1);
+
+        JLabel labEvent1 = new JLabel("Nom Evenement");
+        FormLabel(labEvent1,177,80);
+        formulaireUpdate.add(labEvent1);
+
+        JLabel labDateEvent1 = new JLabel("Date Evenement");
+        FormLabel(labDateEvent1,214,85);
+        formulaireUpdate.add(labDateEvent1);
+
+        updateNumSalle = new JComboBox<>(salles);
+        updateNumSalle.setBounds(126,45,138,20);
+        formulaireUpdate.add(updateNumSalle);
+
+        updateNumBloc = new JComboBox<>(blocs);
+        updateNumBloc.setBounds(126,92,138,20);
+        formulaireUpdate.add(updateNumBloc);
+
+        updateIdReservataire = new JTextField();
+        formTextField(updateIdReservataire,135,"update");
+        formulaireUpdate.add(updateIdReservataire);
+
+        updateNomEvent = new JTextField();
+        formTextField(updateNomEvent,175,"update");
+        formulaireUpdate.add(updateNomEvent);
+
+        JDateChooser updateDateEvent = new JDateChooser();
+        updateDateEvent.setBorder(null);
+        updateDateEvent.setBounds(126, 214, 138, 20);
+        formulaireUpdate.add(updateDateEvent);
+
+
+        JScrollPane scrollPaneUpdate = new JScrollPane();
+        scrollPaneUpdate.setBounds(338, 77, 298, 331);
+        panUpdate.add(scrollPaneUpdate);
+
+        updateTable = new JTable();
+        MyTableModel model = new MyTableModel();
+
+        updateTable.setModel(model);
+        updateTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+                int i = updateTable.convertRowIndexToModel(updateTable.getSelectedRow());
+                updateNumSalle.setSelectedItem( model.getValueAt(i, 0));
+                updateNumBloc.setSelectedItem((String) model.getValueAt(i, 1));
+                updateIdReservataire.setText((String) model.getValueAt(i, 2));
+                updateNomEvent.setText((String) model.getValueAt(i, 3));
+                try {
+                    updateDateEvent.setDate(new SimpleDateFormat("dd-MM-yyyy").parse((String) model.getValueAt(i, 4)));
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
+
+
+            }
+        });
+
+
+        scrollPaneUpdate.setViewportView(updateTable);
+
+        JButton boutonUpdate = new JButton("MODIFIER ...");
+        boutonUpdate.setBounds(27, 419, 111, 23);
+        panUpdate.add(boutonUpdate);
+
+        JButton updateButtCancel = new JButton("ANNULER ...\r\n");
+        updateButtCancel.setBorder(new BevelBorder(BevelBorder.RAISED));
+        updateButtCancel.addActionListener(e -> {
+            updateNumSalle.setSelectedIndex(0);
+            updateNumBloc.setSelectedIndex(0);
+            updateIdReservataire.setText("");
+            updateNomEvent.setText("");
+            updateDateEvent.setDate(null);
+        });
+        updateButtCancel.setBounds(525, 419, 111, 23);
+        panUpdate.add(updateButtCancel);
+
+        JLabel lblNewLabel = new JLabel(">> MODIFIER UN EVENEMENT");
+        titleLabel(lblNewLabel);
+        panUpdate.add(lblNewLabel);
+
+        rechercheUpdate = new JTextField();
+        rechercheUpdate.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String research = rechercheUpdate.getText();
+                searchInTable(research, updateTable);
+            }
+        });
+        rechercheUpdate.setBounds(27, 93, 276, 20);
+        panUpdate.add(rechercheUpdate);
+        rechercheUpdate.setColumns(10);
+
+        JLabel lblNewLabel1 = new JLabel("Recherchez un évènement ici");
+        lblNewLabel1.setFont(new Font("Tahoma", Font.PLAIN, 13));
+        lblNewLabel1.setBounds(53, 66, 250, 14);
+        panUpdate.add(lblNewLabel1);
+
+    }
     @Override
     public void errorOccurred(String message) {
         System.out.println(message);
