@@ -1,4 +1,4 @@
-package com.lop.View.src.source;
+package com.lop.view.src.source;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -15,8 +15,8 @@ import java.util.Map;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.TableRowSorter;
 
-import com.lop.Controller.Controller;
-import com.lop.ErrorEvent.ErrorListener;
+import com.lop.controller.Controller;
+import com.lop.error_event.ErrorListener;
 import com.lop.communication.Request;
 import com.lop.communication.Response;
 import com.toedter.calendar.JDateChooser;
@@ -27,12 +27,12 @@ public class MainWindow extends JFrame implements ErrorListener {
     JPanel contenu;
     CardLayout cardlayout;
 
-    private JComboBox addNumSalle;
-    private JComboBox addNumBloc;
+    private JComboBox<String> addNumSalle;
+    private JComboBox<String> addNumBloc;
     private JTextField addIdReservataire;
     private JTextField addNomEvent;
-    private JComboBox updateNumSalle;
-    private JComboBox updateNumBloc;
+    private JComboBox<String> updateNumSalle;
+    private JComboBox<String> updateNumBloc;
     private JTextField updateIdReservataire;
     private JTextField updateNomEvent;
     private JTable updateTable;
@@ -40,10 +40,10 @@ public class MainWindow extends JFrame implements ErrorListener {
     private JDateChooser addDateEvent;
     private JTable tableDelete;
     private JTextField deleteIdText;
-    private final Controller controller;
+    private final transient Controller controller;
 
-    String [] salles = {"--Numero de Salle--","1","2","3","4"};
-    String[] blocs = {"--Numero de Bloc--","A","B","C","D"};
+    String [] salles = {"--Numéro de Salle--","1","2","3","4"};
+    String[] blocs = {"--Numéro de Bloc--","A","B","C","D"};
 
     public MainWindow(Controller controller) throws IOException {
         this.controller = controller;
@@ -109,7 +109,7 @@ public class MainWindow extends JFrame implements ErrorListener {
             params.put("numBloc", (String) this.addNumBloc.getSelectedItem());
             params.put("eventName",  this.addNomEvent.getText());
             params.put("eventDate", new SimpleDateFormat("yyyy-MM-dd").format(this.addDateEvent.getDate()));
-//        System.out.println();
+
             Response response =  this.controller.add(new Request("Ajout d'un utilisateur", params));
 
         }
@@ -155,9 +155,13 @@ public class MainWindow extends JFrame implements ErrorListener {
             public void mouseClicked(MouseEvent e) {
                 cardlayout.show(contenu, "add");
             }
+
+            @Override
             public void mouseEntered(MouseEvent e){
                 panMenuAdd.setBackground(Color.white);
             }
+
+            @Override
             public void mouseExited(MouseEvent e){
                 panMenuAdd.setBackground(new Color(255, 140, 0));
             }
@@ -182,9 +186,13 @@ public class MainWindow extends JFrame implements ErrorListener {
             public void mouseClicked(MouseEvent e) {
                 cardlayout.show(contenu, "update");
             }
+
+            @Override
             public void mouseEntered(MouseEvent e){
                 panMenuUpdate.setBackground(Color.white);
             }
+
+            @Override
             public void mouseExited(MouseEvent e){
                 panMenuUpdate.setBackground(new Color(255, 140, 0));
             }
@@ -209,9 +217,13 @@ public class MainWindow extends JFrame implements ErrorListener {
             public void mouseClicked(MouseEvent e) {
                 cardlayout.show(contenu, "delete");
             }
+
+            @Override
             public void mouseEntered(MouseEvent e){
                 panMenuDelete.setBackground(Color.white);
             }
+
+            @Override
             public void mouseExited(MouseEvent e){
                 panMenuDelete.setBackground(new Color(255, 140, 0));
             }
@@ -236,9 +248,13 @@ public class MainWindow extends JFrame implements ErrorListener {
             public void mouseClicked(MouseEvent e) {
                 cardlayout.show(contenu, "home");
             }
+
+            @Override
             public void mouseEntered(MouseEvent e){
                 panMenuHome.setBackground(Color.white);
             }
+
+            @Override
             public void mouseExited(MouseEvent e){
                 panMenuHome.setBackground(new Color(255, 140, 0));
             }
@@ -263,9 +279,13 @@ public class MainWindow extends JFrame implements ErrorListener {
             public void mouseClicked(MouseEvent e) {
                 cardlayout.show(contenu, "autres");
             }
+
+            @Override
             public void mouseEntered(MouseEvent e){
                 panMenuAutres.setBackground(Color.white);
             }
+
+            @Override
             public void mouseExited(MouseEvent e){
                 panMenuAutres.setBackground(new Color(255, 140, 0));
             }
@@ -335,31 +355,31 @@ public class MainWindow extends JFrame implements ErrorListener {
         formulaire.setLayout(null);
 
         JLabel labIdSalle = new JLabel("Numero de Salle ");
-        FormLabel(labIdSalle,83,118);
+        formLabel(labIdSalle,83,118);
         formulaire.add(labIdSalle);
 
         JLabel labIdBloc = new JLabel("Numero de Bloc");
-        FormLabel(labIdBloc,140,118);
+        formLabel(labIdBloc,140,118);
         formulaire.add(labIdBloc);
 
         JLabel labIdReservataire = new JLabel("ID du reservataire");
-        FormLabel(labIdReservataire,188,118);
+        formLabel(labIdReservataire,188,118);
         formulaire.add(labIdReservataire);
 
         JLabel labEvent = new JLabel("Nom Evenement");
-        FormLabel(labEvent,244,118);
+        formLabel(labEvent,244,118);
         formulaire.add(labEvent);
 
         JLabel labDateEvent = new JLabel("Date Evenement");
-        FormLabel(labDateEvent,292,118);
+        formLabel(labDateEvent,292,118);
         formulaire.add(labDateEvent);
 
 
-        addNumSalle = new JComboBox(salles);
+        addNumSalle = new JComboBox<>(salles);
         addNumSalle.setBounds(150,85,178,20);
         formulaire.add(addNumSalle);
 
-        addNumBloc = new JComboBox(blocs);
+        addNumBloc = new JComboBox<>(blocs);
         addNumBloc.setBounds(150,138,178,20);
         formulaire.add(addNumBloc);
 
@@ -410,13 +430,13 @@ public class MainWindow extends JFrame implements ErrorListener {
     }
 
     public void formTextField(JTextField tf,int y,String namePanel){
-        //tf.setBorder(null);
+
         if(namePanel.equals("add")) tf.setBounds(150,y,178,20);
         if(namePanel.equals("update")) tf.setBounds(126,y,138,20);
         tf.setColumns(10);
     }
 
-    public void FormLabel(JLabel label,int y,int width){
+    public void formLabel(JLabel label, int y, int width){
         label.setFont(new Font("Tahoma", Font.PLAIN, 13));
         label.setBounds(22,y,width,15);
     }
@@ -439,24 +459,24 @@ public class MainWindow extends JFrame implements ErrorListener {
         formulaireUpdate.setBounds(27, 124, 276, 284);
         panUpdate.add(formulaireUpdate);
 
-        JLabel labIdSalle1 = new JLabel("Numero de Salle ");
-        FormLabel(labIdSalle1,46,94);
+        JLabel labIdSalle1 = new JLabel("Numéro de Salle ");
+        formLabel(labIdSalle1,46,94);
         formulaireUpdate.add(labIdSalle1);
 
-        JLabel labIdBloc1 = new JLabel("Numero de Bloc");
-        FormLabel(labIdBloc1,94,106);
+        JLabel labIdBloc1 = new JLabel("Numéro de Bloc");
+        formLabel(labIdBloc1,94,106);
         formulaireUpdate.add(labIdBloc1);
 
         JLabel labIdReservataire1 = new JLabel("ID du reservataire");
-        FormLabel(labIdReservataire1,134,94);
+        formLabel(labIdReservataire1,134,94);
         formulaireUpdate.add(labIdReservataire1);
 
         JLabel labEvent1 = new JLabel("Nom Evenement");
-        FormLabel(labEvent1,177,80);
+        formLabel(labEvent1,177,80);
         formulaireUpdate.add(labEvent1);
 
         JLabel labDateEvent1 = new JLabel("Date Evenement");
-        FormLabel(labDateEvent1,214,85);
+        formLabel(labDateEvent1,214,85);
         formulaireUpdate.add(labDateEvent1);
 
         updateNumSalle = new JComboBox<>(salles);
@@ -495,7 +515,7 @@ public class MainWindow extends JFrame implements ErrorListener {
 
                 int i = updateTable.convertRowIndexToModel(updateTable.getSelectedRow());
                 updateNumSalle.setSelectedItem( model.getValueAt(i, 0));
-                updateNumBloc.setSelectedItem((String) model.getValueAt(i, 1));
+                updateNumBloc.setSelectedItem(model.getValueAt(i, 1));
                 updateIdReservataire.setText((String) model.getValueAt(i, 2));
                 updateNomEvent.setText((String) model.getValueAt(i, 3));
                 try {

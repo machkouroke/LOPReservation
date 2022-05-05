@@ -1,4 +1,4 @@
-package com.lop.Exception;
+package com.lop.exception;
 
 public class DataBaseException extends Exception{
     public DataBaseException(String message) {

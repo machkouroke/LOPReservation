@@ -1,6 +1,6 @@
 package com.lop.communication;
 
-import com.lop.Controller.Controller;
+import com.lop.controller.Controller;
 
 
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
-package com.lop.Model.Beans;
+package com.lop.model.beans;
 
-public class Equipements {
+public class Equipments {
     private int numEqt;
     private int numSalle;
     private char idBloc;
