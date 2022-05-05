@@ -4,9 +4,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.CardLayout;
+import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
@@ -29,20 +27,23 @@ public class MainWindow extends JFrame implements ErrorListener {
     JPanel contenu;
     CardLayout cardlayout;
 
-    private final JTextField addNumSalle;
-    private final JTextField addNumBloc;
-    private final JTextField addIdReservataire;
-    private final JTextField addNomEvent;
+    private JComboBox addNumSalle;
+    private JComboBox addNumBloc;
+    private JTextField addIdReservataire;
+    private JTextField addNomEvent;
     private final JTextField updateNumSalle;
     private final JTextField updateNumBloc;
     private final JTextField updateIdReservataire;
     private final JTextField updateNomEvent;
     private final JTable updateTable;
     private final JTextField rechercheUpdate;
-    private final JDateChooser addDateEvent;
+    private JDateChooser addDateEvent;
     private final JTable tableDelete;
     private final JTextField deleteIdText;
     private final Controller controller;
+
+    String [] salles = {"--Numero de Salle--","1","2","3","4"};
+    String[] blocs = {"--Numero de Bloc--","A","B","C","D"};
 
     public MainWindow(Controller controller) throws IOException {
         this.controller = controller;
@@ -88,106 +89,7 @@ public class MainWindow extends JFrame implements ErrorListener {
         //Affichage du panel de l'accueil
         panelHome();
 
-        JPanel panAdd = new JPanel();
-        panAdd.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-        panAdd.setBackground(new Color(250, 240, 230));
-        contenu.add(panAdd, "add");
-        panAdd.setLayout(null);
-
-        JPanel formulaire = new JPanel();
-        formulaire.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-        formulaire.setBounds(159, 64, 338, 332);
-        panAdd.add(formulaire);
-        formulaire.setLayout(null);
-
-        JLabel labIdSalle = new JLabel("Numero de Salle ");
-        labIdSalle.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        labIdSalle.setBounds(22, 83, 118, 17);
-        formulaire.add(labIdSalle);
-
-        JLabel labIdBloc = new JLabel("Numero de Bloc");
-        labIdBloc.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        labIdBloc.setBounds(22, 140, 118, 14);
-        formulaire.add(labIdBloc);
-
-        JLabel labIdReservataire = new JLabel("ID du reservataire");
-        labIdReservataire.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        labIdReservataire.setBounds(22, 188, 118, 20);
-        formulaire.add(labIdReservataire);
-
-        JLabel labEvent = new JLabel("Nom Evenement");
-        labEvent.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        labEvent.setBounds(22, 244, 118, 14);
-        formulaire.add(labEvent);
-
-        JLabel labDateEvent = new JLabel("Date Evenement");
-        labDateEvent.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        labDateEvent.setBounds(22, 292, 118, 17);
-//        formulaire.add(labDateEvent);
-
-        addNumSalle = new JTextField();
-        addNumSalle.setBorder(null);
-        addNumSalle.setBounds(150, 85, 178, 20);
-        formulaire.add(addNumSalle);
-        addNumSalle.setColumns(10);
-
-        addNumBloc = new JTextField();
-        addNumBloc.setBorder(null);
-        addNumBloc.setBounds(150, 138, 178, 20);
-        formulaire.add(addNumBloc);
-        addNumBloc.setColumns(10);
-
-        addIdReservataire = new JTextField();
-        addIdReservataire.setBorder(null);
-        addIdReservataire.setBounds(150, 189, 178, 20);
-        formulaire.add(addIdReservataire);
-        addIdReservataire.setColumns(10);
-
-        addNomEvent = new JTextField();
-        addNomEvent.setBorder(null);
-        addNomEvent.setBounds(150, 242, 178, 20);
-        formulaire.add(addNomEvent);
-        addNomEvent.setColumns(10);
-
-        addDateEvent = new JDateChooser();
-        addDateEvent.setBounds(150, 292, 178, 20);
-        formulaire.add(addDateEvent);
-
-        JLabel iconAddForm = new JLabel("");
-        iconAddForm.setBounds(142, 11, 57, 63);
-        formulaire.add(iconAddForm);
-        ImageIcon imgAddForm = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/ajout_ev2.png")));
-        iconAddForm.setIcon(imgAddForm);
-
-        JButton boutonAjout = new JButton("AJOUTER");
-        boutonAjout.addActionListener(this::addEvent);
-        boutonAjout.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-        boutonAjout.setBounds(383, 407, 114, 23);
-        panAdd.add(boutonAjout);
-
-        JButton boutonRestore = new JButton("REINITIALISER");
-        boutonRestore.addActionListener(e -> {
-
-            int rep = JOptionPane.showConfirmDialog(null, "Etes-vous surs de vouloir tout remettre a zero");
-            if (rep == JOptionPane.YES_OPTION) {
-                addNumSalle.setText("");
-                addNumBloc.setText("");
-                addIdReservataire.setText("");
-                addNomEvent.setText("");
-                addDateEvent.setDate(null);
-            }
-
-        });
-        boutonRestore.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-        boutonRestore.setBounds(158, 407, 114, 23);
-        panAdd.add(boutonRestore);
-
-        JLabel addTitle = new JLabel(">> AJOUTER UN EVENEMENT");
-        addTitle.setForeground(new Color(255, 140, 0));
-        addTitle.setHorizontalAlignment(SwingConstants.CENTER);
-        addTitle.setFont(new Font("Comic Sans MS", Font.BOLD, 19));
-        addTitle.setBounds(35, 11, 318, 42);
-        panAdd.add(addTitle);
+        panelAdd();
 
         JPanel panUpdate = new JPanel();
         panUpdate.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -508,18 +410,20 @@ public class MainWindow extends JFrame implements ErrorListener {
     }
 
     public void addEvent(ActionEvent action) {
-        if (addNumSalle.getText().equals("") || addNumBloc.getText().equals("") || addIdReservataire.getText().equals("") || addNomEvent.getText().equals("") || addDateEvent.getDate() == null) {
+        if (addNumSalle.getSelectedIndex()==0 || addNumBloc.getSelectedIndex()==0 || addIdReservataire.getText().equals("") || addNomEvent.getText().equals("") || addDateEvent.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Certaines cases sont vides.\nEntrez toutes les valeurs.");
         }
-        Map<String, String> params = new HashMap<>();
-        params.put("idReservataire",  this.addIdReservataire.getText());
-        params.put("numSalle",  this.addNumSalle.getText());
-        params.put("numBloc",  this.addNumBloc.getText());
-        params.put("eventName",  this.addNomEvent.getText());
-        params.put("eventDate", new SimpleDateFormat("yyyy-MM-dd").format(this.addDateEvent.getDate()));
+        else{
+            Map<String, String> params = new HashMap<>();
+            params.put("idReservataire",  this.addIdReservataire.getText());
+            params.put("numSalle", (String) this.addNumSalle.getSelectedItem());
+            params.put("numBloc", (String) this.addNumBloc.getSelectedItem());
+            params.put("eventName",  this.addNomEvent.getText());
+            params.put("eventDate", new SimpleDateFormat("yyyy-MM-dd").format(this.addDateEvent.getDate()));
 //        System.out.println();
-        Response response =  this.controller.add(new Request("Ajout d'un utilisateur", params));
+            Response response =  this.controller.add(new Request("Ajout d'un utilisateur", params));
 
+        }
     }
 
     public void searchInTable(String str, JTable table) {
@@ -698,6 +602,108 @@ public class MainWindow extends JFrame implements ErrorListener {
         lblBienvenu.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 60));
         lblBienvenu.setBounds(175, 322, 335, 94);
         home.add(lblBienvenu);
+    }
+
+    public void panelAdd() throws IOException{
+        JPanel panAdd = new JPanel();
+        panAdd.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+        panAdd.setBackground(new Color(250, 240, 230));
+        contenu.add(panAdd, "add");
+        panAdd.setLayout(null);
+
+        JPanel formulaire = new JPanel();
+        formulaire.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+        formulaire.setBounds(159, 64, 338, 332);
+        panAdd.add(formulaire);
+        formulaire.setLayout(null);
+
+        JLabel labIdSalle = new JLabel("Numero de Salle ");
+        addFormLabel(labIdSalle,83);
+        formulaire.add(labIdSalle);
+
+        JLabel labIdBloc = new JLabel("Numero de Bloc");
+        addFormLabel(labIdBloc,140);
+        formulaire.add(labIdBloc);
+
+        JLabel labIdReservataire = new JLabel("ID du reservataire");
+        addFormLabel(labIdReservataire,188);
+        formulaire.add(labIdReservataire);
+
+        JLabel labEvent = new JLabel("Nom Evenement");
+        addFormLabel(labEvent,244);
+        formulaire.add(labEvent);
+
+        JLabel labDateEvent = new JLabel("Date Evenement");
+        addFormLabel(labDateEvent,292);
+        formulaire.add(labDateEvent);
+
+
+        addNumSalle = new JComboBox(salles);
+        addNumSalle.setBounds(150,85,178,20);
+        formulaire.add(addNumSalle);
+
+        addNumBloc = new JComboBox(blocs);
+        addNumBloc.setBounds(150,138,178,20);
+        formulaire.add(addNumBloc);
+
+        addIdReservataire = new JTextField();
+        addTextField(addIdReservataire,189);
+        formulaire.add(addIdReservataire);
+
+        addNomEvent = new JTextField();
+        addTextField(addNomEvent,242);
+        formulaire.add(addNomEvent);
+
+        addDateEvent = new JDateChooser();
+        addDateEvent.setBounds(150, 292, 178, 20);
+        formulaire.add(addDateEvent);
+
+        JLabel iconAddForm = new JLabel("");
+        iconAddForm.setBounds(142, 11, 57, 63);
+        formulaire.add(iconAddForm);
+        ImageIcon imgAddForm = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/ajout_ev2.png")));
+        iconAddForm.setIcon(imgAddForm);
+
+        JButton boutonAjout = new JButton("AJOUTER");
+        boutonAjout.addActionListener(this::addEvent);
+        boutonAjout.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+        boutonAjout.setBounds(383, 407, 114, 23);
+        panAdd.add(boutonAjout);
+
+        JButton boutonRestore = new JButton("REINITIALISER");
+        boutonRestore.addActionListener(e -> {
+
+            int rep = JOptionPane.showConfirmDialog(null, "Etes-vous surs de vouloir tout remettre a zero");
+            if (rep == JOptionPane.YES_OPTION) {
+                addNumSalle.setSelectedIndex(0);
+                addNumBloc.setSelectedIndex(0);
+                addIdReservataire.setText("");
+                addNomEvent.setText("");
+                addDateEvent.setDate(null);
+            }
+
+        });
+        boutonRestore.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+        boutonRestore.setBounds(158, 407, 114, 23);
+        panAdd.add(boutonRestore);
+
+        JLabel addTitle = new JLabel(">> AJOUTER UN EVENEMENT");
+        addTitle.setForeground(new Color(255, 140, 0));
+        addTitle.setHorizontalAlignment(SwingConstants.CENTER);
+        addTitle.setFont(new Font("Comic Sans MS", Font.BOLD, 19));
+        addTitle.setBounds(35, 11, 318, 42);
+        panAdd.add(addTitle);
+    }
+
+    public void addTextField(JTextField tf,int y){
+        //tf.setBorder(null);
+        tf.setBounds(150,y,178,20);
+        tf.setColumns(10);
+    }
+
+    public void addFormLabel(JLabel label,int y){
+        label.setFont(new Font("Tahoma", Font.PLAIN, 13));
+        label.setBounds(22,y,118,15);
     }
 
     @Override
