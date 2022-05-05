@@ -31,15 +31,15 @@ public class MainWindow extends JFrame implements ErrorListener {
     private JComboBox addNumBloc;
     private JTextField addIdReservataire;
     private JTextField addNomEvent;
-    private final JTextField updateNumSalle;
-    private final JTextField updateNumBloc;
-    private final JTextField updateIdReservataire;
-    private final JTextField updateNomEvent;
-    private final JTable updateTable;
-    private final JTextField rechercheUpdate;
+    private JComboBox updateNumSalle;
+    private JComboBox updateNumBloc;
+    private JTextField updateIdReservataire;
+    private JTextField updateNomEvent;
+    private JTable updateTable;
+    private JTextField rechercheUpdate;
     private JDateChooser addDateEvent;
-    private final JTable tableDelete;
-    private final JTextField deleteIdText;
+    private JTable tableDelete;
+    private JTextField deleteIdText;
     private final Controller controller;
 
     String [] salles = {"--Numero de Salle--","1","2","3","4"};
@@ -86,326 +86,15 @@ public class MainWindow extends JFrame implements ErrorListener {
         contenu.setLayout(new CardLayout(0, 0));
         cardlayout = (CardLayout) contenu.getLayout();
 
-        //Affichage du panel de l'accueil
         panelHome();
 
         panelAdd();
 
-        JPanel panUpdate = new JPanel();
-        panUpdate.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-        panUpdate.setBackground(new Color(250, 240, 230));
-        contenu.add(panUpdate, "update");
-        panUpdate.setLayout(null);
+        panelUpdate();
 
-        JPanel formulaireUpdate = new JPanel();
-        formulaireUpdate.setLayout(null);
-        formulaireUpdate.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-        formulaireUpdate.setBounds(27, 124, 276, 284);
-        panUpdate.add(formulaireUpdate);
+        panelDelete();
 
-        JLabel labIdSalle1 = new JLabel("Numero de Salle ");
-        labIdSalle1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        labIdSalle1.setBounds(22, 46, 94, 17);
-        formulaireUpdate.add(labIdSalle1);
-
-        JLabel labIdBloc1 = new JLabel("Numero de Bloc");
-        labIdBloc1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        labIdBloc1.setBounds(22, 94, 106, 14);
-        formulaireUpdate.add(labIdBloc1);
-
-        JLabel labIdReservataire1 = new JLabel("ID du reservataire");
-        labIdReservataire1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        labIdReservataire1.setBounds(22, 134, 94, 20);
-        formulaireUpdate.add(labIdReservataire1);
-
-        JLabel labEvent1 = new JLabel("Nom Evenement");
-        labEvent1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        labEvent1.setBounds(22, 177, 80, 14);
-        formulaireUpdate.add(labEvent1);
-
-        JLabel labDateEvent1 = new JLabel("Date Evenement");
-        labDateEvent1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        labDateEvent1.setBounds(22, 214, 85, 17);
-        formulaireUpdate.add(labDateEvent1);
-
-        updateNumSalle = new JTextField();
-        updateNumSalle.setColumns(10);
-        updateNumSalle.setBorder(null);
-        updateNumSalle.setBounds(126, 45, 138, 20);
-        formulaireUpdate.add(updateNumSalle);
-
-        updateNumBloc = new JTextField();
-        updateNumBloc.setColumns(10);
-        updateNumBloc.setBorder(null);
-        updateNumBloc.setBounds(126, 92, 138, 20);
-        formulaireUpdate.add(updateNumBloc);
-
-        updateIdReservataire = new JTextField();
-        updateIdReservataire.setColumns(10);
-        updateIdReservataire.setBorder(null);
-        updateIdReservataire.setBounds(126, 135, 138, 20);
-        formulaireUpdate.add(updateIdReservataire);
-
-        updateNomEvent = new JTextField();
-        updateNomEvent.setColumns(10);
-        updateNomEvent.setBorder(null);
-        updateNomEvent.setBounds(126, 175, 138, 20);
-        formulaireUpdate.add(updateNomEvent);
-
-        JDateChooser updateDateEvent = new JDateChooser();
-        updateDateEvent.setBorder(null);
-        updateDateEvent.setBounds(126, 214, 138, 20);
-        formulaireUpdate.add(updateDateEvent);
-
-
-        JScrollPane scrollPaneUpdate = new JScrollPane();
-        scrollPaneUpdate.setBounds(338, 77, 298, 331);
-        panUpdate.add(scrollPaneUpdate);
-
-        updateTable = new JTable();
-        MyTableModel model = new MyTableModel();
-
-        updateTable.setModel(model);
-        updateTable.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-                int i = updateTable.convertRowIndexToModel(updateTable.getSelectedRow());
-                updateNumSalle.setText((String) model.getValueAt(i, 0));
-                updateNumBloc.setText((String) model.getValueAt(i, 1));
-                updateIdReservataire.setText((String) model.getValueAt(i, 2));
-                updateNomEvent.setText((String) model.getValueAt(i, 3));
-                try {
-                    updateDateEvent.setDate(new SimpleDateFormat("dd-MM-yyyy").parse((String) model.getValueAt(i, 4)));
-                } catch (ParseException e1) {
-                    e1.printStackTrace();
-                }
-
-
-            }
-        });
-
-
-        scrollPaneUpdate.setViewportView(updateTable);
-
-        JButton boutonUpdate = new JButton("MODIFIER ...");
-        boutonUpdate.setBounds(27, 419, 111, 23);
-        panUpdate.add(boutonUpdate);
-
-        JButton updateButtCancel = new JButton("ANNULER ...\r\n");
-        updateButtCancel.setBorder(new BevelBorder(BevelBorder.RAISED));
-        updateButtCancel.addActionListener(e -> {
-            updateNumSalle.setText("");
-            updateNumBloc.setText("");
-            updateIdReservataire.setText("");
-            updateNomEvent.setText("");
-            updateDateEvent.setDate(null);
-        });
-        updateButtCancel.setBounds(525, 419, 111, 23);
-        panUpdate.add(updateButtCancel);
-
-        JLabel lblNewLabel = new JLabel(">> MODIFIER UN EVENEMENT");
-        lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        lblNewLabel.setForeground(new Color(255, 140, 0));
-        lblNewLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 19));
-        lblNewLabel.setBounds(53, 21, 318, 23);
-        panUpdate.add(lblNewLabel);
-
-        rechercheUpdate = new JTextField();
-        rechercheUpdate.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                String research = rechercheUpdate.getText();
-                searchInTable(research, updateTable);
-            }
-        });
-        rechercheUpdate.setBounds(27, 93, 276, 20);
-        panUpdate.add(rechercheUpdate);
-        rechercheUpdate.setColumns(10);
-
-        JLabel lblNewLabel1 = new JLabel("Recherchez un évènement ici");
-        lblNewLabel1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        lblNewLabel1.setBounds(53, 66, 250, 14);
-        panUpdate.add(lblNewLabel1);
-
-
-        JPanel panDelete = new JPanel();
-        panDelete.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-        panDelete.setBackground(new Color(250, 240, 230));
-        contenu.add(panDelete, "delete");
-        panDelete.setLayout(null);
-
-        JLabel idDelete = new JLabel("Entrez l'ID de l'evenement \r\n\u00E0 supprimer\r\n");
-        idDelete.setFont(new Font("Tahoma", Font.PLAIN, 17));
-        idDelete.setBounds(22, 137, 306, 52);
-        panDelete.add(idDelete);
-
-        deleteIdText = new JTextField();
-        deleteIdText.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                String idToDelete = deleteIdText.getText();
-                searchInTable(idToDelete, tableDelete);
-            }
-        });
-        deleteIdText.setBounds(32, 200, 273, 37);
-        panDelete.add(deleteIdText);
-        deleteIdText.setColumns(10);
-
-        JScrollPane scrollpaneDelete = new JScrollPane();
-        scrollpaneDelete.setBounds(338, 66, 298, 331);
-        panDelete.add(scrollpaneDelete);
-
-        tableDelete = new JTable();
-        MyTableModel modelDel = new MyTableModel();
-        tableDelete.setModel(modelDel);
-        tableDelete.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-                int i = tableDelete.convertRowIndexToModel(tableDelete.getSelectedRow());
-                deleteIdText.setText((String) modelDel.getValueAt(i, 0));
-
-
-            }
-        });
-
-        scrollpaneDelete.setViewportView(tableDelete);
-
-
-        JButton btnDel = new JButton("SUPPRIMER\r\n");
-        btnDel.setBounds(32, 270, 132, 30);
-        panDelete.add(btnDel);
-
-        JButton btnCancel = new JButton("ANNULER\r\n");
-        btnCancel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                deleteIdText.setText("");
-            }
-        });
-        btnCancel.setBounds(173, 355, 132, 30);
-        panDelete.add(btnCancel);
-
-        JLabel lblnewlabel2 = new JLabel(">> SUPPRIMER UN EVENEMENT");
-        lblnewlabel2.setForeground(new Color(255, 140, 0));
-        lblnewlabel2.setFont(new Font("Comic Sans MS", Font.BOLD, 19));
-        lblnewlabel2.setBounds(60, 11, 333, 32);
-        panDelete.add(lblnewlabel2);
-
-        JPanel panAutres = new JPanel();
-        panAutres.setBackground(new Color(250, 240, 230));
-        contenu.add(panAutres, "autres");
-        panAutres.setLayout(null);
-
-        JPanel questions = new JPanel();
-        questions.setBounds(66, 90, 533, 76);
-        panAutres.add(questions);
-        questions.setLayout(new CardLayout(0, 0));
-        CardLayout cardlayoutQuestions = (CardLayout) questions.getLayout();
-
-        JPanel autresReq = new JPanel();
-        autresReq.setBackground(new Color(250, 240, 230));
-        questions.add(autresReq, "autres");
-
-        JPanel reservataireDonne = new JPanel();
-        reservataireDonne.setBackground(new Color(250, 240, 230));
-        questions.add(reservataireDonne, "reservataireDonne");
-        reservataireDonne.setLayout(null);
-
-        JLabel lblReservId = new JLabel("Entrez l'ID du reservataire .");
-        lblReservId.setFont(new Font("Tahoma", Font.PLAIN, 17));
-        lblReservId.setBackground(new Color(250, 240, 230));
-        lblReservId.setBounds(139, 11, 241, 21);
-        reservataireDonne.add(lblReservId);
-
-        JTextField textReserveDonneId = new JTextField();
-        textReserveDonneId.setBounds(87, 38, 332, 33);
-        reservataireDonne.add(textReserveDonneId);
-        textReserveDonneId.setColumns(10);
-
-        JPanel blocDonne = new JPanel();
-        blocDonne.setBackground(new Color(250, 240, 230));
-        questions.add(blocDonne, "bloc_donne");
-        blocDonne.setLayout(null);
-
-        JLabel lblBlocDonne = new JLabel("Entrez le numero du bloc");
-        lblBlocDonne.setFont(new Font("Tahoma", Font.PLAIN, 17));
-        lblBlocDonne.setHorizontalAlignment(SwingConstants.CENTER);
-        lblBlocDonne.setBounds(151, 5, 196, 29);
-        blocDonne.add(lblBlocDonne);
-
-        JTextField textBlocDonne = new JTextField();
-        textBlocDonne.setBounds(91, 36, 338, 29);
-        blocDonne.add(textBlocDonne);
-        textBlocDonne.setColumns(10);
-
-        JPanel dateDonne = new JPanel();
-        dateDonne.setBackground(new Color(250, 240, 230));
-        questions.add(dateDonne, "date_donne");
-        dateDonne.setLayout(null);
-
-        JLabel lblDateDonne = new JLabel("Selectionnez la date");
-        lblDateDonne.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lblDateDonne.setBounds(170, 5, 191, 28);
-        dateDonne.add(lblDateDonne);
-
-        JDateChooser textDatedonne = new JDateChooser();
-        textDatedonne.setBounds(135, 36, 247, 28);
-        dateDonne.add(textDatedonne);
-
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setBorder(null);
-        scrollPane.setBounds(66, 177, 533, 274);
-        panAutres.add(scrollPane);
-
-        JTable tableLecture = new JTable();
-        tableLecture.setBorder(null);
-        scrollPane.setViewportView(tableLecture);
-        MyTableModel modelLecture = new MyTableModel();
-        tableLecture.setModel(modelLecture);
-
-
-        String[] req = {"              -------Que voulez-vous afficher ?-------              ",
-                "Reservations d'un individu donne", "Reservations actifs dans un bloc donne",
-                "Individu ayant des reservations en cours", "Reservations d'un jour donne", "Evenements passés"};
-        JComboBox<String> request = new JComboBox<>(req);
-        request.addItemListener(e -> {
-
-            if (request.getSelectedIndex() == 1) {
-                modelLecture.setColumnIdentifiers(new String[]{"ID", "Nom"});
-                cardlayoutQuestions.show(questions, "reservataireDonne");
-
-            }
-
-            if (request.getSelectedIndex() == 2) {
-                modelLecture.setColumnIdentifiers(new String[]{"ID", "NomEven"});
-                cardlayoutQuestions.show(questions, "bloc_donne");
-
-            }
-
-            if (request.getSelectedIndex() == 3) {
-                modelLecture.setColumnIdentifiers(new String[]{"ID", "Age_Ind"});
-                cardlayoutQuestions.show(questions, "autres");
-
-            }
-
-            if (request.getSelectedIndex() == 4) {
-                modelLecture.setColumnIdentifiers(new String[]{"IDEvent", "Nom"});
-                cardlayoutQuestions.show(questions, "date_donne");
-
-
-            }
-
-            if (request.getSelectedIndex() == 5) {
-                modelLecture.setColumnIdentifiers(new String[]{"ID", "Nom", "Date"});
-                cardlayoutQuestions.show(questions, "autres");
-
-            }
-        });
-        request.setBounds(66, 57, 533, 22);
-        panAutres.add(request);
-
+        panelAutres();
 
     }
 
@@ -466,6 +155,12 @@ public class MainWindow extends JFrame implements ErrorListener {
             public void mouseClicked(MouseEvent e) {
                 cardlayout.show(contenu, "add");
             }
+            public void mouseEntered(MouseEvent e){
+                panMenuAdd.setBackground(Color.white);
+            }
+            public void mouseExited(MouseEvent e){
+                panMenuAdd.setBackground(new Color(255, 140, 0));
+            }
         });
         menuPanelPosition(panMenuAdd,70);
         menu.add(panMenuAdd);
@@ -486,6 +181,12 @@ public class MainWindow extends JFrame implements ErrorListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 cardlayout.show(contenu, "update");
+            }
+            public void mouseEntered(MouseEvent e){
+                panMenuUpdate.setBackground(Color.white);
+            }
+            public void mouseExited(MouseEvent e){
+                panMenuUpdate.setBackground(new Color(255, 140, 0));
             }
         });
         menuPanelPosition(panMenuUpdate,122);
@@ -508,6 +209,12 @@ public class MainWindow extends JFrame implements ErrorListener {
             public void mouseClicked(MouseEvent e) {
                 cardlayout.show(contenu, "delete");
             }
+            public void mouseEntered(MouseEvent e){
+                panMenuDelete.setBackground(Color.white);
+            }
+            public void mouseExited(MouseEvent e){
+                panMenuDelete.setBackground(new Color(255, 140, 0));
+            }
         });
         menuPanelPosition(panMenuDelete,174);
         menu.add(panMenuDelete);
@@ -529,6 +236,12 @@ public class MainWindow extends JFrame implements ErrorListener {
             public void mouseClicked(MouseEvent e) {
                 cardlayout.show(contenu, "home");
             }
+            public void mouseEntered(MouseEvent e){
+                panMenuHome.setBackground(Color.white);
+            }
+            public void mouseExited(MouseEvent e){
+                panMenuHome.setBackground(new Color(255, 140, 0));
+            }
         });
         menuPanelPosition(panMenuHome,18);
         menu.add(panMenuHome);
@@ -549,6 +262,12 @@ public class MainWindow extends JFrame implements ErrorListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 cardlayout.show(contenu, "autres");
+            }
+            public void mouseEntered(MouseEvent e){
+                panMenuAutres.setBackground(Color.white);
+            }
+            public void mouseExited(MouseEvent e){
+                panMenuAutres.setBackground(new Color(255, 140, 0));
             }
         });
         menuPanelPosition(panMenuAutres,226);
@@ -606,10 +325,8 @@ public class MainWindow extends JFrame implements ErrorListener {
 
     public void panelAdd() throws IOException{
         JPanel panAdd = new JPanel();
-        panAdd.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-        panAdd.setBackground(new Color(250, 240, 230));
+        contenuPanel(panAdd);
         contenu.add(panAdd, "add");
-        panAdd.setLayout(null);
 
         JPanel formulaire = new JPanel();
         formulaire.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -618,23 +335,23 @@ public class MainWindow extends JFrame implements ErrorListener {
         formulaire.setLayout(null);
 
         JLabel labIdSalle = new JLabel("Numero de Salle ");
-        addFormLabel(labIdSalle,83);
+        FormLabel(labIdSalle,83,118);
         formulaire.add(labIdSalle);
 
         JLabel labIdBloc = new JLabel("Numero de Bloc");
-        addFormLabel(labIdBloc,140);
+        FormLabel(labIdBloc,140,118);
         formulaire.add(labIdBloc);
 
         JLabel labIdReservataire = new JLabel("ID du reservataire");
-        addFormLabel(labIdReservataire,188);
+        FormLabel(labIdReservataire,188,118);
         formulaire.add(labIdReservataire);
 
         JLabel labEvent = new JLabel("Nom Evenement");
-        addFormLabel(labEvent,244);
+        FormLabel(labEvent,244,118);
         formulaire.add(labEvent);
 
         JLabel labDateEvent = new JLabel("Date Evenement");
-        addFormLabel(labDateEvent,292);
+        FormLabel(labDateEvent,292,118);
         formulaire.add(labDateEvent);
 
 
@@ -647,11 +364,11 @@ public class MainWindow extends JFrame implements ErrorListener {
         formulaire.add(addNumBloc);
 
         addIdReservataire = new JTextField();
-        addTextField(addIdReservataire,189);
+        formTextField(addIdReservataire,189,"add");
         formulaire.add(addIdReservataire);
 
         addNomEvent = new JTextField();
-        addTextField(addNomEvent,242);
+        formTextField(addNomEvent,242,"add");
         formulaire.add(addNomEvent);
 
         addDateEvent = new JDateChooser();
@@ -688,24 +405,343 @@ public class MainWindow extends JFrame implements ErrorListener {
         panAdd.add(boutonRestore);
 
         JLabel addTitle = new JLabel(">> AJOUTER UN EVENEMENT");
-        addTitle.setForeground(new Color(255, 140, 0));
-        addTitle.setHorizontalAlignment(SwingConstants.CENTER);
-        addTitle.setFont(new Font("Comic Sans MS", Font.BOLD, 19));
-        addTitle.setBounds(35, 11, 318, 42);
+        titleLabel(addTitle);
         panAdd.add(addTitle);
     }
 
-    public void addTextField(JTextField tf,int y){
+    public void formTextField(JTextField tf,int y,String namePanel){
         //tf.setBorder(null);
-        tf.setBounds(150,y,178,20);
+        if(namePanel.equals("add")) tf.setBounds(150,y,178,20);
+        if(namePanel.equals("update")) tf.setBounds(126,y,138,20);
         tf.setColumns(10);
     }
 
-    public void addFormLabel(JLabel label,int y){
+    public void FormLabel(JLabel label,int y,int width){
         label.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        label.setBounds(22,y,118,15);
+        label.setBounds(22,y,width,15);
     }
 
+    public void titleLabel(JLabel lb){
+        lb.setHorizontalAlignment(SwingConstants.CENTER);
+        lb.setForeground(new Color(255, 140, 0));
+        lb.setFont(new Font("Comic Sans MS", Font.BOLD, 19));
+        lb.setBounds(35, 11, 318, 42);
+    }
+
+    public void panelUpdate(){
+        JPanel panUpdate = new JPanel();
+        contenuPanel(panUpdate);
+        contenu.add(panUpdate, "update");
+
+        JPanel formulaireUpdate = new JPanel();
+        formulaireUpdate.setLayout(null);
+        formulaireUpdate.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+        formulaireUpdate.setBounds(27, 124, 276, 284);
+        panUpdate.add(formulaireUpdate);
+
+        JLabel labIdSalle1 = new JLabel("Numero de Salle ");
+        FormLabel(labIdSalle1,46,94);
+        formulaireUpdate.add(labIdSalle1);
+
+        JLabel labIdBloc1 = new JLabel("Numero de Bloc");
+        FormLabel(labIdBloc1,94,106);
+        formulaireUpdate.add(labIdBloc1);
+
+        JLabel labIdReservataire1 = new JLabel("ID du reservataire");
+        FormLabel(labIdReservataire1,134,94);
+        formulaireUpdate.add(labIdReservataire1);
+
+        JLabel labEvent1 = new JLabel("Nom Evenement");
+        FormLabel(labEvent1,177,80);
+        formulaireUpdate.add(labEvent1);
+
+        JLabel labDateEvent1 = new JLabel("Date Evenement");
+        FormLabel(labDateEvent1,214,85);
+        formulaireUpdate.add(labDateEvent1);
+
+        updateNumSalle = new JComboBox<>(salles);
+        updateNumSalle.setBounds(126,45,138,20);
+        formulaireUpdate.add(updateNumSalle);
+
+        updateNumBloc = new JComboBox<>(blocs);
+        updateNumBloc.setBounds(126,92,138,20);
+        formulaireUpdate.add(updateNumBloc);
+
+        updateIdReservataire = new JTextField();
+        formTextField(updateIdReservataire,135,"update");
+        formulaireUpdate.add(updateIdReservataire);
+
+        updateNomEvent = new JTextField();
+        formTextField(updateNomEvent,175,"update");
+        formulaireUpdate.add(updateNomEvent);
+
+        JDateChooser updateDateEvent = new JDateChooser();
+        updateDateEvent.setBorder(null);
+        updateDateEvent.setBounds(126, 214, 138, 20);
+        formulaireUpdate.add(updateDateEvent);
+
+
+        JScrollPane scrollPaneUpdate = new JScrollPane();
+        scrollPaneUpdate.setBounds(338, 77, 298, 331);
+        panUpdate.add(scrollPaneUpdate);
+
+        updateTable = new JTable();
+        MyTableModel model = new MyTableModel();
+
+        updateTable.setModel(model);
+        updateTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+                int i = updateTable.convertRowIndexToModel(updateTable.getSelectedRow());
+                updateNumSalle.setSelectedItem( model.getValueAt(i, 0));
+                updateNumBloc.setSelectedItem((String) model.getValueAt(i, 1));
+                updateIdReservataire.setText((String) model.getValueAt(i, 2));
+                updateNomEvent.setText((String) model.getValueAt(i, 3));
+                try {
+                    updateDateEvent.setDate(new SimpleDateFormat("dd-MM-yyyy").parse((String) model.getValueAt(i, 4)));
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
+
+
+            }
+        });
+
+
+        scrollPaneUpdate.setViewportView(updateTable);
+
+        JButton boutonUpdate = new JButton("MODIFIER ...");
+        boutonUpdate.setBounds(27, 419, 111, 23);
+        panUpdate.add(boutonUpdate);
+
+        JButton updateButtCancel = new JButton("ANNULER ...\r\n");
+        updateButtCancel.setBorder(new BevelBorder(BevelBorder.RAISED));
+        updateButtCancel.addActionListener(e -> {
+            updateNumSalle.setSelectedIndex(0);
+            updateNumBloc.setSelectedIndex(0);
+            updateIdReservataire.setText("");
+            updateNomEvent.setText("");
+            updateDateEvent.setDate(null);
+        });
+        updateButtCancel.setBounds(525, 419, 111, 23);
+        panUpdate.add(updateButtCancel);
+
+        JLabel updateTitle = new JLabel(">> MODIFIER UN EVENEMENT");
+        titleLabel(updateTitle);
+        panUpdate.add(updateTitle);
+
+        rechercheUpdate = new JTextField();
+        rechercheUpdate.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String research = rechercheUpdate.getText();
+                searchInTable(research, updateTable);
+            }
+        });
+        rechercheUpdate.setBounds(27, 93, 276, 20);
+        panUpdate.add(rechercheUpdate);
+        rechercheUpdate.setColumns(10);
+
+        JLabel lblNewLabel1 = new JLabel("Recherchez un évènement ici");
+        lblNewLabel1.setFont(new Font("Tahoma", Font.PLAIN, 13));
+        lblNewLabel1.setBounds(53, 66, 250, 14);
+        panUpdate.add(lblNewLabel1);
+
+    }
+
+    public void panelDelete(){
+        JPanel panDelete = new JPanel();
+        contenuPanel(panDelete);
+        contenu.add(panDelete, "delete");
+
+        JLabel idDelete = new JLabel("Entrez l'ID de l'evenement \r\n\u00E0 supprimer\r\n");
+        idDelete.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        idDelete.setBounds(22, 137, 306, 52);
+        panDelete.add(idDelete);
+
+        deleteIdText = new JTextField();
+        deleteIdText.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String idToDelete = deleteIdText.getText();
+                searchInTable(idToDelete, tableDelete);
+            }
+        });
+        deleteIdText.setBounds(32, 200, 273, 37);
+        panDelete.add(deleteIdText);
+        deleteIdText.setColumns(10);
+
+        JScrollPane scrollpaneDelete = new JScrollPane();
+        scrollpaneDelete.setBounds(338, 66, 298, 331);
+        panDelete.add(scrollpaneDelete);
+
+        tableDelete = new JTable();
+        MyTableModel modelDel = new MyTableModel();
+        tableDelete.setModel(modelDel);
+        tableDelete.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+                int i = tableDelete.convertRowIndexToModel(tableDelete.getSelectedRow());
+                deleteIdText.setText((String) modelDel.getValueAt(i, 0));
+
+
+            }
+        });
+
+        scrollpaneDelete.setViewportView(tableDelete);
+
+
+        JButton btnDel = new JButton("SUPPRIMER\r\n");
+        btnDel.setBounds(32, 270, 132, 30);
+        panDelete.add(btnDel);
+
+        JButton btnCancel = new JButton("ANNULER\r\n");
+        btnCancel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                deleteIdText.setText("");
+            }
+        });
+        btnCancel.setBounds(173, 355, 132, 30);
+        panDelete.add(btnCancel);
+
+        JLabel deleteTitle = new JLabel(">> SUPPRIMER UN EVENEMENT");
+        titleLabel(deleteTitle);
+        panDelete.add(deleteTitle);
+    }
+
+    public void panelAutres(){
+        JPanel panAutres = new JPanel();
+        contenuPanel(panAutres);
+        contenu.add(panAutres, "autres");
+
+        JPanel questions = new JPanel();
+        questions.setBounds(66, 90, 533, 76);
+        panAutres.add(questions);
+        questions.setLayout(new CardLayout(0, 0));
+        CardLayout cardlayoutQuestions = (CardLayout) questions.getLayout();
+
+        JPanel autresReq = new JPanel();
+        autresReq.setBackground(new Color(250, 240, 230));
+        questions.add(autresReq, "autres");
+
+        JPanel reservataireDonne = new JPanel();
+        displayQuestionsPanel(reservataireDonne);
+        questions.add(reservataireDonne, "reservataireDonne");
+
+        JLabel lblReservId = new JLabel("Entrez l'ID du reservataire .");
+        lblReservId.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        lblReservId.setBackground(new Color(250, 240, 230));
+        lblReservId.setBounds(139, 11, 241, 21);
+        reservataireDonne.add(lblReservId);
+
+        JTextField textReserveDonneId = new JTextField();
+        textReserveDonneId.setBounds(48, 35, 332, 33);
+        reservataireDonne.add(textReserveDonneId);
+        textReserveDonneId.setColumns(10);
+
+        JButton buttReserveDonne = new JButton("AFFICHER");
+        buttReserveDonne.setBounds(408, 39, 89, 23);
+        reservataireDonne.add(buttReserveDonne);
+
+        JPanel blocDonne = new JPanel();
+        displayQuestionsPanel(blocDonne);
+        questions.add(blocDonne, "bloc_donne");
+
+        JLabel lblBlocDonne = new JLabel("Entrez le numero du bloc");
+        lblBlocDonne.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        lblBlocDonne.setHorizontalAlignment(SwingConstants.CENTER);
+        lblBlocDonne.setBounds(151, 5, 196, 29);
+        blocDonne.add(lblBlocDonne);
+
+        JTextField textBlocDonne = new JTextField();
+        textBlocDonne.setBounds(48, 36, 338, 29);
+        blocDonne.add(textBlocDonne);
+        textBlocDonne.setColumns(10);
+
+        JButton buttBlocDonne = new JButton("AFFICHER");
+        buttBlocDonne.setBounds(408, 39, 89, 23);
+        blocDonne.add(buttBlocDonne);
+
+        JPanel dateDonne = new JPanel();
+        displayQuestionsPanel(dateDonne);
+        questions.add(dateDonne, "date_donne");
+
+        JLabel lblDateDonne = new JLabel("Selectionnez la date");
+        lblDateDonne.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblDateDonne.setBounds(170, 5, 191, 28);
+        dateDonne.add(lblDateDonne);
+
+        JDateChooser textDatedonne = new JDateChooser();
+        textDatedonne.setBounds(48, 36, 247, 28);
+        dateDonne.add(textDatedonne);
+
+        JButton buttDateDonne = new JButton("AFFICHER");
+        buttDateDonne.setBounds(408, 39, 89, 23);
+        dateDonne.add(buttDateDonne);
+
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setBorder(null);
+        scrollPane.setBounds(66, 177, 533, 274);
+        panAutres.add(scrollPane);
+
+        JTable tableLecture = new JTable();
+        tableLecture.setBorder(null);
+        scrollPane.setViewportView(tableLecture);
+        MyTableModel modelLecture = new MyTableModel();
+        tableLecture.setModel(modelLecture);
+
+
+        String[] req = {"              -------Que voulez-vous afficher ?-------              ",
+                "Reservations d'un individu donne", "Reservations actifs dans un bloc donne",
+                "Individu ayant des reservations en cours", "Reservations d'un jour donne", "Evenements passés"};
+        JComboBox<String> request = new JComboBox<>(req);
+        request.addItemListener(e -> {
+
+            if (request.getSelectedIndex() == 1) {
+                modelLecture.setColumnIdentifiers(new String[]{"ID", "Nom"});
+                cardlayoutQuestions.show(questions, "reservataireDonne");
+            }
+
+            if (request.getSelectedIndex() == 2) {
+                modelLecture.setColumnIdentifiers(new String[]{"ID", "NomEven"});
+                cardlayoutQuestions.show(questions, "bloc_donne");
+            }
+
+            if (request.getSelectedIndex() == 3) {
+                modelLecture.setColumnIdentifiers(new String[]{"ID", "Age_Ind"});
+                cardlayoutQuestions.show(questions, "autres");
+            }
+            if (request.getSelectedIndex() == 4) {
+                modelLecture.setColumnIdentifiers(new String[]{"IDEvent", "Nom"});
+                cardlayoutQuestions.show(questions, "date_donne");
+            }
+
+            if (request.getSelectedIndex() == 5) {
+                modelLecture.setColumnIdentifiers(new String[]{"ID", "Nom", "Date"});
+                cardlayoutQuestions.show(questions, "autres");
+            }
+        });
+        request.setBounds(66, 57, 533, 22);
+        panAutres.add(request);
+
+        JLabel autreTitle = new JLabel(">> AFFICHAGE");
+        titleLabel(autreTitle);
+        panAutres.add(autreTitle);
+    }
+
+    public void displayQuestionsPanel(JPanel panel){
+        panel.setBackground(new Color(250, 240, 230));
+        panel.setLayout(null);
+    }
+
+    public void contenuPanel(JPanel panel){
+        panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
+        panel.setBackground(new Color(250, 240, 230));
+        panel.setLayout(null);
+    }
     @Override
     public void errorOccurred(String message) {
         System.out.println(message);
@@ -716,3 +752,5 @@ public class MainWindow extends JFrame implements ErrorListener {
         System.out.println(message);
     }
 }
+
+
