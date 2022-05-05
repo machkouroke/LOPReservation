@@ -567,7 +567,7 @@ public class MainWindow extends JFrame implements ErrorListener {
 
 
     }
-
+/*Test commit*/
 
     public void menuPanelPosition(JPanel panel, int y){
         panel.setBorder(new BevelBorder(BevelBorder.RAISED));
