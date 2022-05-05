@@ -123,7 +123,7 @@ public class MainWindow extends JFrame implements ErrorListener {
         JLabel labDateEvent = new JLabel("Date Evenement");
         labDateEvent.setFont(new Font("Tahoma", Font.PLAIN, 13));
         labDateEvent.setBounds(22, 292, 118, 17);
-        formulaire.add(labDateEvent);
+//        formulaire.add(labDateEvent);
 
         addNumSalle = new JTextField();
         addNumSalle.setBorder(null);
