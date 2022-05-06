@@ -20,12 +20,17 @@ import com.lop.error_event.ErrorListener;
 import com.lop.communication.Request;
 import com.lop.communication.Response;
 import com.toedter.calendar.JDateChooser;
+import oracle.jdbc.logging.annotations.Log;
+
+import java.util.logging.*;
 
 public class MainWindow extends JFrame implements ErrorListener {
-
+    Logger logger=Logger.getLogger("flogger");
+    JDateChooser updateDateEvent;
     JPanel contentPane;
     JPanel contenu;
     CardLayout cardlayout;
+    JTextField textBlocDonne;
 
     private JComboBox<String> addNumSalle;
     private JComboBox<String> addNumBloc;
@@ -44,8 +49,10 @@ public class MainWindow extends JFrame implements ErrorListener {
 
     String [] salles = {"--Numéro de Salle--","1","2","3","4"};
     String[] blocs = {"--Numéro de Bloc--","A","B","C","D"};
+    private JDateChooser textDateDonne;
 
     public MainWindow(Controller controller) throws IOException {
+        //my_log.logger.setLevel(Level.WARNING);
         this.controller = controller;
         this.controller.addListener(this);
         setTitle("GESTION DES EVENEMENTS");
@@ -98,7 +105,7 @@ public class MainWindow extends JFrame implements ErrorListener {
 
     }
 
-    public void addEvent(ActionEvent action) {
+    public void addEvent(ActionEvent action) {  String r;
         if (addNumSalle.getSelectedIndex()==0 || addNumBloc.getSelectedIndex()==0 || addIdReservataire.getText().equals("") || addNomEvent.getText().equals("") || addDateEvent.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Certaines cases sont vides.\nEntrez toutes les valeurs.");
         }
@@ -110,7 +117,12 @@ public class MainWindow extends JFrame implements ErrorListener {
             params.put("eventName",  this.addNomEvent.getText());
             params.put("eventDate", new SimpleDateFormat("yyyy-MM-dd").format(this.addDateEvent.getDate()));
 
-            Response response =  this.controller.add(new Request("Ajout d'un utilisateur", params));
+            Response response =  this.controller.addo(new Request("Ajout d'un utilisateur", params));
+            r=response.getError();
+            if( r!=null){
+                this.ErrorLog(r);
+            }
+            else return;
 
         }
     }
@@ -495,7 +507,7 @@ public class MainWindow extends JFrame implements ErrorListener {
         formTextField(updateNomEvent,175,"update");
         formulaireUpdate.add(updateNomEvent);
 
-        JDateChooser updateDateEvent = new JDateChooser();
+         updateDateEvent = new JDateChooser();
         updateDateEvent.setBorder(null);
         updateDateEvent.setBounds(126, 214, 138, 20);
         formulaireUpdate.add(updateDateEvent);
@@ -557,6 +569,7 @@ public class MainWindow extends JFrame implements ErrorListener {
             public void keyReleased(KeyEvent e) {
                 String research = rechercheUpdate.getText();
                 searchInTable(research, updateTable);
+
             }
         });
         rechercheUpdate.setBounds(27, 93, 276, 20);
@@ -676,12 +689,13 @@ public class MainWindow extends JFrame implements ErrorListener {
         lblBlocDonne.setBounds(151, 5, 196, 29);
         blocDonne.add(lblBlocDonne);
 
-        JTextField textBlocDonne = new JTextField();
+         textBlocDonne = new JTextField();
         textBlocDonne.setBounds(48, 36, 338, 29);
         blocDonne.add(textBlocDonne);
         textBlocDonne.setColumns(10);
 
         JButton buttBlocDonne = new JButton("AFFICHER");
+        buttBlocDonne.addActionListener(this::evtInBloc);
         buttBlocDonne.setBounds(408, 39, 89, 23);
         blocDonne.add(buttBlocDonne);
 
@@ -694,11 +708,12 @@ public class MainWindow extends JFrame implements ErrorListener {
         lblDateDonne.setBounds(170, 5, 191, 28);
         dateDonne.add(lblDateDonne);
 
-        JDateChooser textDatedonne = new JDateChooser();
-        textDatedonne.setBounds(48, 36, 247, 28);
-        dateDonne.add(textDatedonne);
+        textDateDonne= new JDateChooser();
+        textDateDonne.setBounds(48, 36, 247, 28);
+        dateDonne.add(textDateDonne);
 
         JButton buttDateDonne = new JButton("AFFICHER");
+        buttDateDonne.addActionListener(this::dayReservation);
         buttDateDonne.setBounds(408, 39, 89, 23);
         dateDonne.add(buttDateDonne);
 
@@ -771,6 +786,111 @@ public class MainWindow extends JFrame implements ErrorListener {
     public void noError(String message) {
         System.out.println(message);
     }
+    public void delete(ActionEvent e) {
+        if(tableDelete.getSelectedRow()<0) {
+            JOptionPane.showMessageDialog(null,"veuillez au prealable selectionner l'evenement à supprimer");
+        }
+        else {
+            Map<String,String> parameters=new HashMap();
+            parameters.put("idEvent",deleteIdText.getText());
+
+            Response response=this.controller.delete(new Request("Suppression d\'un evenement",parameters));
+            String r=response.getError();
+            if( r!=null){
+                this.ErrorLog(r);
+            }
+            else return;
+
+
+        }
+        }
+
+
+    public void update(ActionEvent e) {
+        Map<String,String> params=new HashMap();
+        params.put("idReservataire",  this.updateIdReservataire.getText());
+        params.put("numSalle", (String) this.updateNumSalle.getSelectedItem());
+        params.put("numBloc",(String) this.updateNumBloc.getSelectedItem());
+        params.put("eventName",  this.updateNomEvent.getText());
+        params.put("eventDate", new SimpleDateFormat("yyyy-MM-dd").format(this.updateDateEvent.getDate()));
+
+        Response response=this.controller.update(new Request("Mise à jour d\'un evenement",params));
+        String r=response.getError();
+        if( r!=null){
+            this.ErrorLog(r);
+        }
+        else return;
+
+    }
+    public void listeSalleReservataire(ActionEvent e) {
+        Map<String,String> parameters=new HashMap();
+
+        Response response=this.controller.listeSalleReservataire(new Request("Affichage des salles reservees par un reservataire",parameters));
+        String r=response.getError();
+        if( r!=null){
+            this.ErrorLog(r);
+        }
+        else return;
+    }
+    public void evtInBloc(ActionEvent e) {
+        if(textBlocDonne.getText().equals("")) JOptionPane.showMessageDialog(null,"veuillez entrer l'id du bloc ");
+        else {
+            Map<String,String> parameters=new HashMap();
+            parameters.put( "idBloc",(String) this.textBlocDonne.getText());
+
+            Response response=this.controller.evtInBloc(new Request("Evenements dans un bloc",parameters));
+        String r=response.getError();
+        if( r!=null){
+            this.ErrorLog(r);
+        }
+        else return;}
+    }
+    public void actifReservateur(ActionEvent action) {
+
+
+        Response response=this.controller.actifReservateur();
+        String r=response.getError();
+        if( r!=null){
+            this.ErrorLog(r);
+        }
+        else return;
+    }
+
+    public void dayReservation(ActionEvent e) {
+        if(new SimpleDateFormat("yyyy-MM-dd").format(this.textDateDonne.getDate())=="")
+            JOptionPane.showMessageDialog(null,"veuillez choisir la date");
+        else {
+            Map<String,String> parameters=new HashMap();
+            parameters.put( "dayReservation",new SimpleDateFormat("yyyy-MM-dd").format(this.textDateDonne.getDate()));
+
+            Response response=this.controller.actifReservateur();
+            String r=response.getError();
+            if( r!=null){
+                this.ErrorLog(r);
+            }
+            else return;}
+    }
+    public void pastEvent(ActionEvent e) {
+
+        Response response=this.controller.pastEvent();
+        String r=response.getError();
+        if( r!=null){
+            this.ErrorLog(r);
+        }
+        else return;
+    }
+    public void ErrorLog(String message){
+        try {
+            FileHandler fh=new FileHandler("my_log.txt");
+            logger.addHandler(fh);
+            logger.log(Level.SEVERE,message);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }
+
+
 
 
