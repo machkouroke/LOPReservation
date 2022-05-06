@@ -23,7 +23,7 @@ import com.toedter.calendar.JDateChooser;
 
 import java.util.logging.*;
 
-public class MainWindow extends JFrame implements ErrorListener {
+public class MainWindow extends JFrame implements ErrorListener , ViewToController {
     Logger logger=Logger.getLogger("flogger");
     JDateChooser updateDateEvent;
     JPanel contentPane;
@@ -104,7 +104,7 @@ public class MainWindow extends JFrame implements ErrorListener {
 
     }
 
-    public void addEvent(ActionEvent action) {  String r;
+    public void add(ActionEvent action) {  String r;
         if (addNumSalle.getSelectedIndex()==0 || addNumBloc.getSelectedIndex()==0 || addIdReservataire.getText().equals("") || addNomEvent.getText().equals("") || addDateEvent.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Certaines cases sont vides.\nEntrez toutes les valeurs.");
         }
@@ -413,7 +413,7 @@ public class MainWindow extends JFrame implements ErrorListener {
         iconAddForm.setIcon(imgAddForm);
 
         JButton boutonAjout = new JButton("AJOUTER");
-        boutonAjout.addActionListener(this::addEvent);
+        boutonAjout.addActionListener(this::add);
         boutonAjout.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
         boutonAjout.setBounds(383, 407, 114, 23);
         panAdd.add(boutonAjout);
