@@ -117,7 +117,7 @@ public class MainWindow extends JFrame implements ErrorListener {
             params.put("eventName",  this.addNomEvent.getText());
             params.put("eventDate", new SimpleDateFormat("yyyy-MM-dd").format(this.addDateEvent.getDate()));
 
-            Response response =  this.controller.add(new Request("Ajout d'un utilisateur", params));
+            Response response =  this.controller.addo(new Request("Ajout d'un utilisateur", params));
             r=response.getError();
             if( r!=null){
                 this.ErrorLog(r);
