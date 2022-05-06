@@ -20,11 +20,10 @@ import com.lop.error_event.ErrorListener;
 import com.lop.communication.Request;
 import com.lop.communication.Response;
 import com.toedter.calendar.JDateChooser;
-import oracle.jdbc.logging.annotations.Log;
 
 import java.util.logging.*;
 
-public class MainWindow extends JFrame implements ErrorListener {
+public class MainWindow extends JFrame implements ErrorListener , ViewToController {
     Logger logger=Logger.getLogger("flogger");
     JDateChooser updateDateEvent;
     JPanel contentPane;
@@ -105,7 +104,7 @@ public class MainWindow extends JFrame implements ErrorListener {
 
     }
 
-    public void addEvent(ActionEvent action) {  String r;
+    public void add(ActionEvent action) {  String r;
         if (addNumSalle.getSelectedIndex()==0 || addNumBloc.getSelectedIndex()==0 || addIdReservataire.getText().equals("") || addNomEvent.getText().equals("") || addDateEvent.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Certaines cases sont vides.\nEntrez toutes les valeurs.");
         }
@@ -117,7 +116,7 @@ public class MainWindow extends JFrame implements ErrorListener {
             params.put("eventName",  this.addNomEvent.getText());
             params.put("eventDate", new SimpleDateFormat("yyyy-MM-dd").format(this.addDateEvent.getDate()));
 
-            Response response =  this.controller.addo(new Request("Ajout d'un utilisateur", params));
+            Response response =  this.controller.add(new Request("Ajout d'un utilisateur", params));
             r=response.getError();
             if( r!=null){
                 this.ErrorLog(r);
@@ -414,7 +413,7 @@ public class MainWindow extends JFrame implements ErrorListener {
         iconAddForm.setIcon(imgAddForm);
 
         JButton boutonAjout = new JButton("AJOUTER");
-        boutonAjout.addActionListener(this::addEvent);
+        boutonAjout.addActionListener(this::add);
         boutonAjout.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
         boutonAjout.setBounds(383, 407, 114, 23);
         panAdd.add(boutonAjout);
@@ -779,12 +778,12 @@ public class MainWindow extends JFrame implements ErrorListener {
     }
     @Override
     public void errorOccurred(String message) {
-        System.out.println(message);
+        JOptionPane.showMessageDialog(null,message);
     }
 
     @Override
     public void noError(String message) {
-        System.out.println(message);
+        JOptionPane.showMessageDialog(null,message);
     }
     public void delete(ActionEvent e) {
         if(tableDelete.getSelectedRow()<0) {
