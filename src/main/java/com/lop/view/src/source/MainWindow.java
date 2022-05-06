@@ -20,7 +20,6 @@ import com.lop.error_event.ErrorListener;
 import com.lop.communication.Request;
 import com.lop.communication.Response;
 import com.toedter.calendar.JDateChooser;
-import oracle.jdbc.logging.annotations.Log;
 
 import java.util.logging.*;
 
@@ -117,7 +116,7 @@ public class MainWindow extends JFrame implements ErrorListener {
             params.put("eventName",  this.addNomEvent.getText());
             params.put("eventDate", new SimpleDateFormat("yyyy-MM-dd").format(this.addDateEvent.getDate()));
 
-            Response response =  this.controller.addo(new Request("Ajout d'un utilisateur", params));
+            Response response =  this.controller.add(new Request("Ajout d'un utilisateur", params));
             r=response.getError();
             if( r!=null){
                 this.ErrorLog(r);
@@ -779,12 +778,12 @@ public class MainWindow extends JFrame implements ErrorListener {
     }
     @Override
     public void errorOccurred(String message) {
-        System.out.println(message);
+        JOptionPane.showMessageDialog(null,message);
     }
 
     @Override
     public void noError(String message) {
-        System.out.println(message);
+        JOptionPane.showMessageDialog(null,message);
     }
     public void delete(ActionEvent e) {
         if(tableDelete.getSelectedRow()<0) {
