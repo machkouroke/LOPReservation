@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.border.EtchedBorder;
 import javax.swing.table.TableRowSorter;
@@ -24,6 +25,9 @@ import com.toedter.calendar.JDateChooser;
 import java.util.logging.*;
 
 public class MainWindow extends JFrame implements ErrorListener , ViewToController {
+    MyTableModel modelLecture;
+    MyTableModel modelDel;
+    MyTableModel model;
     Logger logger=Logger.getLogger("flogger");
     JDateChooser updateDateEvent;
     JPanel contentPane;
@@ -121,7 +125,7 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
             if( r!=null){
                 this.ErrorLog(r);
             }
-            else return;
+            else noError("element ajoute avec succes");
 
         }
     }
@@ -195,7 +199,27 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
         panMenuUpdate.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+
+
+                Response response= controller.getAllReservations();
+                List<List<String>> data=response.getData();
+                String[] columns=new String[data.get(0).size()];
+                 data.get(0).toArray(columns);
+                Object[] row=new Object[data.get(0).size()];
+                model.setColumnIdentifiers(columns);
+
+                int i=1;
+                int j;
+                while(i<data.size()-1 ){
+                    for(j=0;j<data.get(0).size();j++){
+                    row[j]=data.get(i).get(j);}
+                    model.addRow(row);
+                    //....
+                    i++;
+                }
                 cardlayout.show(contenu, "update");
+
+                //set les differents textes à vide....
             }
 
             @Override
@@ -226,7 +250,24 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
         panMenuDelete.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                Response response= controller.getAllReservations();
+                List<List<String>> data=response.getData();
+                String[] columns=new String[data.get(0).size()];
+                data.get(0).toArray(columns);
+                Object[] row=new Object[data.get(0).size()];
+                modelDel.setColumnIdentifiers(columns);
+                tableDelete.setModel(model);
+
+                int i=1;int j;
+                while(i<data.size()-1 ){
+                    for(j=0;j<data.get(0).size();j++){
+                        row[j]=data.get(i).get(j);}
+                    model.addRow(row);
+                    //....
+                    i++;
+                }
                 cardlayout.show(contenu, "delete");
+                //set les differents textes à vide....
             }
 
             @Override
@@ -517,7 +558,7 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
         panUpdate.add(scrollPaneUpdate);
 
         updateTable = new JTable();
-        MyTableModel model = new MyTableModel();
+        model = new MyTableModel();
 
         updateTable.setModel(model);
         updateTable.addMouseListener(new MouseAdapter() {
@@ -543,6 +584,7 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
         scrollPaneUpdate.setViewportView(updateTable);
 
         JButton boutonUpdate = new JButton("MODIFIER ...");
+        boutonUpdate.addActionListener(this::update);
         boutonUpdate.setBounds(27, 419, 111, 23);
         panUpdate.add(boutonUpdate);
 
@@ -609,7 +651,7 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
         panDelete.add(scrollpaneDelete);
 
         tableDelete = new JTable();
-        MyTableModel modelDel = new MyTableModel();
+        modelDel = new MyTableModel();
         tableDelete.setModel(modelDel);
         tableDelete.addMouseListener(new MouseAdapter() {
             @Override
@@ -626,6 +668,7 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
 
 
         JButton btnDel = new JButton("SUPPRIMER\r\n");
+        btnDel.addActionListener(this::delete);
         btnDel.setBounds(32, 270, 132, 30);
         panDelete.add(btnDel);
 
@@ -675,6 +718,7 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
         textReserveDonneId.setColumns(10);
 
         JButton buttReserveDonne = new JButton("AFFICHER");
+        buttReserveDonne.addActionListener(this::dayReservation);
         buttReserveDonne.setBounds(408, 39, 89, 23);
         reservataireDonne.add(buttReserveDonne);
 
@@ -724,7 +768,7 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
         JTable tableLecture = new JTable();
         tableLecture.setBorder(null);
         scrollPane.setViewportView(tableLecture);
-        MyTableModel modelLecture = new MyTableModel();
+        modelLecture = new MyTableModel();
         tableLecture.setModel(modelLecture);
 
 
@@ -787,18 +831,20 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
     }
     public void delete(ActionEvent e) {
         if(tableDelete.getSelectedRow()<0) {
-            JOptionPane.showMessageDialog(null,"veuillez au prealable selectionner l'evenement à supprimer");
+            errorOccurred("veuillez au prealable selectionner l'evenement à supprimer");
+            //JOptionPane.showMessageDialog(null,"veuillez au prealable selectionner l'evenement à supprimer");
         }
         else {
+
             Map<String,String> parameters=new HashMap();
             parameters.put("idEvent",deleteIdText.getText());
 
-            Response response=this.controller.delete(new Request("Suppression d\'un evenement",parameters));
+            Response response=this.controller.delete(new Request("Suppression d'un evenement",parameters));
             String r=response.getError();
             if( r!=null){
                 this.ErrorLog(r);
             }
-            else return;
+            else noError("Suppression effectuée");
 
 
         }
@@ -813,12 +859,12 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
         params.put("eventName",  this.updateNomEvent.getText());
         params.put("eventDate", new SimpleDateFormat("yyyy-MM-dd").format(this.updateDateEvent.getDate()));
 
-        Response response=this.controller.update(new Request("Mise à jour d\'un evenement",params));
+        Response response=this.controller.update(new Request("Mise à jour d'un evenement",params));
         String r=response.getError();
         if( r!=null){
             this.ErrorLog(r);
         }
-        else return;
+
 
     }
     public void listeSalleReservataire(ActionEvent e) {
@@ -829,54 +875,116 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
         if( r!=null){
             this.ErrorLog(r);
         }
-        else return;
+
     }
     public void evtInBloc(ActionEvent e) {
-        if(textBlocDonne.getText().equals("")) JOptionPane.showMessageDialog(null,"veuillez entrer l'id du bloc ");
+        if(textBlocDonne.getText().equals("")) errorOccurred("veuillez entrer l'id du bloc ");//JOptionPane.showMessageDialog(null,"veuillez entrer l'id du bloc ");
         else {
-            Map<String,String> parameters=new HashMap();
-            parameters.put( "idBloc",(String) this.textBlocDonne.getText());
+            Map<String, String> parameters = new HashMap();
+            parameters.put("idBloc", this.textBlocDonne.getText());
 
-            Response response=this.controller.evtInBloc(new Request("Evenements dans un bloc",parameters));
-        String r=response.getError();
-        if( r!=null){
-            this.ErrorLog(r);
+            Response response = this.controller.evtInBloc(new Request("Evenements dans un bloc", parameters));
+            List<List<String>> data = response.getData();
+            String[] columns = new String[data.get(0).size()];
+            data.get(0).toArray(columns);
+            Object[] row = new Object[data.get(0).size()];
+            model.setColumnIdentifiers(columns);
+
+            int i = 1;
+            int j;
+            while (i < data.size() - 1) {
+                for (j = 0; j < data.get(0).size(); j++) {
+                    row[j] = data.get(i).get(j);
+                }
+                modelLecture.addRow(row);
+                //....
+                i++;
+            }
+            String r = response.getError();
+
+            //model lecture avec colonnes
+            if (r != null) {
+                this.ErrorLog(r);
+            }
         }
-        else return;}
     }
     public void actifReservateur(ActionEvent action) {
 
 
         Response response=this.controller.actifReservateur();
+        List<List<String>> data=response.getData();
+        String[] columns=new String[data.get(0).size()];
+        data.get(0).toArray(columns);
+        Object[] row=new Object[data.get(0).size()];
+        modelLecture.setColumnIdentifiers(columns);
+
+        int i=1;
+        int j;
+        while(i<data.size()-1 ){
+            for(j=0;j<data.get(0).size(); j++){
+                row[j]=data.get(i).get(j);}
+            modelLecture.addRow(row);
+            //....
+            i++;
+        }
         String r=response.getError();
         if( r!=null){
             this.ErrorLog(r);
         }
-        else return;
+
     }
 
     public void dayReservation(ActionEvent e) {
-        if(new SimpleDateFormat("yyyy-MM-dd").format(this.textDateDonne.getDate())=="")
-            JOptionPane.showMessageDialog(null,"veuillez choisir la date");
+        if(new SimpleDateFormat("yyyy-MM-dd").format(this.textDateDonne.getDate()).equals("")) errorOccurred("veuillez choisir la date");
+        //JOptionPane.showMessageDialog(null,"veuillez choisir la date");
         else {
             Map<String,String> parameters=new HashMap();
             parameters.put( "dayReservation",new SimpleDateFormat("yyyy-MM-dd").format(this.textDateDonne.getDate()));
-
             Response response=this.controller.actifReservateur();
+            List<List<String>> data=response.getData();
+            String[] columns=new String[data.get(0).size()];
+            data.get(0).toArray(columns);
+            Object[] row=new Object[data.get(0).size()];
+            modelLecture.setColumnIdentifiers(columns);
+
+            int i=1;
+            int j;
+            while(i<data.size()-1 ){
+                for(j=0;j<data.get(0).size(); j++){
+                    row[j]=data.get(i).get(j);}
+                modelLecture.addRow(row);
+                //....
+                i++;
+            }
             String r=response.getError();
             if( r!=null){
-                this.ErrorLog(r);
+                ErrorLog(r);
             }
-            else return;}
+            else noError("affichage effectue");}
     }
     public void pastEvent(ActionEvent e) {
 
         Response response=this.controller.pastEvent();
+        List<List<String>> data=response.getData();
+        String[] columns=new String[data.get(0).size()];
+        data.get(0).toArray(columns);
+        Object[] row=new Object[data.get(0).size()];
+        modelLecture.setColumnIdentifiers(columns);
+        int i=1;
+        int j;
+        while(i<data.size()-1 ){
+            for(j=0;j<data.get(0).size(); j++){
+                row[j]=data.get(i).get(j);}
+            modelLecture.addRow(row);
+            //....
+            i++;
+        }
         String r=response.getError();
+
         if( r!=null){
             this.ErrorLog(r);
         }
-        else return;
+        else noError("affichage effectue");
     }
     public void ErrorLog(String message){
         try {
