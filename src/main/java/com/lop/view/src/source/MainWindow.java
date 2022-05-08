@@ -24,11 +24,11 @@ import com.toedter.calendar.JDateChooser;
 
 import java.util.logging.*;
 
-public class MainWindow extends JFrame implements ErrorListener , ViewToController {
+public class MainWindow extends JFrame implements ErrorListener, ViewToController {
     MyTableModel modelLecture;
     MyTableModel modelDel;
     MyTableModel model;
-    Logger logger=Logger.getLogger("flogger");
+    Logger logger = Logger.getLogger("flogger");
     JDateChooser updateDateEvent;
     JPanel contentPane;
     JPanel contenu;
@@ -50,8 +50,8 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
     private JTextField deleteIdText;
     private final transient Controller controller;
 
-    String [] salles = {"--Numéro de Salle--","1","2","3","4"};
-    String[] blocs = {"--Numéro de Bloc--","A","B","C","D"};
+    String[] salles = {"--Numéro de Salle--", "1", "2", "3", "4"};
+    String[] blocs = {"--Numéro de Bloc--", "A", "B", "C", "D"};
     private JDateChooser textDateDonne;
 
     public MainWindow(Controller controller) throws IOException {
@@ -108,32 +108,31 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
 
     }
 
-    public void add(ActionEvent action) {  String r;
-        if (addNumSalle.getSelectedIndex()==0 || addNumBloc.getSelectedIndex()==0 || addIdReservataire.getText().equals("") || addNomEvent.getText().equals("") || addDateEvent.getDate() == null) {
+    public void add(ActionEvent action) {
+        String r;
+        if (addNumSalle.getSelectedIndex() == 0 || addNumBloc.getSelectedIndex() == 0 || addIdReservataire.getText().equals("") || addNomEvent.getText().equals("") || addDateEvent.getDate() == null) {
             JOptionPane.showMessageDialog(null, "Certaines cases sont vides.\nEntrez toutes les valeurs.");
-        }
-        else{
+        } else {
             Map<String, String> params = new HashMap<>();
-            params.put("idReservataire",  this.addIdReservataire.getText());
+            params.put("idReservataire", this.addIdReservataire.getText());
             params.put("numSalle", (String) this.addNumSalle.getSelectedItem());
             params.put("numBloc", (String) this.addNumBloc.getSelectedItem());
-            params.put("eventName",  this.addNomEvent.getText());
+            params.put("eventName", this.addNomEvent.getText());
             params.put("eventDate", new SimpleDateFormat("yyyy-MM-dd").format(this.addDateEvent.getDate()));
 
-            Response response =  this.controller.add(new Request("Ajout d'un utilisateur", params));
-            r=response.getError();
-            if( r!=null){
+            Response response = this.controller.add(new Request("Ajout d'un utilisateur", params));
+            r = response.getError();
+            if (r != null) {
                 this.ErrorLog(r);
             }
-            else noError("element ajoute avec succes");
 
         }
     }
 
     public void searchInTable(String str, JTable table) {
 
-        MyTableModel model = (MyTableModel) table.getModel();
-        TableRowSorter<MyTableModel> trs = new TableRowSorter<>(model);
+        MyTableModel modelSearch = (MyTableModel) table.getModel();
+        TableRowSorter<MyTableModel> trs = new TableRowSorter<>(modelSearch);
         table.setRowSorter(trs);
         trs.setRowFilter(RowFilter.regexFilter(str));
         model.fireTableDataChanged();
@@ -172,21 +171,21 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
             }
 
             @Override
-            public void mouseEntered(MouseEvent e){
+            public void mouseEntered(MouseEvent e) {
                 panMenuAdd.setBackground(Color.white);
             }
 
             @Override
-            public void mouseExited(MouseEvent e){
+            public void mouseExited(MouseEvent e) {
                 panMenuAdd.setBackground(new Color(255, 140, 0));
             }
         });
-        menuPanelPosition(panMenuAdd,70);
+        menuPanelPosition(panMenuAdd, 70);
         menu.add(panMenuAdd);
 
 
         JLabel menuAdd = new JLabel("AJOUT");
-        menuLabelFunction(menuAdd,new int[] {58,13,44,19});
+        menuLabelFunction(menuAdd, new int[]{58, 13, 44, 19});
         panMenuAdd.add(menuAdd);
 
         JLabel menuAddIcon = new JLabel("");
@@ -201,43 +200,35 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
             public void mouseClicked(MouseEvent e) {
 
 
-                Response response= controller.getAllReservations();
-                List<List<String>> data=response.getData();
-                String[] columns=new String[data.get(0).size()];
-                 data.get(0).toArray(columns);
-                Object[] row=new Object[data.get(0).size()];
-                model.setColumnIdentifiers(columns);
-
-                int i=1;
-                int j;
-                while(i<data.size()-1 ){
-                    for(j=0;j<data.get(0).size();j++){
-                    row[j]=data.get(i).get(j);}
+                Response response = controller.getAllReservations();
+                List<List<String>> data = response.getData();
+                model.setColumnIdentifiers(data.get(0).toArray(new String[0]));
+                for (List<String> rowTable : data.stream().skip(1).toList()) {
+                    Object[] row = new Object[rowTable.size()];
+                    for (int i = 0; i < rowTable.size(); i++) {
+                        row[i] = rowTable.get(i);
+                    }
                     model.addRow(row);
-                    //....
-                    i++;
                 }
                 cardlayout.show(contenu, "update");
-
-                //set les differents textes à vide....
             }
 
             @Override
-            public void mouseEntered(MouseEvent e){
+            public void mouseEntered(MouseEvent e) {
                 panMenuUpdate.setBackground(Color.white);
             }
 
             @Override
-            public void mouseExited(MouseEvent e){
+            public void mouseExited(MouseEvent e) {
                 panMenuUpdate.setBackground(new Color(255, 140, 0));
             }
         });
-        menuPanelPosition(panMenuUpdate,122);
+        menuPanelPosition(panMenuUpdate, 122);
         menu.add(panMenuUpdate);
 
 
         JLabel menuUpdate = new JLabel("MODIFICATION");
-        menuLabelFunction(menuUpdate,new int[] {44,10,106,25});
+        menuLabelFunction(menuUpdate, new int[]{44, 10, 106, 25});
         panMenuUpdate.add(menuUpdate);
 
         JLabel menuUpdateIcon = new JLabel("");
@@ -250,18 +241,20 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
         panMenuDelete.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Response response= controller.getAllReservations();
-                List<List<String>> data=response.getData();
-                String[] columns=new String[data.get(0).size()];
+                Response response = controller.getAllReservations();
+                List<List<String>> data = response.getData();
+                String[] columns = new String[data.get(0).size()];
                 data.get(0).toArray(columns);
-                Object[] row=new Object[data.get(0).size()];
+                Object[] row = new Object[data.get(0).size()];
                 modelDel.setColumnIdentifiers(columns);
                 tableDelete.setModel(model);
 
-                int i=1;int j;
-                while(i<data.size()-1 ){
-                    for(j=0;j<data.get(0).size();j++){
-                        row[j]=data.get(i).get(j);}
+                int i = 1;
+                int j;
+                while (i < data.size() - 1) {
+                    for (j = 0; j < data.get(0).size(); j++) {
+                        row[j] = data.get(i).get(j);
+                    }
                     model.addRow(row);
                     //....
                     i++;
@@ -271,21 +264,21 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
             }
 
             @Override
-            public void mouseEntered(MouseEvent e){
+            public void mouseEntered(MouseEvent e) {
                 panMenuDelete.setBackground(Color.white);
             }
 
             @Override
-            public void mouseExited(MouseEvent e){
+            public void mouseExited(MouseEvent e) {
                 panMenuDelete.setBackground(new Color(255, 140, 0));
             }
         });
-        menuPanelPosition(panMenuDelete,174);
+        menuPanelPosition(panMenuDelete, 174);
         menu.add(panMenuDelete);
 
 
         JLabel menuDelete = new JLabel("SUPPRESSION");
-        menuLabelFunction(menuDelete,new int[] {44,14,98,17});
+        menuLabelFunction(menuDelete, new int[]{44, 14, 98, 17});
         panMenuDelete.add(menuDelete);
 
         JLabel menuDeleteIcon = new JLabel("");
@@ -302,21 +295,21 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
             }
 
             @Override
-            public void mouseEntered(MouseEvent e){
+            public void mouseEntered(MouseEvent e) {
                 panMenuHome.setBackground(Color.white);
             }
 
             @Override
-            public void mouseExited(MouseEvent e){
+            public void mouseExited(MouseEvent e) {
                 panMenuHome.setBackground(new Color(255, 140, 0));
             }
         });
-        menuPanelPosition(panMenuHome,18);
+        menuPanelPosition(panMenuHome, 18);
         menu.add(panMenuHome);
 
 
         JLabel menuHome = new JLabel("ACCUEIL");
-        menuLabelFunction(menuHome,new int[] {56,14,59,17});
+        menuLabelFunction(menuHome, new int[]{56, 14, 59, 17});
         panMenuHome.add(menuHome);
 
         JLabel menuHomeIcon = new JLabel("New label");
@@ -333,21 +326,21 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
             }
 
             @Override
-            public void mouseEntered(MouseEvent e){
+            public void mouseEntered(MouseEvent e) {
                 panMenuAutres.setBackground(Color.white);
             }
 
             @Override
-            public void mouseExited(MouseEvent e){
+            public void mouseExited(MouseEvent e) {
                 panMenuAutres.setBackground(new Color(255, 140, 0));
             }
         });
-        menuPanelPosition(panMenuAutres,226);
+        menuPanelPosition(panMenuAutres, 226);
         menu.add(panMenuAutres);
 
 
         JLabel menuAutres = new JLabel("AUTRES");
-        menuLabelFunction(menuAutres,new int[] {43,15,83,15});
+        menuLabelFunction(menuAutres, new int[]{43, 15, 83, 15});
         panMenuAutres.add(menuAutres);
 
         JLabel menuAutresIcon = new JLabel("");
@@ -358,17 +351,17 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
 
 
     }
-/*Test commit*/
+    /*Test commit*/
 
-    public void menuPanelPosition(JPanel panel, int y){
+    public void menuPanelPosition(JPanel panel, int y) {
         panel.setBorder(new BevelBorder(BevelBorder.RAISED));
         panel.setBackground(new Color(255, 140, 0));
-        panel.setBounds(7,y,160,45);
+        panel.setBounds(7, y, 160, 45);
         panel.setLayout(null);
     }
 
-    public void menuLabelFunction(JLabel label, int[] bounds){
-        label.setBounds(bounds[0],bounds[1],bounds[2],bounds[3] );
+    public void menuLabelFunction(JLabel label, int[] bounds) {
+        label.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setForeground(new Color(0, 0, 0));
         label.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -395,7 +388,7 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
         home.add(lblBienvenu);
     }
 
-    public void panelAdd() throws IOException{
+    public void panelAdd() throws IOException {
         JPanel panAdd = new JPanel();
         contenuPanel(panAdd);
         contenu.add(panAdd, "add");
@@ -407,40 +400,40 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
         formulaire.setLayout(null);
 
         JLabel labIdSalle = new JLabel("Numero de Salle ");
-        formLabel(labIdSalle,83,118);
+        formLabel(labIdSalle, 83, 118);
         formulaire.add(labIdSalle);
 
         JLabel labIdBloc = new JLabel("Numero de Bloc");
-        formLabel(labIdBloc,140,118);
+        formLabel(labIdBloc, 140, 118);
         formulaire.add(labIdBloc);
 
         JLabel labIdReservataire = new JLabel("ID du reservataire");
-        formLabel(labIdReservataire,188,118);
+        formLabel(labIdReservataire, 188, 118);
         formulaire.add(labIdReservataire);
 
         JLabel labEvent = new JLabel("Nom Evenement");
-        formLabel(labEvent,244,118);
+        formLabel(labEvent, 244, 118);
         formulaire.add(labEvent);
 
         JLabel labDateEvent = new JLabel("Date Evenement");
-        formLabel(labDateEvent,292,118);
+        formLabel(labDateEvent, 292, 118);
         formulaire.add(labDateEvent);
 
 
         addNumSalle = new JComboBox<>(salles);
-        addNumSalle.setBounds(150,85,178,20);
+        addNumSalle.setBounds(150, 85, 178, 20);
         formulaire.add(addNumSalle);
 
         addNumBloc = new JComboBox<>(blocs);
-        addNumBloc.setBounds(150,138,178,20);
+        addNumBloc.setBounds(150, 138, 178, 20);
         formulaire.add(addNumBloc);
 
         addIdReservataire = new JTextField();
-        formTextField(addIdReservataire,189,"add");
+        formTextField(addIdReservataire, 189, "add");
         formulaire.add(addIdReservataire);
 
         addNomEvent = new JTextField();
-        formTextField(addNomEvent,242,"add");
+        formTextField(addNomEvent, 242, "add");
         formulaire.add(addNomEvent);
 
         addDateEvent = new JDateChooser();
@@ -481,26 +474,26 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
         panAdd.add(addTitle);
     }
 
-    public void formTextField(JTextField tf,int y,String namePanel){
+    public void formTextField(JTextField tf, int y, String namePanel) {
 
-        if(namePanel.equals("add")) tf.setBounds(150,y,178,20);
-        if(namePanel.equals("update")) tf.setBounds(126,y,138,20);
+        if (namePanel.equals("add")) tf.setBounds(150, y, 178, 20);
+        if (namePanel.equals("update")) tf.setBounds(126, y, 138, 20);
         tf.setColumns(10);
     }
 
-    public void formLabel(JLabel label, int y, int width){
+    public void formLabel(JLabel label, int y, int width) {
         label.setFont(new Font("Tahoma", Font.PLAIN, 13));
-        label.setBounds(22,y,width,15);
+        label.setBounds(22, y, width, 15);
     }
 
-    public void titleLabel(JLabel lb){
+    public void titleLabel(JLabel lb) {
         lb.setHorizontalAlignment(SwingConstants.CENTER);
         lb.setForeground(new Color(255, 140, 0));
         lb.setFont(new Font("Comic Sans MS", Font.BOLD, 19));
         lb.setBounds(35, 11, 318, 42);
     }
 
-    public void panelUpdate(){
+    public void panelUpdate() {
         JPanel panUpdate = new JPanel();
         contenuPanel(panUpdate);
         contenu.add(panUpdate, "update");
@@ -512,42 +505,42 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
         panUpdate.add(formulaireUpdate);
 
         JLabel labIdSalle1 = new JLabel("Numéro de Salle ");
-        formLabel(labIdSalle1,46,94);
+        formLabel(labIdSalle1, 46, 94);
         formulaireUpdate.add(labIdSalle1);
 
         JLabel labIdBloc1 = new JLabel("Numéro de Bloc");
-        formLabel(labIdBloc1,94,106);
+        formLabel(labIdBloc1, 94, 106);
         formulaireUpdate.add(labIdBloc1);
 
         JLabel labIdReservataire1 = new JLabel("ID du reservataire");
-        formLabel(labIdReservataire1,134,94);
+        formLabel(labIdReservataire1, 134, 94);
         formulaireUpdate.add(labIdReservataire1);
 
         JLabel labEvent1 = new JLabel("Nom Evenement");
-        formLabel(labEvent1,177,80);
+        formLabel(labEvent1, 177, 80);
         formulaireUpdate.add(labEvent1);
 
         JLabel labDateEvent1 = new JLabel("Date Evenement");
-        formLabel(labDateEvent1,214,85);
+        formLabel(labDateEvent1, 214, 85);
         formulaireUpdate.add(labDateEvent1);
 
         updateNumSalle = new JComboBox<>(salles);
-        updateNumSalle.setBounds(126,45,138,20);
+        updateNumSalle.setBounds(126, 45, 138, 20);
         formulaireUpdate.add(updateNumSalle);
 
         updateNumBloc = new JComboBox<>(blocs);
-        updateNumBloc.setBounds(126,92,138,20);
+        updateNumBloc.setBounds(126, 92, 138, 20);
         formulaireUpdate.add(updateNumBloc);
 
         updateIdReservataire = new JTextField();
-        formTextField(updateIdReservataire,135,"update");
+        formTextField(updateIdReservataire, 135, "update");
         formulaireUpdate.add(updateIdReservataire);
 
         updateNomEvent = new JTextField();
-        formTextField(updateNomEvent,175,"update");
+        formTextField(updateNomEvent, 175, "update");
         formulaireUpdate.add(updateNomEvent);
 
-         updateDateEvent = new JDateChooser();
+        updateDateEvent = new JDateChooser();
         updateDateEvent.setBorder(null);
         updateDateEvent.setBounds(126, 214, 138, 20);
         formulaireUpdate.add(updateDateEvent);
@@ -566,7 +559,7 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
             public void mouseReleased(MouseEvent e) {
 
                 int i = updateTable.convertRowIndexToModel(updateTable.getSelectedRow());
-                updateNumSalle.setSelectedItem( model.getValueAt(i, 0));
+                updateNumSalle.setSelectedItem(model.getValueAt(i, 0));
                 updateNumBloc.setSelectedItem(model.getValueAt(i, 1));
                 updateIdReservataire.setText((String) model.getValueAt(i, 2));
                 updateNomEvent.setText((String) model.getValueAt(i, 3));
@@ -624,7 +617,7 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
 
     }
 
-    public void panelDelete(){
+    public void panelDelete() {
         JPanel panDelete = new JPanel();
         contenuPanel(panDelete);
         contenu.add(panDelete, "delete");
@@ -687,7 +680,7 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
         panDelete.add(deleteTitle);
     }
 
-    public void panelAutres(){
+    public void panelAutres() {
         JPanel panAutres = new JPanel();
         contenuPanel(panAutres);
         contenu.add(panAutres, "autres");
@@ -732,7 +725,7 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
         lblBlocDonne.setBounds(151, 5, 196, 29);
         blocDonne.add(lblBlocDonne);
 
-         textBlocDonne = new JTextField();
+        textBlocDonne = new JTextField();
         textBlocDonne.setBounds(48, 36, 338, 29);
         blocDonne.add(textBlocDonne);
         textBlocDonne.setColumns(10);
@@ -751,7 +744,7 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
         lblDateDonne.setBounds(170, 5, 191, 28);
         dateDonne.add(lblDateDonne);
 
-        textDateDonne= new JDateChooser();
+        textDateDonne = new JDateChooser();
         textDateDonne.setBounds(48, 36, 247, 28);
         dateDonne.add(textDateDonne);
 
@@ -810,75 +803,78 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
         panAutres.add(autreTitle);
     }
 
-    public void displayQuestionsPanel(JPanel panel){
+    public void displayQuestionsPanel(JPanel panel) {
         panel.setBackground(new Color(250, 240, 230));
         panel.setLayout(null);
     }
 
-    public void contenuPanel(JPanel panel){
+    public void contenuPanel(JPanel panel) {
         panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
         panel.setBackground(new Color(250, 240, 230));
         panel.setLayout(null);
     }
+
     @Override
     public void errorOccurred(String message) {
-        JOptionPane.showMessageDialog(null,message);
+        JOptionPane.showMessageDialog(null, message);
     }
 
     @Override
     public void noError(String message) {
-        JOptionPane.showMessageDialog(null,message);
+        JOptionPane.showMessageDialog(null, message);
     }
+
     public void delete(ActionEvent e) {
-        if(tableDelete.getSelectedRow()<0) {
+        if (tableDelete.getSelectedRow() < 0) {
             errorOccurred("veuillez au prealable selectionner l'evenement à supprimer");
             //JOptionPane.showMessageDialog(null,"veuillez au prealable selectionner l'evenement à supprimer");
-        }
-        else {
+        } else {
 
-            Map<String,String> parameters=new HashMap();
-            parameters.put("idEvent",deleteIdText.getText());
+            Map<String, String> parameters = new HashMap();
+            parameters.put("idEvent", deleteIdText.getText());
 
-            Response response=this.controller.delete(new Request("Suppression d'un evenement",parameters));
-            String r=response.getError();
-            if( r!=null){
+            Response response = this.controller.delete(new Request("Suppression d'un evenement", parameters));
+            String r = response.getError();
+            if (r != null) {
                 this.ErrorLog(r);
-            }
-            else noError("Suppression effectuée");
+            } else noError("Suppression effectuée");
 
 
         }
-        }
+    }
 
 
     public void update(ActionEvent e) {
-        Map<String,String> params=new HashMap();
-        params.put("idReservataire",  this.updateIdReservataire.getText());
+        Map<String, String> params = new HashMap<>();
+        params.put("idReservataire", this.updateIdReservataire.getText());
         params.put("numSalle", (String) this.updateNumSalle.getSelectedItem());
-        params.put("numBloc",(String) this.updateNumBloc.getSelectedItem());
-        params.put("eventName",  this.updateNomEvent.getText());
+        params.put("numBloc", (String) this.updateNumBloc.getSelectedItem());
+        params.put("eventName", this.updateNomEvent.getText());
         params.put("eventDate", new SimpleDateFormat("yyyy-MM-dd").format(this.updateDateEvent.getDate()));
 
-        Response response=this.controller.update(new Request("Mise à jour d'un evenement",params));
-        String r=response.getError();
-        if( r!=null){
+        Response response = this.controller.update(new Request("Mise à jour d'un evenement", params));
+        String r = response.getError();
+        if (r != null) {
             this.ErrorLog(r);
         }
 
 
     }
+
     public void listeSalleReservataire(ActionEvent e) {
-        Map<String,String> parameters=new HashMap();
+        Map<String, String> parameters = new HashMap();
 
-        Response response=this.controller.listeSalleReservataire(new Request("Affichage des salles reservees par un reservataire",parameters));
-        String r=response.getError();
-        if( r!=null){
+        Response response = this.controller.listeSalleReservataire(new Request("Affichage des salles reservees par un reservataire", parameters));
+        String r = response.getError();
+        if (r != null) {
             this.ErrorLog(r);
         }
 
     }
+
     public void evtInBloc(ActionEvent e) {
-        if(textBlocDonne.getText().equals("")) errorOccurred("veuillez entrer l'id du bloc ");//JOptionPane.showMessageDialog(null,"veuillez entrer l'id du bloc ");
+        if (textBlocDonne.getText().equals(""))
+            errorOccurred("veuillez entrer l'id du bloc ");//JOptionPane.showMessageDialog(null,"veuillez entrer l'id du bloc ");
         else {
             Map<String, String> parameters = new HashMap();
             parameters.put("idBloc", this.textBlocDonne.getText());
@@ -908,89 +904,94 @@ public class MainWindow extends JFrame implements ErrorListener , ViewToControll
             }
         }
     }
+
     public void actifReservateur(ActionEvent action) {
 
 
-        Response response=this.controller.actifReservateur();
-        List<List<String>> data=response.getData();
-        String[] columns=new String[data.get(0).size()];
+        Response response = this.controller.actifReservateur();
+        List<List<String>> data = response.getData();
+        String[] columns = new String[data.get(0).size()];
         data.get(0).toArray(columns);
-        Object[] row=new Object[data.get(0).size()];
+        Object[] row = new Object[data.get(0).size()];
         modelLecture.setColumnIdentifiers(columns);
 
-        int i=1;
+        int i = 1;
         int j;
-        while(i<data.size()-1 ){
-            for(j=0;j<data.get(0).size(); j++){
-                row[j]=data.get(i).get(j);}
+        while (i < data.size() - 1) {
+            for (j = 0; j < data.get(0).size(); j++) {
+                row[j] = data.get(i).get(j);
+            }
             modelLecture.addRow(row);
-            //....
             i++;
         }
-        String r=response.getError();
-        if( r!=null){
+        String r = response.getError();
+        if (r != null) {
             this.ErrorLog(r);
         }
 
     }
 
     public void dayReservation(ActionEvent e) {
-        if(new SimpleDateFormat("yyyy-MM-dd").format(this.textDateDonne.getDate()).equals("")) errorOccurred("veuillez choisir la date");
-        //JOptionPane.showMessageDialog(null,"veuillez choisir la date");
+        if (new SimpleDateFormat("yyyy-MM-dd").format(this.textDateDonne.getDate()).equals(""))
+            errorOccurred("veuillez choisir la date");
+
         else {
-            Map<String,String> parameters=new HashMap();
-            parameters.put( "dayReservation",new SimpleDateFormat("yyyy-MM-dd").format(this.textDateDonne.getDate()));
-            Response response=this.controller.actifReservateur();
-            List<List<String>> data=response.getData();
-            String[] columns=new String[data.get(0).size()];
+            Map<String, String> parameters = new HashMap();
+            parameters.put("dayReservation", new SimpleDateFormat("yyyy-MM-dd").format(this.textDateDonne.getDate()));
+            Response response = this.controller.actifReservateur();
+            List<List<String>> data = response.getData();
+            String[] columns = new String[data.get(0).size()];
             data.get(0).toArray(columns);
-            Object[] row=new Object[data.get(0).size()];
+            Object[] row = new Object[data.get(0).size()];
             modelLecture.setColumnIdentifiers(columns);
 
-            int i=1;
+            int i = 1;
             int j;
-            while(i<data.size()-1 ){
-                for(j=0;j<data.get(0).size(); j++){
-                    row[j]=data.get(i).get(j);}
+            while (i < data.size() - 1) {
+                for (j = 0; j < data.get(0).size(); j++) {
+                    row[j] = data.get(i).get(j);
+                }
                 modelLecture.addRow(row);
                 //....
                 i++;
             }
-            String r=response.getError();
-            if( r!=null){
+            String r = response.getError();
+            if (r != null) {
                 ErrorLog(r);
-            }
-            else noError("affichage effectue");}
+            } else noError("affichage effectue");
+        }
     }
+
     public void pastEvent(ActionEvent e) {
 
-        Response response=this.controller.pastEvent();
-        List<List<String>> data=response.getData();
-        String[] columns=new String[data.get(0).size()];
+        Response response = this.controller.pastEvent();
+        List<List<String>> data = response.getData();
+        String[] columns = new String[data.get(0).size()];
         data.get(0).toArray(columns);
-        Object[] row=new Object[data.get(0).size()];
+        Object[] row = new Object[data.get(0).size()];
         modelLecture.setColumnIdentifiers(columns);
-        int i=1;
+        int i = 1;
         int j;
-        while(i<data.size()-1 ){
-            for(j=0;j<data.get(0).size(); j++){
-                row[j]=data.get(i).get(j);}
+        while (i < data.size() - 1) {
+            for (j = 0; j < data.get(0).size(); j++) {
+                row[j] = data.get(i).get(j);
+            }
             modelLecture.addRow(row);
             //....
             i++;
         }
-        String r=response.getError();
+        String r = response.getError();
 
-        if( r!=null){
+        if (r != null) {
             this.ErrorLog(r);
-        }
-        else noError("affichage effectue");
+        } else noError("affichage effectue");
     }
-    public void ErrorLog(String message){
+
+    public void ErrorLog(String message) {
         try {
-            FileHandler fh=new FileHandler("my_log.txt");
+            FileHandler fh = new FileHandler("my_log.txt");
             logger.addHandler(fh);
-            logger.log(Level.SEVERE,message);
+            logger.log(Level.SEVERE, message);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
