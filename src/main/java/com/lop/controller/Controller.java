@@ -162,7 +162,7 @@ public class Controller implements ErrorInitiator {
     public Response getAllReservations() {
         try {
             return new Response("Liste de tous les évènements",
-                    new EventManager(factory).getAllReservations(), this);
+                    new EventManager(factory).getAllReservations());
         } catch (SQLException e) {
             return new Response(e, this);
         }
