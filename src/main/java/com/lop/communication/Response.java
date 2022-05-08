@@ -24,7 +24,11 @@ public class Response {
         this.attribute.put("Error", null);
         controller.noError(message);
     }
-
+    public Response(String message, List<List<String>> data) {
+        this.data.addAll(data);
+        this.attribute.put("Error", null);
+        this.attribute.put("Message", message);
+    }
     public Response(Exception e, Controller controller) {
         this.attribute.put("Error", "Erreur: " + e.getMessage());
         this.attribute.put("Message", null);
