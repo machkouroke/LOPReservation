@@ -107,6 +107,25 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         panelAutres();
 
     }
+    public void affichage(MyTableModel model,Response response){
+        //response = controller.getAllReservations();
+        List<List<String>> data = response.getData();
+        String[] columns = new String[data.get(0).size()];
+        data.get(0).toArray(columns);
+        Object[] row = new Object[data.get(0).size()];
+        model.setColumnIdentifiers(columns);
+
+        int i = 1;
+        int j;
+        while (i < data.size() - 1) {
+            for (j = 0; j < data.get(0).size(); j++) {
+                row[j] = data.get(i).get(j);
+            }
+            model.addRow(row);
+            //....
+            i++;
+        }
+    }
 
     public void add(ActionEvent action) {
         String r;
@@ -198,18 +217,8 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         panMenuUpdate.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
-
-                Response response = controller.getAllReservations();
-                List<List<String>> data = response.getData();
-                model.setColumnIdentifiers(data.get(0).toArray(new String[0]));
-                for (List<String> rowTable : data.stream().skip(1).toList()) {
-                    Object[] row = new Object[rowTable.size()];
-                    for (int i = 0; i < rowTable.size(); i++) {
-                        row[i] = rowTable.get(i);
-                    }
-                    model.addRow(row);
-                }
+               Response response= controller.getAllReservations();
+                affichage(model,response);
                 cardlayout.show(contenu, "update");
             }
 
@@ -241,24 +250,8 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         panMenuDelete.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Response response = controller.getAllReservations();
-                List<List<String>> data = response.getData();
-                String[] columns = new String[data.get(0).size()];
-                data.get(0).toArray(columns);
-                Object[] row = new Object[data.get(0).size()];
-                modelDel.setColumnIdentifiers(columns);
-                tableDelete.setModel(model);
-
-                int i = 1;
-                int j;
-                while (i < data.size() - 1) {
-                    for (j = 0; j < data.get(0).size(); j++) {
-                        row[j] = data.get(i).get(j);
-                    }
-                    model.addRow(row);
-                    //....
-                    i++;
-                }
+                Response response=controller.getAllReservations();
+                 affichage(modelDel,response);
                 cardlayout.show(contenu, "delete");
                 //set les differents textes à vide....
             }
@@ -826,8 +819,8 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
     public void delete(ActionEvent e) {
         if (tableDelete.getSelectedRow() < 0) {
-            errorOccurred("veuillez au prealable selectionner l'evenement à supprimer");
-            //JOptionPane.showMessageDialog(null,"veuillez au prealable selectionner l'evenement à supprimer");
+            //errorOccurred("veuillez au prealable selectionner l'evenement à supprimer");
+            JOptionPane.showMessageDialog(null,"veuillez au prealable selectionner l'evenement à supprimer");
         } else {
 
             Map<String, String> parameters = new HashMap();
@@ -835,9 +828,10 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
             Response response = this.controller.delete(new Request("Suppression d'un evenement", parameters));
             String r = response.getError();
+
             if (r != null) {
                 this.ErrorLog(r);
-            } else noError("Suppression effectuée");
+            }
 
 
         }
@@ -874,28 +868,12 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
     public void evtInBloc(ActionEvent e) {
         if (textBlocDonne.getText().equals(""))
-            errorOccurred("veuillez entrer l'id du bloc ");//JOptionPane.showMessageDialog(null,"veuillez entrer l'id du bloc ");
+            JOptionPane.showMessageDialog(null,"veuillez entrer l'id du bloc ");
         else {
             Map<String, String> parameters = new HashMap();
             parameters.put("idBloc", this.textBlocDonne.getText());
-
             Response response = this.controller.evtInBloc(new Request("Evenements dans un bloc", parameters));
-            List<List<String>> data = response.getData();
-            String[] columns = new String[data.get(0).size()];
-            data.get(0).toArray(columns);
-            Object[] row = new Object[data.get(0).size()];
-            model.setColumnIdentifiers(columns);
-
-            int i = 1;
-            int j;
-            while (i < data.size() - 1) {
-                for (j = 0; j < data.get(0).size(); j++) {
-                    row[j] = data.get(i).get(j);
-                }
-                modelLecture.addRow(row);
-                //....
-                i++;
-            }
+             affichage(modelLecture,response);
             String r = response.getError();
 
             //model lecture avec colonnes
@@ -909,21 +887,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
 
         Response response = this.controller.actifReservateur();
-        List<List<String>> data = response.getData();
-        String[] columns = new String[data.get(0).size()];
-        data.get(0).toArray(columns);
-        Object[] row = new Object[data.get(0).size()];
-        modelLecture.setColumnIdentifiers(columns);
-
-        int i = 1;
-        int j;
-        while (i < data.size() - 1) {
-            for (j = 0; j < data.get(0).size(); j++) {
-                row[j] = data.get(i).get(j);
-            }
-            modelLecture.addRow(row);
-            i++;
-        }
+        affichage(modelLecture,response);
         String r = response.getError();
         if (r != null) {
             this.ErrorLog(r);
@@ -939,52 +903,23 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
             Map<String, String> parameters = new HashMap();
             parameters.put("dayReservation", new SimpleDateFormat("yyyy-MM-dd").format(this.textDateDonne.getDate()));
             Response response = this.controller.actifReservateur();
-            List<List<String>> data = response.getData();
-            String[] columns = new String[data.get(0).size()];
-            data.get(0).toArray(columns);
-            Object[] row = new Object[data.get(0).size()];
-            modelLecture.setColumnIdentifiers(columns);
-
-            int i = 1;
-            int j;
-            while (i < data.size() - 1) {
-                for (j = 0; j < data.get(0).size(); j++) {
-                    row[j] = data.get(i).get(j);
-                }
-                modelLecture.addRow(row);
-                //....
-                i++;
-            }
+            affichage(modelLecture,response);
             String r = response.getError();
             if (r != null) {
                 ErrorLog(r);
-            } else noError("affichage effectue");
+            }
         }
     }
 
     public void pastEvent(ActionEvent e) {
 
         Response response = this.controller.pastEvent();
-        List<List<String>> data = response.getData();
-        String[] columns = new String[data.get(0).size()];
-        data.get(0).toArray(columns);
-        Object[] row = new Object[data.get(0).size()];
-        modelLecture.setColumnIdentifiers(columns);
-        int i = 1;
-        int j;
-        while (i < data.size() - 1) {
-            for (j = 0; j < data.get(0).size(); j++) {
-                row[j] = data.get(i).get(j);
-            }
-            modelLecture.addRow(row);
-            //....
-            i++;
-        }
+        affichage(modelLecture,response);
         String r = response.getError();
 
         if (r != null) {
             this.ErrorLog(r);
-        } else noError("affichage effectue");
+        }
     }
 
     public void ErrorLog(String message) {
