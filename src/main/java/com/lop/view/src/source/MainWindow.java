@@ -552,12 +552,12 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
             public void mouseReleased(MouseEvent e) {
 
                 int i = updateTable.convertRowIndexToModel(updateTable.getSelectedRow());
-                updateNumSalle.setSelectedItem(model.getValueAt(i, 0));
-                updateNumBloc.setSelectedItem(model.getValueAt(i, 1));
-                updateIdReservataire.setText((String) model.getValueAt(i, 2));
-                updateNomEvent.setText((String) model.getValueAt(i, 3));
+                updateNumSalle.setSelectedItem(model.getValueAt(i, 2));
+                updateNumBloc.setSelectedItem(model.getValueAt(i, 3));
+                updateIdReservataire.setText((String) model.getValueAt(i, 1));
+                updateNomEvent.setText((String) model.getValueAt(i, 4));
                 try {
-                    updateDateEvent.setDate(new SimpleDateFormat("dd-MM-yyyy").parse((String) model.getValueAt(i, 4)));
+                    updateDateEvent.setDate(new SimpleDateFormat("dd-MM-yyyy").parse((String) model.getValueAt(i, 5)));
                 } catch (ParseException e1) {
                     e1.printStackTrace();
                 }
