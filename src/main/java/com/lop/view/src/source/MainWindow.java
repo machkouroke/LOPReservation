@@ -88,7 +88,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         titreP.add(lbltitreP);
 
         //menu
-        menu_func();
+        menuFunc();
 
         contenu = new JPanel();
         contenu.setBounds(194, 16, 646, 478);
@@ -140,7 +140,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
     }
 
-    public void menu_func() throws IOException {
+    public void menuFunc() throws IOException {
 
         JPanel menu = new JPanel();
         menu.setBackground(new Color(255, 140, 0));
@@ -198,8 +198,6 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         panMenuUpdate.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
-
                 Response response = controller.getAllReservations();
                 List<List<String>> data = response.getData();
                 model.setColumnIdentifiers(data.get(0).toArray(new String[0]));
@@ -351,7 +349,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
 
     }
-    /*Test commit*/
+
 
     public void menuPanelPosition(JPanel panel, int y) {
         panel.setBorder(new BevelBorder(BevelBorder.RAISED));
