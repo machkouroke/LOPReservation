@@ -70,7 +70,7 @@ public class Controller implements ErrorInitiator {
      * @return un objet Responses qui retourne juste un message si tout est correcte et un message d'erreur sinon
      */
     public Response update(Request request)  {
-        Evenements event = new Evenements(Integer.parseInt(request.get("idReservataire")),
+        Evenements event = new Evenements(Integer.parseInt(request.get("idEvent")),Integer.parseInt(request.get("idReservataire")),
                 Integer.parseInt(request.get("numSalle")), request.get("numBloc"), request.get("eventName"),
                 request.get("eventDate"));
         try {

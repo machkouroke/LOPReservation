@@ -106,6 +106,8 @@ public record EventManager(Factory factory) {
                         "WHERE ID_EVENT=? ")) {
 
             requestSet(event, request);
+            request.setInt(6, event.getIdEvt(conn));
+
 
         } catch (SQLException e) {
             e.printStackTrace();

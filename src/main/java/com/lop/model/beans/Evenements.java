@@ -1,8 +1,13 @@
 package com.lop.model.beans;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 public class Evenements {
+    private int idEvent = 0;
     private int idReservataire;
     private int numSalle;
     private String idBloc;
@@ -11,6 +16,15 @@ public class Evenements {
 
     public Evenements(int idReservataire, int numSalle, String idBloc, String nom,
                       String dateEvt) {
+        this.idReservataire = idReservataire;
+        this.numSalle = numSalle;
+        this.idBloc = idBloc;
+        this.nom = nom;
+        this.dateEvt = dateEvt;
+    }
+    public Evenements(int idEvent, int idReservataire, int numSalle, String idBloc, String nom,
+                      String dateEvt) {
+        this.idEvent = idEvent;
         this.idReservataire = idReservataire;
         this.numSalle = numSalle;
         this.idBloc = idBloc;
@@ -53,7 +67,17 @@ public class Evenements {
     public String getDateEvt() {
         return dateEvt;
     }
-
+    public int getIdEvt(Connection conn) throws SQLException {
+        if(idEvent == 0) {
+            try(Statement statement = conn.createStatement()) {
+                ResultSet answer = statement.executeQuery("SELECT ID_EVENT FROM SYSTEM.EVENEMENTS " +
+                        "WHERE NUM_SALLE=? AND ID_BLOC=? AND DATE_EVT=?");
+                answer.next();
+                idEvent = answer.getInt(1);
+            }
+        }
+       return idEvent;
+    }
     public void setDateEvt(String dateEvt) {
         this.dateEvt = dateEvt;
     }
