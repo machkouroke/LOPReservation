@@ -67,6 +67,7 @@ public record EventManager(Factory factory) {
                     "insert into SYSTEM.EVENEMENTS(ID_RESERVATAIRE, NUM_SALLE, ID_BLOC, NOM, DATE_EVT) " +
                             "values(?, ?, ?, ?, TO_DATE(?, 'YYYY-MM-DD'))")) {
                 requestSet(event, request);
+                request.executeUpdate();
 
             } catch (SQLIntegrityConstraintViolationException e) {
                 throw new DataBaseException("La classe demandé n'est pas disponible en ce jour");
@@ -107,6 +108,7 @@ public record EventManager(Factory factory) {
 
             requestSet(event, request);
             request.setInt(6, event.getIdEvt(conn));
+            request.executeUpdate();
 
 
         } catch (SQLException e) {
@@ -128,7 +130,7 @@ public record EventManager(Factory factory) {
         request.setString(3, event.getIdBloc());
         request.setString(4, event.getNom());
         request.setString(5, event.getDateEvt());
-        request.executeUpdate();
+
     }
 
     public List<List<String>> listeSalleReservataire(int id) throws

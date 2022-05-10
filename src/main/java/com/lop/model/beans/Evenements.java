@@ -85,4 +85,16 @@ public class Evenements {
         return List.of(Integer.toString(idReservataire), Integer.toString(numSalle), idBloc, nom,
                 dateEvt, "DD/MM/YYYY");
     }
+
+    @Override
+    public String toString() {
+        return "Evenements{" +
+                "idEvent=" + idEvent +
+                ", idReservataire=" + idReservataire +
+                ", numSalle=" + numSalle +
+                ", idBloc='" + idBloc + '\'' +
+                ", nom='" + nom + '\'' +
+                ", dateEvt='" + dateEvt + '\'' +
+                '}';
+    }
 }

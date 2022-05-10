@@ -49,6 +49,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
     private JTable tableDelete;
     private JTextField deleteIdText;
     private final transient Controller controller;
+    private String actualEvent;
 
     String[] salles = {"--Numéro de Salle--", "1", "2", "3", "4"};
     String[] blocs = {"--Numéro de Bloc--", "A", "B", "C", "D"};
@@ -544,6 +545,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
             public void mouseReleased(MouseEvent e) {
 
                 int i = updateTable.convertRowIndexToModel(updateTable.getSelectedRow());
+                actualEvent = (String) model.getValueAt(i, 0);
                 updateNumSalle.setSelectedItem(model.getValueAt(i, 2));
                 updateNumBloc.setSelectedItem(model.getValueAt(i, 3));
                 updateIdReservataire.setText((String) model.getValueAt(i, 1));
@@ -832,6 +834,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
     public void update(ActionEvent e) {
         Map<String, String> params = new HashMap<>();
+        params.put("idEvent", this.actualEvent);
         params.put("idReservataire", this.updateIdReservataire.getText());
         params.put("numSalle", (String) this.updateNumSalle.getSelectedItem());
         params.put("numBloc", (String) this.updateNumBloc.getSelectedItem());

@@ -74,6 +74,7 @@ public class Controller implements ErrorInitiator {
                 Integer.parseInt(request.get("numSalle")), request.get("numBloc"), request.get("eventName"),
                 request.get("eventDate"));
         try {
+            System.out.println(event);
             new EventManager(this.factory).update(event);
             return new Response("La réservation  a bien été mise à jour", this);
         } catch (DataBaseException | SQLException e) {
