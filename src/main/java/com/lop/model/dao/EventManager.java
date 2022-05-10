@@ -103,7 +103,7 @@ public record EventManager(Factory factory) {
         Connection conn = this.factory.getConnection();
         try (PreparedStatement request = conn.prepareStatement(
                 "UPDATE SYSTEM.EVENEMENTS SET ID_RESERVATAIRE=?, NUM_SALLE=?, ID_BLOC=?, NOM=?, " +
-                        "DATE_EVT=?" +
+                        "DATE_EVT=TO_DATE(?, 'YYYY-MM-DD')" +
                         "WHERE ID_EVENT=? ")) {
 
             requestSet(event, request);
@@ -129,6 +129,7 @@ public record EventManager(Factory factory) {
         request.setInt(2, event.getNumSalle());
         request.setString(3, event.getIdBloc());
         request.setString(4, event.getNom());
+
         request.setString(5, event.getDateEvt());
 
     }

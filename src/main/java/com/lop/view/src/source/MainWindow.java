@@ -551,7 +551,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
                 updateIdReservataire.setText((String) model.getValueAt(i, 1));
                 updateNomEvent.setText((String) model.getValueAt(i, 4));
                 try {
-                    updateDateEvent.setDate(new SimpleDateFormat("dd-MM-yyyy").parse((String) model.getValueAt(i, 5)));
+                    updateDateEvent.setDate(new SimpleDateFormat("yyyy-MM-dd").parse((String) model.getValueAt(i, 5)));
                 } catch (ParseException e1) {
                     e1.printStackTrace();
                 }
