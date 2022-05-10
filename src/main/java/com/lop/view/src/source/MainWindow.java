@@ -919,7 +919,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
     public void ErrorLog(String message) {
         try {
-            FileHandler fh = new FileHandler("my_log.txt");
+            FileHandler fh = new FileHandler("log.xml");
             logger.addHandler(fh);
             logger.log(Level.SEVERE, message);
         } catch (IOException e) {
