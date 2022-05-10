@@ -49,6 +49,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
     private JTable tableDelete;
     private JTextField deleteIdText;
     private final transient Controller controller;
+    private String actualEvent;
 
     String[] salles = {"--Numéro de Salle--", "1", "2", "3", "4"};
     String[] blocs = {"--Numéro de Bloc--", "A", "B", "C", "D"};
@@ -88,7 +89,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         titreP.add(lbltitreP);
 
         //menu
-        menu_func();
+        menuFunc();
 
         contenu = new JPanel();
         contenu.setBounds(194, 16, 646, 478);
@@ -107,23 +108,16 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         panelAutres();
 
     }
-    public void affichage(MyTableModel model,Response response){
-        //response = controller.getAllReservations();
-        List<List<String>> data = response.getData();
-        String[] columns = new String[data.get(0).size()];
-        data.get(0).toArray(columns);
-        Object[] row = new Object[data.get(0).size()];
-        model.setColumnIdentifiers(columns);
 
-        int i = 1;
-        int j;
-        while (i < data.size() - 1) {
-            for (j = 0; j < data.get(0).size(); j++) {
-                row[j] = data.get(i).get(j);
+    public void affichage(MyTableModel model, Response response) {
+        List<List<String>> data = response.getData();
+        model.setColumnIdentifiers(data.get(0).toArray(new String[0]));
+        for (List<String> rowTable : data.stream().skip(1).toList()) {
+            Object[] row = new Object[rowTable.size()];
+            for (int i = 0; i < rowTable.size(); i++) {
+                row[i] = rowTable.get(i);
             }
             model.addRow(row);
-            //....
-            i++;
         }
     }
 
@@ -156,10 +150,9 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         trs.setRowFilter(RowFilter.regexFilter(str));
         model.fireTableDataChanged();
 
-
     }
 
-    public void menu_func() throws IOException {
+    public void menuFunc() throws IOException {
 
         JPanel menu = new JPanel();
         menu.setBackground(new Color(255, 140, 0));
@@ -217,8 +210,8 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         panMenuUpdate.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-               Response response= controller.getAllReservations();
-                affichage(model,response);
+                Response response = controller.getAllReservations();
+                affichage(model, response);
                 cardlayout.show(contenu, "update");
             }
 
@@ -250,8 +243,8 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         panMenuDelete.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Response response=controller.getAllReservations();
-                 affichage(modelDel,response);
+                Response response = controller.getAllReservations();
+                affichage(modelDel, response);
                 cardlayout.show(contenu, "delete");
                 //set les differents textes à vide....
             }
@@ -344,7 +337,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
 
     }
-    /*Test commit*/
+
 
     public void menuPanelPosition(JPanel panel, int y) {
         panel.setBorder(new BevelBorder(BevelBorder.RAISED));
@@ -552,12 +545,13 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
             public void mouseReleased(MouseEvent e) {
 
                 int i = updateTable.convertRowIndexToModel(updateTable.getSelectedRow());
+                actualEvent = (String) model.getValueAt(i, 0);
                 updateNumSalle.setSelectedItem(model.getValueAt(i, 2));
                 updateNumBloc.setSelectedItem(model.getValueAt(i, 3));
                 updateIdReservataire.setText((String) model.getValueAt(i, 1));
                 updateNomEvent.setText((String) model.getValueAt(i, 4));
                 try {
-                    updateDateEvent.setDate(new SimpleDateFormat("dd-MM-yyyy").parse((String) model.getValueAt(i, 5)));
+                    updateDateEvent.setDate(new SimpleDateFormat("yyyy-MM-dd").parse((String) model.getValueAt(i, 5)));
                 } catch (ParseException e1) {
                     e1.printStackTrace();
                 }
@@ -820,7 +814,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
     public void delete(ActionEvent e) {
         if (tableDelete.getSelectedRow() < 0) {
             //errorOccurred("veuillez au prealable selectionner l'evenement à supprimer");
-            JOptionPane.showMessageDialog(null,"veuillez au prealable selectionner l'evenement à supprimer");
+            JOptionPane.showMessageDialog(null, "veuillez au prealable selectionner l'evenement à supprimer");
         } else {
 
             Map<String, String> parameters = new HashMap();
@@ -840,6 +834,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
     public void update(ActionEvent e) {
         Map<String, String> params = new HashMap<>();
+        params.put("idEvent", this.actualEvent);
         params.put("idReservataire", this.updateIdReservataire.getText());
         params.put("numSalle", (String) this.updateNumSalle.getSelectedItem());
         params.put("numBloc", (String) this.updateNumBloc.getSelectedItem());
@@ -868,12 +863,12 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
     public void evtInBloc(ActionEvent e) {
         if (textBlocDonne.getText().equals(""))
-            JOptionPane.showMessageDialog(null,"veuillez entrer l'id du bloc ");
+            JOptionPane.showMessageDialog(null, "veuillez entrer l'id du bloc ");
         else {
             Map<String, String> parameters = new HashMap();
             parameters.put("idBloc", this.textBlocDonne.getText());
             Response response = this.controller.evtInBloc(new Request("Evenements dans un bloc", parameters));
-             affichage(modelLecture,response);
+            affichage(modelLecture, response);
             String r = response.getError();
 
             //model lecture avec colonnes
@@ -887,7 +882,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
 
         Response response = this.controller.actifReservateur();
-        affichage(modelLecture,response);
+        affichage(modelLecture, response);
         String r = response.getError();
         if (r != null) {
             this.ErrorLog(r);
@@ -903,7 +898,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
             Map<String, String> parameters = new HashMap();
             parameters.put("dayReservation", new SimpleDateFormat("yyyy-MM-dd").format(this.textDateDonne.getDate()));
             Response response = this.controller.actifReservateur();
-            affichage(modelLecture,response);
+            affichage(modelLecture, response);
             String r = response.getError();
             if (r != null) {
                 ErrorLog(r);
@@ -914,7 +909,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
     public void pastEvent(ActionEvent e) {
 
         Response response = this.controller.pastEvent();
-        affichage(modelLecture,response);
+        affichage(modelLecture, response);
         String r = response.getError();
 
         if (r != null) {
@@ -924,7 +919,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
     public void ErrorLog(String message) {
         try {
-            FileHandler fh = new FileHandler("my_log.txt");
+            FileHandler fh = new FileHandler("log.xml");
             logger.addHandler(fh);
             logger.log(Level.SEVERE, message);
         } catch (IOException e) {

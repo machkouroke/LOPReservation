@@ -70,10 +70,11 @@ public class Controller implements ErrorInitiator {
      * @return un objet Responses qui retourne juste un message si tout est correcte et un message d'erreur sinon
      */
     public Response update(Request request)  {
-        Evenements event = new Evenements(Integer.parseInt(request.get("idReservataire")),
+        Evenements event = new Evenements(Integer.parseInt(request.get("idEvent")),Integer.parseInt(request.get("idReservataire")),
                 Integer.parseInt(request.get("numSalle")), request.get("numBloc"), request.get("eventName"),
                 request.get("eventDate"));
         try {
+            System.out.println(event);
             new EventManager(this.factory).update(event);
             return new Response("La réservation  a bien été mise à jour", this);
         } catch (DataBaseException | SQLException e) {
@@ -90,7 +91,7 @@ public class Controller implements ErrorInitiator {
     public Response listeSalleReservataire(Request request)  {
         try {
             return new Response("Liste des Réservation d'un réservataires données",
-                    new EventManager(factory).listeSalleReservataire(Integer.parseInt(request.get("idReservataire"))), this);
+                    new EventManager(factory).listeSalleReservataire(Integer.parseInt(request.get("idReservataire"))));
         } catch (SQLException e) {
             return new Response(e, this);
         }
@@ -106,7 +107,7 @@ public class Controller implements ErrorInitiator {
 
         try {
             return new Response("Évènements dans un bloc données",
-                    new EventManager(factory).evtInBloc(request.get("idBloc")), this);
+                    new EventManager(factory).evtInBloc(request.get("idBloc")));
         } catch (SQLException e) {
             return new Response(e, this);
         }
@@ -120,7 +121,7 @@ public class Controller implements ErrorInitiator {
     public Response actifReservateur() {
         try {
             return new Response("Réservateurs avec une réservation en cours",
-                    new EventManager(factory).actifReservateur(), this);
+                    new EventManager(factory).actifReservateur());
         } catch (SQLException e) {
             return new Response(e, this);
         }
@@ -136,7 +137,7 @@ public class Controller implements ErrorInitiator {
     public Response dayReservation(Request request) {
         try {
             return new Response("Réservation d'une journées données",
-                    new EventManager(factory).dayReservation(request.get("dayReservation")), this);
+                    new EventManager(factory).dayReservation(request.get("dayReservation")));
         } catch (SQLException e) {
             return new Response(e, this);
         }
@@ -150,7 +151,7 @@ public class Controller implements ErrorInitiator {
     public Response pastEvent() {
         try {
             return new Response("Évènements passé",
-                    new EventManager(factory).pastEvent(), this);
+                    new EventManager(factory).pastEvent());
         } catch (SQLException e) {
             return new Response(e, this);
         }
@@ -197,4 +198,3 @@ public class Controller implements ErrorInitiator {
         }
     }
 }
-//OK....
