@@ -827,6 +827,8 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
                 this.ErrorLog(r);
             }
 
+            Response response2 = controller.getAllReservations();
+            affichage(modelDel, response2);
 
         }
     }
@@ -846,6 +848,8 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         if (r != null) {
             this.ErrorLog(r);
         }
+        Response response1 = controller.getAllReservations();
+        affichage(model, response1);
 
 
     }
