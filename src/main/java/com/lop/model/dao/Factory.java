@@ -13,8 +13,8 @@ public record Factory(String url, String name, String password) {
 
     public static Factory getInstance() {
         if (instance == null) {
-            instance = new Factory("jdbc:oracle:thin:@localhost:1521:xe", "system",
-                    "claudine");
+            instance = new Factory("jdbc:oracle:thin:@localhost:1521:orcl", "system",
+                    "momo1");
         }
         return instance;
     }

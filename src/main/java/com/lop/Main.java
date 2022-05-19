@@ -5,6 +5,7 @@ import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialLighte
 
 import com.lop.controller.Controller;
 import com.lop.model.dao.Factory;
+import com.lop.view.ConnectionWindow;
 import com.lop.view.src.source.MainWindow;
 
 import javax.swing.*;
@@ -24,6 +25,8 @@ public class Main {
 
         SwingUtilities.invokeAndWait(() -> {
             try {
+//                ConnectionWindow connection = new ConnectionWindow();
+//                connection.setVisible(true);
                 MainWindow frame = new MainWindow(new Controller(Factory.getInstance()));
                 frame.setVisible(true);
             } catch (Exception e) {
