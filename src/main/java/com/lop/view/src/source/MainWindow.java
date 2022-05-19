@@ -55,6 +55,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
     String[] salles = {"--Numéro de Salle--", "1", "2", "3", "4"};
     String[] blocs = {"--Numéro de Bloc--", "A", "B", "C", "D"};
     private JDateChooser textDateDonne;
+    JTextField textReserveDonneId;
 
     public MainWindow(Controller controller) throws IOException {
         //my_log.logger.setLevel(Level.WARNING);
@@ -110,15 +111,21 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
     }
 
+    public void lecture(Response response) {
+        String[] columnName = response.getData().get(0).toArray(new String[1]);
+        modelLecture.setColumnIdentifiers(columnName);
+
+    }
+
     public void affichage(MyTableModel model, Response response) {
         List<Object[]> data = new ArrayList<>();
         String[] columnName = response.getData().get(0).toArray(new String[1]);
-        model.setColumnIdentifiers( columnName);
+        model.setColumnIdentifiers(columnName);
         List<List<String>> responseData = response.getData().
                 stream().
                 skip(1).
                 toList();
-        for(List<String> row : responseData){
+        for (List<String> row : responseData) {
             data.add(row.toArray(new Object[1]));
         }
         model.data = data;
@@ -707,13 +714,13 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         lblReservId.setBounds(139, 11, 241, 21);
         reservataireDonne.add(lblReservId);
 
-        JTextField textReserveDonneId = new JTextField();
+        textReserveDonneId = new JTextField();
         textReserveDonneId.setBounds(48, 35, 332, 33);
         reservataireDonne.add(textReserveDonneId);
         textReserveDonneId.setColumns(10);
 
         JButton buttReserveDonne = new JButton("AFFICHER");
-        buttReserveDonne.addActionListener(this::dayReservation);
+        buttReserveDonne.addActionListener(this::listeSalleReservataire);
         buttReserveDonne.setBounds(408, 39, 89, 23);
         reservataireDonne.add(buttReserveDonne);
 
@@ -774,27 +781,52 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         request.addItemListener(e -> {
 
             if (request.getSelectedIndex() == 1) {
-                modelLecture.setColumnIdentifiers(new String[]{"ID", "Nom"});
                 cardlayoutQuestions.show(questions, "reservataireDonne");
+                Map<String, String> parameters = new HashMap<>();
+                parameters.put("idReservataire", textReserveDonneId.getText());
+                Request reques = new Request("Affichage des salles reservees par un reservataire", parameters);
+                Response response = controller.listeSalleReservataire(reques);
+                lecture(response);
+
+
+
             }
 
             if (request.getSelectedIndex() == 2) {
-                modelLecture.setColumnIdentifiers(new String[]{"ID", "NomEven"});
                 cardlayoutQuestions.show(questions, "bloc_donne");
+                Map<String, String> parameters = new HashMap();
+                parameters.put("idBloc", this.textBlocDonne.getText());
+                Response response = this.controller.evtInBloc(new Request("Evenements dans un bloc", parameters));
+                lecture(response);
+
+
             }
 
             if (request.getSelectedIndex() == 3) {
-                modelLecture.setColumnIdentifiers(new String[]{"ID", "Age_Ind"});
                 cardlayoutQuestions.show(questions, "autres");
+                Response response = this.controller.actifReservateur();
+                affichage(modelLecture,response);
+                lecture(response);
+
+
             }
             if (request.getSelectedIndex() == 4) {
-                modelLecture.setColumnIdentifiers(new String[]{"IDEvent", "Nom"});
                 cardlayoutQuestions.show(questions, "date_donne");
+                Map<String, String> parameters = new HashMap();
+                parameters.put("dayReservation", new SimpleDateFormat("yyyy-MM-dd").format(this.textDateDonne.getDate()));
+                Response response = this.controller.dayReservation(new Request("Reservation dun jour donne", parameters));
+                lecture(response);
+
+
             }
 
             if (request.getSelectedIndex() == 5) {
-                modelLecture.setColumnIdentifiers(new String[]{"ID", "Nom", "Date"});
                 cardlayoutQuestions.show(questions, "autres");
+                Response response = this.controller.pastEvent();
+                affichage(modelLecture,response);
+                //lecture(response);
+
+
             }
         });
         request.setBounds(66, 57, 533, 22);
@@ -835,7 +867,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
             Map<String, String> parameters = new HashMap();
             parameters.put("idEvent", deleteIdText.getText());
 
-            Response response = this.controller.delete(new Request("Suppression d'un evenement", parameters));
+            Response response = controller.delete(new Request("Suppression d'un evenement", parameters));
             String r = response.getError();
 
             if (r != null) {
@@ -877,13 +909,14 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
     public void listeSalleReservataire(ActionEvent e) {
         Map<String, String> parameters = new HashMap();
-
-        Response response = this.controller.listeSalleReservataire(new Request("Affichage des salles reservees par un reservataire", parameters));
+        parameters.put("idReservataire", textReserveDonneId.getText());
+        Response response = controller.listeSalleReservataire(new Request("Affichage des salles reservees par un reservataire", parameters));
+        affichage(modelLecture, response);
         String r = response.getError();
         if (r != null) {
             this.ErrorLog(r);
         }
-        affichage(modelLecture, response);
+
     }
 
     public void evtInBloc(ActionEvent e) {
@@ -894,14 +927,14 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         Map<String, String> parameters = new HashMap();
         parameters.put("idBloc", this.textBlocDonne.getText());
         Response response = this.controller.evtInBloc(new Request("Evenements dans un bloc", parameters));
-
+        affichage(modelLecture, response);
         String r = response.getError();
 
-            //model lecture avec colonnes
-            if (r != null) {
-                this.ErrorLog(r);
-            }
+        //model lecture avec colonnes
+        if (r != null) {
+            this.ErrorLog(r);
         }
+    }
 
 
     public void actifReservateur(ActionEvent action) {
@@ -924,7 +957,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         else {
             Map<String, String> parameters = new HashMap();
             parameters.put("dayReservation", new SimpleDateFormat("yyyy-MM-dd").format(this.textDateDonne.getDate()));
-            Response response = this.controller.actifReservateur();
+            Response response = controller.dayReservation(new Request("Reservation dun jour donne", parameters));
             affichage(modelLecture, response);
             String r = response.getError();
             if (r != null) {
