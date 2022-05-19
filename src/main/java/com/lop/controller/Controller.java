@@ -3,11 +3,14 @@ package com.lop.controller;
 import com.lop.error_event.ErrorInitiator;
 import com.lop.error_event.ErrorListener;
 import com.lop.exception.DataBaseException;
+import com.lop.exception.PasswordIncorrectException;
+import com.lop.exception.UnknownUserNameException;
 import com.lop.model.beans.Evenements;
 import com.lop.model.dao.EventManager;
 import com.lop.model.dao.Factory;
 import com.lop.communication.Request;
 import com.lop.communication.Response;
+import com.lop.model.dao.UserConnection;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -165,6 +168,26 @@ public class Controller implements ErrorInitiator {
             return new Response("Liste de tous les évènements",
                     new EventManager(factory).getAllReservations());
         } catch (SQLException e) {
+            return new Response(e, this);
+        }
+    }
+
+    /**
+     * Effectue l'authentification de l'utilisateur
+     * @param request contient les informations de connexions: userName et password
+     * @return Un objet response avec allowed en message si l'utilisateur est autorisé et denied sinon
+     */
+    public Response authenticate(Request request) {
+        UserConnection connection = new UserConnection(this.factory);
+        try {
+            if (connection.connexionValidate(request.get("userName"), request.get(
+                    "password"))) {
+                return new Response("allowed",
+                        this);
+            }
+            return new Response("denied",
+                    this);
+        } catch (DataBaseException |  PasswordIncorrectException | UnknownUserNameException e) {
             return new Response(e, this);
         }
     }
