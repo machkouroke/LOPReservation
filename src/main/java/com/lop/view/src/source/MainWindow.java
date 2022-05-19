@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,15 +111,29 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
     }
 
     public void affichage(MyTableModel model, Response response) {
-        List<List<String>> data = response.getData();
-        model.setColumnIdentifiers(data.get(0).toArray(new String[0]));
-        for (List<String> rowTable : data.stream().skip(1).toList()) {
-            Object[] row = new Object[rowTable.size()];
-            for (int i = 0; i < rowTable.size(); i++) {
-                row[i] = rowTable.get(i);
-            }
-            model.addRow(row);
+        List<Object[]> data = new ArrayList<>();
+        String[] columnName = response.getData().get(0).toArray(new String[1]);
+        model.setColumnIdentifiers( columnName);
+        List<List<String>> responseData = response.getData().
+                stream().
+                skip(1).
+                toList();
+        for(List<String> row : responseData){
+            data.add(row.toArray(new Object[1]));
         }
+        model.data = data;
+//        data=data.
+//                stream().
+//                skip(1).
+//                toList();
+//        model.setColumnIdentifiers(data.get(0).toArray(new String[0]));
+//        for (List<String> rowTable : data.stream().skip(1).toList()) {
+//            Object[] row = new Object[rowTable.size()];
+//            for (int i = 0; i < rowTable.size(); i++) {
+//                row[i] = rowTable.get(i);
+//            }
+//            model.addRow(row);
+//        }
     }
 
     public void add(ActionEvent action) {
@@ -830,6 +845,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
             Response response2 = controller.getAllReservations();
             affichage(modelDel, response2);
 
+            deleteIdText.setText("");
         }
     }
 
@@ -851,6 +867,11 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         Response response1 = controller.getAllReservations();
         affichage(model, response1);
 
+        updateNumSalle.setSelectedIndex(0);
+        updateNumBloc.setSelectedIndex(0);
+        updateIdReservataire.setText("");
+        updateNomEvent.setText("");
+        updateDateEvent.setDate(null);
 
     }
 
@@ -862,25 +883,26 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         if (r != null) {
             this.ErrorLog(r);
         }
-
+        affichage(modelLecture, response);
     }
 
     public void evtInBloc(ActionEvent e) {
+
         if (textBlocDonne.getText().equals(""))
             JOptionPane.showMessageDialog(null, "veuillez entrer l'id du bloc ");
-        else {
-            Map<String, String> parameters = new HashMap();
-            parameters.put("idBloc", this.textBlocDonne.getText());
-            Response response = this.controller.evtInBloc(new Request("Evenements dans un bloc", parameters));
-            affichage(modelLecture, response);
-            String r = response.getError();
+
+        Map<String, String> parameters = new HashMap();
+        parameters.put("idBloc", this.textBlocDonne.getText());
+        Response response = this.controller.evtInBloc(new Request("Evenements dans un bloc", parameters));
+
+        String r = response.getError();
 
             //model lecture avec colonnes
             if (r != null) {
                 this.ErrorLog(r);
             }
         }
-    }
+
 
     public void actifReservateur(ActionEvent action) {
 
@@ -895,6 +917,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
     }
 
     public void dayReservation(ActionEvent e) {
+
         if (new SimpleDateFormat("yyyy-MM-dd").format(this.textDateDonne.getDate()).equals(""))
             errorOccurred("veuillez choisir la date");
 

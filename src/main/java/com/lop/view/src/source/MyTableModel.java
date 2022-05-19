@@ -52,4 +52,6 @@ public class MyTableModel extends AbstractTableModel {
 		this.fireTableRowsInserted(getRowCount(), getColumnCount());
 	}
 
+
+
 }
