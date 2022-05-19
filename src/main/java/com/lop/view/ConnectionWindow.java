@@ -6,17 +6,26 @@ package com.lop.view;
  */
 
 
+import com.lop.communication.Request;
+import com.lop.controller.Controller;
+import com.lop.model.dao.Factory;
+import com.lop.view.src.source.MainWindow;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 /**
  * @author unknown
  */
 public class ConnectionWindow extends JFrame {
+    private final transient Controller controller;
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     private JPanel panel1;
     private JLabel welcome;
@@ -28,13 +37,16 @@ public class ConnectionWindow extends JFrame {
     private JTextField passwordInput;
     private JPanel buttonBar;
     private JButton connectButton;
+
     // JFormDesigner - End of variables declaration  //GEN-END:variables
-    public ConnectionWindow() {
+    public ConnectionWindow(Controller controller) {
         try {
             initComponents();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.controller = controller;
         myInit();
     }
 
@@ -54,7 +66,7 @@ public class ConnectionWindow extends JFrame {
         //======== this ========
         setMinimumSize(null);
         setMaximizedBounds(null);
-        File file =  new File("test");
+        File file = new File("test");
         System.out.println(file.getAbsolutePath());
         setIconImage(ImageIO.read(new File("src/main/java/com/lop/View/picture/lop.png")));
         var contentPane = getContentPane();
@@ -103,6 +115,7 @@ public class ConnectionWindow extends JFrame {
 
                 //---- connectButton ----
                 connectButton.setText("Connecter");
+                connectButton.addActionListener(this::authenticate);
                 buttonBar.add(connectButton);
             }
             dialogPane.add(buttonBar, BorderLayout.PAGE_END);
@@ -112,10 +125,29 @@ public class ConnectionWindow extends JFrame {
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
+
     public void myInit() {
         setSize(400, 200);
         setResizable(false);
         setVisible(true);
+    }
+
+    public void authenticate(ActionEvent action) {
+        Map<String, String> data = Map.of("userName", usernameInput.getText(),
+                "password", passwordInput.getText());
+        Request request = new Request("Connection", data);
+        if (controller.authenticate(request).getMessage().equals("allowed")) {
+                try {
+                    MainWindow frame = new MainWindow(this.controller);
+                    frame.setVisible(true);
+                    this.setVisible(false);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Informations de connections non valide");
+        }
     }
 
 

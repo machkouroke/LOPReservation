@@ -188,7 +188,7 @@ public class Controller implements ErrorInitiator {
             return new Response("denied",
                     this);
         } catch (DataBaseException |  PasswordIncorrectException | UnknownUserNameException e) {
-            return new Response(e, this);
+            return new Response(e.getMessage(), this);
         }
     }
 
