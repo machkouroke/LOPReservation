@@ -59,7 +59,7 @@ public class ConnectionWindow extends JFrame {
         userNameLabel = new JLabel();
         usernameInput = new JTextField();
         passwordLabel = new JLabel();
-        passwordInput = new JTextField();
+        passwordInput = new JPasswordField();
         buttonBar = new JPanel();
         connectButton = new JButton();
 
