@@ -11,9 +11,17 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 public record EventManager(Factory factory) {
+    private static final String NOM_EVT = "Nom de l'evenement";
+    private static final String DATE_EVT = "Date de l'evenement";
+    private static final String ID_EVT = "Id de l'évènement";
     private static final String DATA_BASE_EXCEPTION =
             "Une erreur est subvenu lors de la connection à la base " +
                     "de données:";
+    private static final String NUM_SALLE = "Numero de salle";
+    private static final String ID_BLOC = "Lettre du Bloc";
+    private static final String ID_RESERVATAIRE = "Id";
+    private static final Object NOM_RESERVATAIRE = "Nom";
+    private static final Object PRENOM_RESERVATAIRE = "Prenom";
 
     public boolean reservataireAllowed(int idReservataire, Connection conn)
             throws DataBaseException {
@@ -85,12 +93,12 @@ public record EventManager(Factory factory) {
 
     public void delete(int id) throws DataBaseException, SQLException {
         Connection conn = this.factory.getConnection();
-        try (PreparedStatement request = conn.prepareStatement(
+        try (PreparedStatement requete = conn.prepareStatement(
                 "DELETE FROM SYSTEM.EVENEMENTS WHERE ID_EVENT = ?")) {
 
-            request.setInt(1, id);
+            requete.setInt(1, id);
 
-            request.executeUpdate();
+            requete.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -110,7 +118,6 @@ public record EventManager(Factory factory) {
             request.setInt(6, event.getIdEvt(conn));
             request.executeUpdate();
 
-
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DataBaseException(DATA_BASE_EXCEPTION + e.getMessage());
@@ -129,54 +136,62 @@ public record EventManager(Factory factory) {
         request.setInt(2, event.getNumSalle());
         request.setString(3, event.getIdBloc());
         request.setString(4, event.getNom());
-
         request.setString(5, event.getDateEvt());
-
     }
 
     public List<List<String>> listeSalleReservataire(int id) throws
             SQLException {
         PrintEvent print = new PrintEvent(factory);
-        return print.print(
-                "SELECT NUM_SALLE, ID_BLOC FROM SYSTEM.EVENEMENTS WHERE ID_RESERVATAIRE=" +
-                        id);
+        return print.print(String.format("SELECT NUM_SALLE AS \"%s\", " +
+                "ID_BLOC AS \"%s\" FROM SYSTEM.EVENEMENTS WHERE ID_RESERVATAIRE=%d", NUM_SALLE, ID_BLOC, id)
+        );
     }
+
 
     public List<List<String>> evtInBloc(String id) throws
             SQLException {
         PrintEvent print = new PrintEvent(factory);
-        return print.print(
-                "SELECT NOM , NUM_SALLE , ID_BLOC, TO_CHAR(DATE_EVT) FROM SYSTEM.EVENEMENTS WHERE ID_BLOC='" +
-                        id + "'");
+        return print.print(String.format("SELECT NOM AS \"%s\", NUM_SALLE AS \"%s\", ID_BLOC AS \"%s\", TO_CHAR(DATE_EVT) " +
+                "AS \"%s\" FROM SYSTEM.EVENEMENTS WHERE ID_BLOC='%s'", NOM_EVT, NUM_SALLE, ID_BLOC, DATE_EVT, id)
+        );
     }
 
     public List<List<String>> actifReservateur() throws
             SQLException {
         PrintEvent print = new PrintEvent(factory);
         return print.print(
-                "SELECT * FROM SYSTEM.RESERVATAIRE WHERE ID_RESERVATAIRE IN (SELECT ID_RESERVATAIRE FROM SYSTEM.EVENEMENTS)");
+                String.format("SELECT ID_RESERVATAIRE AS \"%s\", NOM AS \"%s\", PRENOM AS \"%s\" " +
+                                "FROM SYSTEM.RESERVATAIRE WHERE ID_RESERVATAIRE IN (SELECT ID_RESERVATAIRE FROM SYSTEM.EVENEMENTS)",
+                        ID_RESERVATAIRE, NOM_RESERVATAIRE, PRENOM_RESERVATAIRE)
+        );
     }
 
     public List<List<String>> dayReservation(String day) throws
             SQLException {
         PrintEvent print = new PrintEvent(factory);
         return print.print(
-                "SELECT NOM ,  NUM_SALLE , ID_BLOC FROM SYSTEM.EVENEMENTS WHERE DATE_EVT = "
-                        + "TO_DATE('" + day + "','YYYY-MM-DD')");
+                String.format("SELECT NOM AS \"%s\",  NUM_SALLE AS \"%s\" , ID_BLOC AS \"%s\" " +
+                        "FROM SYSTEM.EVENEMENTS WHERE DATE_EVT = TO_DATE('%s ','YYYY-MM-DD')", NOM_EVT, NUM_SALLE, ID_BLOC, day
+                ));
     }
 
     public List<List<String>> pastEvent() throws SQLException {
         PrintEvent print = new PrintEvent(factory);
 
-        return print.print(
-                "SELECT * FROM SYSTEM.EVENEMENTS WHERE DATE_EVT<CURRENT_DATE");
+        return print.print(String.format("SELECT ID_EVENT AS \"%s\", ID_RESERVATAIRE AS \"%s\"," +
+                        "NUM_SALLE AS \"%s\", ID_BLOC AS \"%s\", " +
+                        "NOM AS \"%s\", DATE_EVT AS \"%s\" FROM SYSTEM.EVENEMENTS WHERE DATE_EVT<CURRENT_DATE", ID_EVT,
+                ID_RESERVATAIRE, NUM_SALLE, ID_BLOC, NOM_EVT, DATE_EVT)
+        );
     }
 
     public List<List<String>> getAllReservations() throws SQLException {
         PrintEvent print = new PrintEvent(factory);
 
-        return print.print(
-                "SELECT * FROM SYSTEM.EVENEMENTS");
+        return print.print(String.format("SELECT ID_EVENT AS \"%s\", ID_RESERVATAIRE AS \"%s\"," +
+                        "NUM_SALLE AS \"%s\", ID_BLOC AS \"%s\", " +
+                        "NOM AS \"%s\", DATE_EVT AS \"%s\" FROM SYSTEM.EVENEMENTS ", ID_EVT,
+                ID_RESERVATAIRE, NUM_SALLE, ID_BLOC, NOM_EVT, DATE_EVT));
     }
 
 }
