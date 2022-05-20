@@ -790,11 +790,12 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
             if (request.getSelectedIndex() == 1) {
                 cardlayoutQuestions.show(questions, "reservataireDonne");
-                Map<String, String> parameters = new HashMap<>();
+                if(!this.textBlocDonne.getText().equals(""))
+                {Map<String, String> parameters = new HashMap<>();
                 parameters.put("idReservataire", textReserveDonneId.getText());
                 Request reques = new Request("Affichage des salles reservees par un reservataire", parameters);
                 Response response = controller.listeSalleReservataire(reques);
-                lecture(response);
+                lecture(response);}
 
 
 
@@ -802,10 +803,12 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
             if (request.getSelectedIndex() == 2) {
                 cardlayoutQuestions.show(questions, "bloc_donne");
-                Map<String, String> parameters = new HashMap();
+                if(!this.textBlocDonne.getText().equals(""))
+                { Map<String, String> parameters = new HashMap();
+
                 parameters.put("idBloc", this.textBlocDonne.getText());
-                Response response = this.controller.evtInBloc(new Request("Evenements dans un bloc", parameters));
-                lecture(response);
+                Response response = this.controller.evtInBloc(new Request("Evenements dans un bloc", parameters));lecture(response);}
+
 
 
             }
@@ -814,16 +817,17 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
                 cardlayoutQuestions.show(questions, "autres");
                 Response response = this.controller.actifReservateur();
                 affichage(modelLecture,response);
-                lecture(response);
+
 
 
             }
             if (request.getSelectedIndex() == 4) {
                 cardlayoutQuestions.show(questions, "date_donne");
+                if(this.textDateDonne.getDate()!=null){
                 Map<String, String> parameters = new HashMap();
                 parameters.put("dayReservation", new SimpleDateFormat("yyyy-MM-dd").format(this.textDateDonne.getDate()));
                 Response response = this.controller.dayReservation(new Request("Reservation dun jour donne", parameters));
-                lecture(response);
+                affichage(modelLecture,response);}
 
 
             }
