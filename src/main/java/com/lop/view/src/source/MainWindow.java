@@ -143,6 +143,14 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 //        }
     }
 
+    public void reset(JComboBox salle,JComboBox bloc,JTextField idR,JTextField nameR,JDateChooser date){
+        salle.setSelectedIndex(0);
+        bloc.setSelectedIndex(0);
+        idR.setText("");
+        nameR.setText("");
+        date.setDate(null);
+    }
+
     public void add(ActionEvent action) {
         String r;
         if (addNumSalle.getSelectedIndex() == 0 || addNumBloc.getSelectedIndex() == 0 || addIdReservataire.getText().equals("") || addNomEvent.getText().equals("") || addDateEvent.getDate() == null) {
@@ -160,7 +168,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
             if (r != null) {
                 this.ErrorLog(r);
             }
-
+            reset(addNumSalle,addNumBloc,addIdReservataire,addNomEvent,addDateEvent);
         }
     }
 
