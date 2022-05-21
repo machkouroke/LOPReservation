@@ -74,7 +74,7 @@ public class ConnectionWindow extends JFrame {
 
         //======== panel1 ========
         {
-            panel1.setBackground(Color.black);
+//            panel1.setBackground(Color.black);
             panel1.setLayout(new CardLayout());
 
             //---- welcome ----

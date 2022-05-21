@@ -1,6 +1,9 @@
 package com.lop;
 
 
+import com.formdev.flatlaf.intellijthemes.FlatSolarizedDarkIJTheme;
+import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubDarkIJTheme;
+import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubIJTheme;
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialDeepOceanContrastIJTheme;
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialLighterIJTheme;
 
@@ -19,7 +22,7 @@ public class Main {
 
 
         try {
-            UIManager.setLookAndFeel(new FlatMaterialDeepOceanContrastIJTheme());
+            UIManager.setLookAndFeel(new FlatMaterialLighterIJTheme());
         } catch (Exception ex) {
             System.err.println("Failed to initialize LaF");
         }
