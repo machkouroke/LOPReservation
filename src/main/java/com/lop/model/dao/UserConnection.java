@@ -23,7 +23,7 @@ public class UserConnection {
     public boolean connexionValidate(String username, String password)
             throws PasswordIncorrectException, UnknownUserNameException, DataBaseException {
         try (PreparedStatement requete = this.factory.getConnection()
-                .prepareStatement("select * from \"User\" where username = ?")) {
+                .prepareStatement("select * from manager.user where username = ?")) {
             requete.setString(1, username);
             ResultSet resultat = requete.executeQuery();
             if (resultat.next()) {

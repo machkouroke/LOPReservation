@@ -13,7 +13,7 @@ public record Factory(String url, String name, String password) {
 
     public static Factory getInstance() {
         if (instance == null) {
-            instance = new Factory("jdbc:mysql://localhost:3306", "root",
+            instance = new Factory("jdbc:mysql://localhost:3306/manager", "root",
                     "claudine");
         }
         return instance;
