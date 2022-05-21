@@ -13,7 +13,7 @@ public record Factory(String url, String name, String password) {
 
     public static Factory getInstance() {
         if (instance == null) {
-            instance = new Factory("jdbc:oracle:thin:@localhost:1521:xe", "system",
+            instance = new Factory("jdbc:mysql://localhost:3306", "root",
                     "claudine");
         }
         return instance;
