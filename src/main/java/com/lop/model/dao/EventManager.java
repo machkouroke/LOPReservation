@@ -26,7 +26,7 @@ public record EventManager(Factory factory) {
     public boolean reservataireAllowed(int idReservataire, Connection conn)
             throws DataBaseException {
         try (PreparedStatement statement = conn.prepareStatement(
-                "SELECT ID_FONCTION, QUOTA FROM SYSTEM.RESERVATAIRE WHERE ID_RESERVATAIRE=?")) {
+                "SELECT ID_FONCTION, QUOTA FROM manager.RESERVATAIRE WHERE ID_RESERVATAIRE=?")) {
             statement.setInt(1, idReservataire);
             ResultSet rs = statement.executeQuery();
             rs.next();
@@ -59,7 +59,7 @@ public record EventManager(Factory factory) {
      */
     public void quotaUpdated(int idReservataire, Connection conn) {
         try (PreparedStatement statement = conn.prepareStatement(
-                "UPDATE SYSTEM.Reservataire SET QUOTA = QUOTA - 1 WHERE ID_RESERVATAIRE=?")) {
+                "UPDATE manager.Reservataire SET QUOTA = QUOTA - 1 WHERE ID_RESERVATAIRE=?")) {
             statement.setInt(1, idReservataire);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -72,8 +72,8 @@ public record EventManager(Factory factory) {
         Connection conn = this.factory.getConnection();
         if (reservataireAllowed(event.getIdReservataire(), conn)) {
             try (PreparedStatement request = conn.prepareStatement(
-                    "insert into SYSTEM.EVENEMENTS(ID_RESERVATAIRE, NUM_SALLE, ID_BLOC, NOM, DATE_EVT) " +
-                            "values(?, ?, ?, ?, TO_DATE(?, 'YYYY-MM-DD'))")) {
+                    "insert into manager.EVENEMENTS(ID_RESERVATAIRE, NUM_SALLE, ID_BLOC, NOM, DATE_EVT) " +
+                            "values(?, ?, ?, ?, STR_TO_DATE(?, '%Y-%m-%d'))")) {
                 requestSet(event, request);
                 request.executeUpdate();
 
@@ -93,8 +93,9 @@ public record EventManager(Factory factory) {
 
     public void delete(int id) throws DataBaseException, SQLException {
         Connection conn = this.factory.getConnection();
-        try (PreparedStatement requete = conn.prepareStatement(
-                "DELETE FROM SYSTEM.EVENEMENTS WHERE ID_EVENT = ?")) {
+
+        try (PreparedStatement request = conn.prepareStatement(
+                "DELETE FROM manager.EVENEMENTS WHERE ID_EVENT = ?")) {
 
             requete.setInt(1, id);
 
@@ -110,8 +111,8 @@ public record EventManager(Factory factory) {
     public void update(Evenements event) throws DataBaseException, SQLException {
         Connection conn = this.factory.getConnection();
         try (PreparedStatement request = conn.prepareStatement(
-                "UPDATE SYSTEM.EVENEMENTS SET ID_RESERVATAIRE=?, NUM_SALLE=?, ID_BLOC=?, NOM=?, " +
-                        "DATE_EVT=TO_DATE(?, 'YYYY-MM-DD')" +
+                "UPDATE manager.EVENEMENTS SET ID_RESERVATAIRE=?, NUM_SALLE=?, ID_BLOC=?, NOM=?, " +
+                        "DATE_EVT=STR_TO_DATE(?, '%Y-%m-%d')" +
                         "WHERE ID_EVENT=? ")) {
 
             requestSet(event, request);
@@ -142,56 +143,54 @@ public record EventManager(Factory factory) {
     public List<List<String>> listeSalleReservataire(int id) throws
             SQLException {
         PrintEvent print = new PrintEvent(factory);
-        return print.print(String.format("SELECT NUM_SALLE AS \"%s\", " +
-                "ID_BLOC AS \"%s\" FROM SYSTEM.EVENEMENTS WHERE ID_RESERVATAIRE=%d", NUM_SALLE, ID_BLOC, id)
-        );
+
+        return print.print(
+                "SELECT NUM_SALLE, ID_BLOC FROM manager.EVENEMENTS WHERE ID_RESERVATAIRE=" +
+                        id);
+
     }
 
 
     public List<List<String>> evtInBloc(String id) throws
             SQLException {
         PrintEvent print = new PrintEvent(factory);
-        return print.print(String.format("SELECT NOM AS \"%s\", NUM_SALLE AS \"%s\", ID_BLOC AS \"%s\", TO_CHAR(DATE_EVT) " +
-                "AS \"%s\" FROM SYSTEM.EVENEMENTS WHERE ID_BLOC='%s'", NOM_EVT, NUM_SALLE, ID_BLOC, DATE_EVT, id)
-        );
+        return print.print(
+                "SELECT NOM , NUM_SALLE , ID_BLOC, DATE_FORMAT(DATE_EVT, '%Y-%m-%d')  FROM manager.EVENEMENTS WHERE ID_BLOC='" +
+                        id + "'");
     }
 
     public List<List<String>> actifReservateur() throws
             SQLException {
         PrintEvent print = new PrintEvent(factory);
         return print.print(
-                String.format("SELECT ID_RESERVATAIRE AS \"%s\", NOM AS \"%s\", PRENOM AS \"%s\" " +
-                                "FROM SYSTEM.RESERVATAIRE WHERE ID_RESERVATAIRE IN (SELECT ID_RESERVATAIRE FROM SYSTEM.EVENEMENTS)",
-                        ID_RESERVATAIRE, NOM_RESERVATAIRE, PRENOM_RESERVATAIRE)
-        );
+
+                "SELECT * FROM manager.RESERVATAIRE WHERE ID_RESERVATAIRE IN (SELECT ID_RESERVATAIRE FROM manager.EVENEMENTS)");
+
     }
 
     public List<List<String>> dayReservation(String day) throws
             SQLException {
         PrintEvent print = new PrintEvent(factory);
         return print.print(
-                String.format("SELECT NOM AS \"%s\",  NUM_SALLE AS \"%s\" , ID_BLOC AS \"%s\" " +
-                        "FROM SYSTEM.EVENEMENTS WHERE DATE_EVT = TO_DATE('%s ','YYYY-MM-DD')", NOM_EVT, NUM_SALLE, ID_BLOC, day
-                ));
+                "SELECT NOM ,  NUM_SALLE , ID_BLOC FROM manager.EVENEMENTS WHERE DATE_EVT = "
+                        + "STR_TO_DATE('" + day + "', '%Y-%m-%d')");
+
     }
 
     public List<List<String>> pastEvent() throws SQLException {
         PrintEvent print = new PrintEvent(factory);
 
-        return print.print(String.format("SELECT ID_EVENT AS \"%s\", ID_RESERVATAIRE AS \"%s\"," +
-                        "NUM_SALLE AS \"%s\", ID_BLOC AS \"%s\", " +
-                        "NOM AS \"%s\", DATE_EVT AS \"%s\" FROM SYSTEM.EVENEMENTS WHERE DATE_EVT<CURRENT_DATE", ID_EVT,
-                ID_RESERVATAIRE, NUM_SALLE, ID_BLOC, NOM_EVT, DATE_EVT)
-        );
+        return print.print(
+                "SELECT * FROM manager.EVENEMENTS WHERE DATE_EVT<CURRENT_DATE");
+
     }
 
     public List<List<String>> getAllReservations() throws SQLException {
         PrintEvent print = new PrintEvent(factory);
 
-        return print.print(String.format("SELECT ID_EVENT AS \"%s\", ID_RESERVATAIRE AS \"%s\"," +
-                        "NUM_SALLE AS \"%s\", ID_BLOC AS \"%s\", " +
-                        "NOM AS \"%s\", DATE_EVT AS \"%s\" FROM SYSTEM.EVENEMENTS ", ID_EVT,
-                ID_RESERVATAIRE, NUM_SALLE, ID_BLOC, NOM_EVT, DATE_EVT));
+        return print.print(
+                "SELECT * FROM manager.EVENEMENTS");
+
     }
 
 }

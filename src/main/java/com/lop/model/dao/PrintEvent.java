@@ -30,7 +30,7 @@ public record PrintEvent(Factory factory) {
             while (answer.next()) {
                 List<String> row = new ArrayList<>();
                 for (int i = 1; i < numberOfColumn + 1; i++) {
-                    row.add(answer.getNString(i));
+                    row.add(answer.getString(i));
                 }
                 data.add(row);
             }

@@ -2,17 +2,15 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2022-05-18T16:35:36.117630800Z</date>
-  <millis>1652891736117</millis>
-  <nanos>630800</nanos>
+  <date>2022-05-21T02:22:49.542862500Z</date>
+  <millis>1653099769542</millis>
+  <nanos>862500</nanos>
   <sequence>0</sequence>
   <logger>flogger</logger>
   <level>SEVERE</level>
   <class>com.lop.view.src.source.MainWindow</class>
   <method>ErrorLog</method>
-  <thread>20</thread>
-  <message>Erreur: Listener refused the connection with the following error:
-ORA-12505, TNS:listener does not currently know of SID given in connect descriptor
- </message>
+  <thread>21</thread>
+  <message>Erreur: Une erreur est subvenu lors de la connection à la base de données:Incorrect datetime value: '2022-05-19' for function str_to_date</message>
 </record>
 </log>
