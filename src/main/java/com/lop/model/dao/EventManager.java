@@ -11,9 +11,17 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 public record EventManager(Factory factory) {
+    private static final String NOM_EVT = "Nom de l'evenement";
+    private static final String DATE_EVT = "Date de l'evenement";
+    private static final String ID_EVT = "Id de l'évènement";
     private static final String DATA_BASE_EXCEPTION =
             "Une erreur est subvenu lors de la connection à la base " +
                     "de données:";
+    private static final String NUM_SALLE = "Numero de salle";
+    private static final String ID_BLOC = "Lettre du Bloc";
+    private static final String ID_RESERVATAIRE = "Id";
+    private static final Object NOM_RESERVATAIRE = "Nom";
+    private static final Object PRENOM_RESERVATAIRE = "Prenom";
 
     public boolean reservataireAllowed(int idReservataire, Connection conn)
             throws DataBaseException {
@@ -85,12 +93,13 @@ public record EventManager(Factory factory) {
 
     public void delete(int id) throws DataBaseException, SQLException {
         Connection conn = this.factory.getConnection();
+
         try (PreparedStatement request = conn.prepareStatement(
                 "DELETE FROM manager.EVENEMENTS WHERE ID_EVENT = ?")) {
 
-            request.setInt(1, id);
+            requete.setInt(1, id);
 
-            request.executeUpdate();
+            requete.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -110,7 +119,6 @@ public record EventManager(Factory factory) {
             request.setInt(6, event.getIdEvt(conn));
             request.executeUpdate();
 
-
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DataBaseException(DATA_BASE_EXCEPTION + e.getMessage());
@@ -129,18 +137,19 @@ public record EventManager(Factory factory) {
         request.setInt(2, event.getNumSalle());
         request.setString(3, event.getIdBloc());
         request.setString(4, event.getNom());
-
         request.setString(5, event.getDateEvt());
-
     }
 
     public List<List<String>> listeSalleReservataire(int id) throws
             SQLException {
         PrintEvent print = new PrintEvent(factory);
+
         return print.print(
                 "SELECT NUM_SALLE, ID_BLOC FROM manager.EVENEMENTS WHERE ID_RESERVATAIRE=" +
                         id);
+
     }
+
 
     public List<List<String>> evtInBloc(String id) throws
             SQLException {
@@ -154,7 +163,9 @@ public record EventManager(Factory factory) {
             SQLException {
         PrintEvent print = new PrintEvent(factory);
         return print.print(
+
                 "SELECT * FROM manager.RESERVATAIRE WHERE ID_RESERVATAIRE IN (SELECT ID_RESERVATAIRE FROM manager.EVENEMENTS)");
+
     }
 
     public List<List<String>> dayReservation(String day) throws
@@ -163,6 +174,7 @@ public record EventManager(Factory factory) {
         return print.print(
                 "SELECT NOM ,  NUM_SALLE , ID_BLOC FROM manager.EVENEMENTS WHERE DATE_EVT = "
                         + "STR_TO_DATE('" + day + "', '%Y-%m-%d')");
+
     }
 
     public List<List<String>> pastEvent() throws SQLException {
@@ -170,6 +182,7 @@ public record EventManager(Factory factory) {
 
         return print.print(
                 "SELECT * FROM manager.EVENEMENTS WHERE DATE_EVT<CURRENT_DATE");
+
     }
 
     public List<List<String>> getAllReservations() throws SQLException {
@@ -177,6 +190,7 @@ public record EventManager(Factory factory) {
 
         return print.print(
                 "SELECT * FROM manager.EVENEMENTS");
+
     }
 
 }
