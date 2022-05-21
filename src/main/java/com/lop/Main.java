@@ -26,7 +26,9 @@ public class Main {
 
         SwingUtilities.invokeAndWait(() -> {
             try {
-                ConnectionWindow frame = new ConnectionWindow(new Controller(Factory.getInstance()));
+                ConnectionWindow frame = new ConnectionWindow(new Controller(new Factory(
+                        "jdbc:mysql://localhost:3306/manager", "root",
+                        "claudine")));
                 frame.setVisible(true);
             } catch (Exception e) {
                 e.printStackTrace();

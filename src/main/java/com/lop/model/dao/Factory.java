@@ -9,27 +9,28 @@ import java.sql.SQLException;
 /**
  * This class create the connection with the database
  */
-public record Factory(String url, String name, String password) {
-    private static Factory instance;
+public class  Factory{
 
+    private  String url;
+    private  String name;
+    private  String password;
 
-    public static Factory getInstance() {
-        if (instance == null) {
-            try {
-                ProcessBuilder pip = new ProcessBuilder("pip", "install", "-r", "src/main/java/com/lop/model/dao/initPython/requirements.txt");
-                errorProcess(pip);
-                ProcessBuilder pb = new ProcessBuilder("python",
-                        "src/main/java/com/lop/model/dao/initPython/main.py", "localhost", "root", "claudine");
-                errorProcess(pb);
-
-            } catch (Exception e) {
-                System.out.println("Exception Raised: " + e);
-            }
-            instance = new Factory("jdbc:mysql://localhost:3306/manager", "root",
-                    "claudine");
+    public Factory(String url, String name, String password) {
+        try {
+            ProcessBuilder pip = new ProcessBuilder("pip", "install", "-r",
+                    "src/main/java/com/lop/model/dao/initPython/requirements.txt");
+            errorProcess(pip);
+            ProcessBuilder pb = new ProcessBuilder("python",
+                    "src/main/java/com/lop/model/dao/initPython/main.py", "localhost", "root", "claudine");
+            errorProcess(pb);
+            this.url = url;
+            this.name = name;
+            this.password = password;
+        } catch (Exception e) {
+            System.out.println("Exception Raised: " + e);
         }
-        return instance;
     }
+
 
     private static void errorProcess(ProcessBuilder pip) throws IOException {
         Process pipProcess = pip.start();
