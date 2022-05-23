@@ -23,6 +23,7 @@ public class Factory {
 
     public Factory(String url, String name, String password) {
         try {
+
             ConfigController.baseInit(name, password);
             this.url = url;
             this.name = name;
