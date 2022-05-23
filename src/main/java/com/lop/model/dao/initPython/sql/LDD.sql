@@ -65,4 +65,3 @@ USERNAME VARCHAR(50) unique not null,
 PASSWORD VARCHAR(50)
 );
 insert into User (username, password) value ('machkour', 'bonjour2000');
-

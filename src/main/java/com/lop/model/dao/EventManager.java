@@ -97,9 +97,9 @@ public record EventManager(Factory factory) {
         try (PreparedStatement request = conn.prepareStatement(
                 "DELETE FROM manager.EVENEMENTS WHERE ID_EVENT = ?")) {
 
-            requete.setInt(1, id);
+            request.setInt(1, id);
 
-            requete.executeUpdate();
+            request.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
