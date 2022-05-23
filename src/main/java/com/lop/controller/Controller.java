@@ -20,8 +20,11 @@ public class Controller implements ErrorInitiator {
     Factory factory;
     private final List<ErrorListener> listeners = new ArrayList<>();
 
+
+
     /**
-     * @param factory Object permettant d'effectuer la connexion avec la base de données et ainsi d'effectuer la manipulation de modèle
+     * @param factory Object permettant d'effectuer la connexion avec la base de données et ainsi d'effectuer
+     *               la manipulation de modèle
      */
     public Controller(Factory factory) {
         this.factory = factory;
@@ -191,6 +194,7 @@ public class Controller implements ErrorInitiator {
             return new Response(e.getMessage(), this);
         }
     }
+
 
     /**
      * permet d'ajouter des écouteurs d'évènements au controller
