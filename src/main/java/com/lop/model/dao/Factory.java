@@ -21,7 +21,7 @@ public class  Factory{
                     "src/main/java/com/lop/model/dao/initPython/requirements.txt");
             errorProcess(pip);
             ProcessBuilder pb = new ProcessBuilder("python",
-                    "src/main/java/com/lop/model/dao/initPython/main.py", "localhost", "root", "claudine");
+                    "src/main/java/com/lop/model/dao/initPython/main.py", "localhost", "root", "momo");
             errorProcess(pb);
             this.url = url;
             this.name = name;

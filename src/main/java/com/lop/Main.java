@@ -31,7 +31,7 @@ public class Main {
             try {
                 ConnectionWindow frame = new ConnectionWindow(new Controller(new Factory(
                         "jdbc:mysql://localhost:3306/manager", "root",
-                        "claudine")));
+                        "momo")));
                 frame.setVisible(true);
             } catch (Exception e) {
                 e.printStackTrace();
