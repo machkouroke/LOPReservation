@@ -1,11 +1,17 @@
 package com.lop.view.src.source;
 
-import com.lop.controller.ConfigController;
+
+import com.lop.controller.Controller;
+import com.lop.model.dao.Factory;
+import com.lop.view.ConnectionWindow;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.sql.SQLException;
+
 
 public class InitialisationBase extends JFrame {
     private JPanel contentPane;
@@ -14,6 +20,7 @@ public class InitialisationBase extends JFrame {
     private JTextField textPwd;
 
     public InitialisationBase() throws IOException, ClassNotFoundException {
+
         init();
         setVisible(true);
     }
@@ -54,6 +61,7 @@ public class InitialisationBase extends JFrame {
         buttEnter.setBorder(null);
         buttEnter.setBounds(24, 176, 370, 23);
         contentPane.add(buttEnter);
+        buttEnter.addActionListener(this::authenticate);
 
         JLabel lblNewLabel_3 = new JLabel("Nouveau ici ??\r\n");
         lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -64,9 +72,30 @@ public class InitialisationBase extends JFrame {
         lblNewLabel_4.setBounds(55, 36, 288, 14);
         contentPane.add(lblNewLabel_4);
     }
+
+    public void authenticate(ActionEvent e) {
+        String host = textHost.getText();
+        String username = textUserName.getText();
+        String pwd = textPwd.getText();
+
+        try {
+            Factory factory = new Factory(host, username, pwd);
+            Controller controller = new Controller(factory);
+            ConnectionWindow frame = new ConnectionWindow(controller);
+            frame.setVisible(true);
+            this.setVisible(false);
+        } catch (SQLException exception) {
+            JOptionPane.showMessageDialog(this,exception.getMessage());
+        } catch (IOException | ClassNotFoundException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     public void textF(JTextField tf,int y){
         tf.setBounds(167, y, 227, 26);
         contentPane.add(tf);
         tf.setColumns(10);
+
     }
+
 }

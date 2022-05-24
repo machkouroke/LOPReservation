@@ -25,7 +25,8 @@ import java.lang.reflect.InvocationTargetException;
 public class Main {
     public static void main(String[] args) throws InterruptedException, InvocationTargetException {
 
-
+//        InitialisationBase b = new InitialisationBase();
+//        b.setVisible(true);
         try {
             UIManager.setLookAndFeel(new FlatMaterialLighterIJTheme());
         } catch (Exception ex) {
