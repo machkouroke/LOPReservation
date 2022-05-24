@@ -11,17 +11,11 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 public record EventManager(Factory factory) {
-    private static final String NOM_EVT = "Nom de l'evenement";
-    private static final String DATE_EVT = "Date de l'evenement";
-    private static final String ID_EVT = "Id de l'évènement";
+
     private static final String DATA_BASE_EXCEPTION =
             "Une erreur est subvenu lors de la connection à la base " +
                     "de données:";
-    private static final String NUM_SALLE = "Numero de salle";
-    private static final String ID_BLOC = "Lettre du Bloc";
-    private static final String ID_RESERVATAIRE = "Id";
-    private static final Object NOM_RESERVATAIRE = "Nom";
-    private static final Object PRENOM_RESERVATAIRE = "Prenom";
+
 
     public boolean reservataireAllowed(int idReservataire, Connection conn)
             throws DataBaseException {
