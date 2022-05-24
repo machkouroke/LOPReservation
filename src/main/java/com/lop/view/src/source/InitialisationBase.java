@@ -1,8 +1,11 @@
 package com.lop.view.src.source;
 
+import com.lop.controller.ConfigController;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.io.IOException;
 
 public class InitialisationBase extends JFrame {
     private JPanel contentPane;
@@ -10,7 +13,11 @@ public class InitialisationBase extends JFrame {
     private JTextField textUserName;
     private JTextField textPwd;
 
-    public InitialisationBase() {
+    public InitialisationBase() throws IOException, ClassNotFoundException {
+        init();
+        setVisible(true);
+    }
+    public void init() {
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 438, 247);
@@ -57,7 +64,6 @@ public class InitialisationBase extends JFrame {
         lblNewLabel_4.setBounds(55, 36, 288, 14);
         contentPane.add(lblNewLabel_4);
     }
-
     public void textF(JTextField tf,int y){
         tf.setBounds(167, y, 227, 26);
         contentPane.add(tf);

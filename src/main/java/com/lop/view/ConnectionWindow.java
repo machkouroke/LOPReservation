@@ -42,6 +42,7 @@ public class ConnectionWindow extends JFrame {
     public ConnectionWindow(Controller controller) {
         try {
             initComponents();
+            setVisible(true);
 
         } catch (IOException e) {
             e.printStackTrace();
