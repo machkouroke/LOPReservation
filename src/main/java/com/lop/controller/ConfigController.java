@@ -10,7 +10,7 @@ public class ConfigController {
     }
     public static boolean firstTime() throws IOException, ClassNotFoundException {
 
-        File f = new File("machine.dot");
+        File f = new File("src/main/java/com/lop/controller/machine.dot");
         if (f.exists()) {
             InetAddress actualAddress = InetAddress.getLocalHost();
             try (FileInputStream fichier = new FileInputStream(f)) {
