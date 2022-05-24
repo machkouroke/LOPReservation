@@ -7,7 +7,6 @@ import com.lop.model.dao.Factory;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
