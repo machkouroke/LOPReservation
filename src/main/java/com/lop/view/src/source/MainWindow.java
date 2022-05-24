@@ -2,8 +2,7 @@ package com.lop.view.src.source;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.border.EtchedBorder;
+
 import javax.swing.table.TableRowSorter;
 
 import com.lop.controller.Controller;
@@ -25,14 +24,21 @@ import com.toedter.calendar.JDateChooser;
 
 import java.util.logging.*;
 
+/**
+ * @author Morel Kouhossounon
+ * @author Candy Aho
+ */
 public class MainWindow extends JFrame implements ErrorListener, ViewToController {
+    public static final Color menuBackground = new Color(47, 84, 207);
+    public static final Color DANGER = new Color(220, 53, 69);
+    public static final Font MAIN_FONT = new Font("Segoe UI", Font.BOLD, 13);
     MyTableModel modelLecture;
     MyTableModel modelDel;
     MyTableModel model;
-    Logger logger = Logger.getLogger("flogger");
+    transient Logger logger = Logger.getLogger("flogger");
     JDateChooser updateDateEvent;
-    JPanel contentPane;
-    JPanel contenu;
+    PanelRound contentPane;
+    PanelRound contenu;
     CardLayout cardlayout;
     JTextField textBlocDonne;
 
@@ -58,18 +64,18 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
     JTextField textReserveDonneId;
 
     public MainWindow(Controller controller) throws IOException {
-        //my_log.logger.setLevel(Level.WARNING);
+
         this.controller = controller;
         this.controller.addListener(this);
-        setTitle("GESTION DES EVENEMENTS");
+        setTitle("LOPReservations");
         setResizable(false);
-        setName("GESTION DES EVENEMENTS");
+        setName("LOPReservations");
+        setIconImage(ImageIO.read(new File("src/main/java/com/lop/View/picture/lop.png")));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBounds(100, 100, 864, 542);
-        contentPane = new JPanel();
-        contentPane.setBackground(new Color(250, 240, 230));
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        contentPane = new PanelRound();
         setContentPane(contentPane);
+
         contentPane.setLayout(null);
         JLabel iconeEven = new JLabel("");
         ImageIcon imgEvent = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/evenement.png")));
@@ -77,23 +83,23 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         iconeEven.setBounds(48, 16, 86, 53);
         contentPane.add(iconeEven);
 
-        JPanel titreP = new JPanel();
+        PanelRound titreP = new PanelRound();
+        titreP.setRound(20);
         titreP.setBackground(new Color(220, 20, 60));
         titreP.setBounds(10, 80, 174, 23);
         contentPane.add(titreP);
         titreP.setLayout(null);
 
-        JLabel lbltitreP = new JLabel("EVENEMENTS");
-        lbltitreP.setHorizontalAlignment(SwingConstants.CENTER);
-        lbltitreP.setBounds(10, 5, 142, 14);
-        lbltitreP.setFont(new Font("Tahoma", Font.BOLD, 15));
-        lbltitreP.setForeground(Color.WHITE);
-        titreP.add(lbltitreP);
+        JLabel labelTitre = new JLabel("EVENEMENTS", SwingConstants.CENTER);
+        labelTitre.setBounds(10, 5, 142, 14);
+        labelTitre.setFont(MAIN_FONT);
+        labelTitre.setForeground(Color.WHITE);
+        titreP.add(labelTitre);
 
         //menu
         menuFunc();
 
-        contenu = new JPanel();
+        contenu = new PanelRound();
         contenu.setBounds(194, 16, 646, 478);
         contentPane.add(contenu);
         contenu.setLayout(new CardLayout(0, 0));
@@ -129,21 +135,9 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
             data.add(row.toArray(new Object[1]));
         }
         model.data = data;
-//        data=data.
-//                stream().
-//                skip(1).
-//                toList();
-//        model.setColumnIdentifiers(data.get(0).toArray(new String[0]));
-//        for (List<String> rowTable : data.stream().skip(1).toList()) {
-//            Object[] row = new Object[rowTable.size()];
-//            for (int i = 0; i < rowTable.size(); i++) {
-//                row[i] = rowTable.get(i);
-//            }
-//            model.addRow(row);
-//        }
     }
 
-    public void reset(JComboBox salle,JComboBox bloc,JTextField idR,JTextField nameR,JDateChooser date){
+    public void reset(JComboBox<String> salle,JComboBox<String> bloc,JTextField idR,JTextField nameR,JDateChooser date){
         salle.setSelectedIndex(0);
         bloc.setSelectedIndex(0);
         idR.setText("");
@@ -166,7 +160,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
             Response response = this.controller.add(new Request("Ajout d'un utilisateur", params));
             r = response.getError();
             if (r != null) {
-                this.ErrorLog(r);
+                this.errorLog(r);
             }
             reset(addNumSalle,addNumBloc,addIdReservataire,addNomEvent,addDateEvent);
         }
@@ -184,13 +178,14 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
     public void menuFunc() throws IOException {
 
-        JPanel menu = new JPanel();
-        menu.setBackground(new Color(255, 140, 0));
+        PanelRound menu = new PanelRound();
+
         menu.setBounds(10, 114, 174, 380);
+
         contentPane.add(menu);
         menu.setLayout(null);
-
-        JLabel menuQuit = new JLabel("QUITTER ...");
+        PanelRound quitter = new PanelRound();
+        JLabel menuQuit = new JLabel("Quitter");
         menuQuit.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -201,11 +196,15 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         menuQuit.setHorizontalAlignment(SwingConstants.CENTER);
         menuQuit.setForeground(Color.WHITE);
         menuQuit.setFont(new Font("Tahoma", Font.BOLD, 13));
-        menuQuit.setBackground(new Color(255, 140, 0));
-        menuQuit.setBounds(40, 341, 87, 28);
-        menu.add(menuQuit);
+        menuQuit.setBackground(menuBackground);
+        quitter.setBounds(7, 341, 160, 28);
 
-        JPanel panMenuAdd = new JPanel();
+        quitter.add(menuQuit);
+        quitter.setBackground(DANGER);
+        quitter.setRound(20);
+        menu.add(quitter);
+
+        PanelRound panMenuAdd = new PanelRound();
         panMenuAdd.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -214,29 +213,29 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                panMenuAdd.setBackground(Color.white);
+                panMenuAdd.setBackground(DANGER);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                panMenuAdd.setBackground(new Color(255, 140, 0));
+                panMenuAdd.setBackground(menuBackground);
             }
         });
         menuPanelPosition(panMenuAdd, 70);
         menu.add(panMenuAdd);
 
 
-        JLabel menuAdd = new JLabel("AJOUT");
+        JLabel menuAdd = new JLabel("Ajout");
         menuLabelFunction(menuAdd, new int[]{58, 13, 44, 19});
         panMenuAdd.add(menuAdd);
 
         JLabel menuAddIcon = new JLabel("");
         menuAddIcon.setBounds(8, 2, 37, 41);
         panMenuAdd.add(menuAddIcon);
-        ImageIcon iconAdMenu = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/menu_ajout.png")));
+        ImageIcon iconAdMenu = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/view/IMAGES/add.png")));
         menuAddIcon.setIcon(iconAdMenu);
 
-        JPanel panMenuUpdate = new JPanel();
+        PanelRound panMenuUpdate = new PanelRound();
         panMenuUpdate.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -247,29 +246,29 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                panMenuUpdate.setBackground(Color.white);
+                panMenuUpdate.setBackground(DANGER);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                panMenuUpdate.setBackground(new Color(255, 140, 0));
+                panMenuUpdate.setBackground(menuBackground);
             }
         });
         menuPanelPosition(panMenuUpdate, 122);
         menu.add(panMenuUpdate);
 
 
-        JLabel menuUpdate = new JLabel("MODIFICATION");
+        JLabel menuUpdate = new JLabel("Modification");
         menuLabelFunction(menuUpdate, new int[]{44, 10, 106, 25});
         panMenuUpdate.add(menuUpdate);
 
         JLabel menuUpdateIcon = new JLabel("");
-        menuUpdateIcon.setBounds(8, 5, 38, 35);
+        menuUpdateIcon.setBounds(8, 4, 37, 41);
         panMenuUpdate.add(menuUpdateIcon);
-        ImageIcon updateMenuIcon = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/menu_modif.png")));
+        ImageIcon updateMenuIcon = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/update.png")));
         menuUpdateIcon.setIcon(updateMenuIcon);
 
-        JPanel panMenuDelete = new JPanel();
+        PanelRound panMenuDelete = new PanelRound();
         panMenuDelete.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -281,29 +280,29 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                panMenuDelete.setBackground(Color.white);
+                panMenuDelete.setBackground(DANGER);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                panMenuDelete.setBackground(new Color(255, 140, 0));
+                panMenuDelete.setBackground(menuBackground);
             }
         });
         menuPanelPosition(panMenuDelete, 174);
         menu.add(panMenuDelete);
 
 
-        JLabel menuDelete = new JLabel("SUPPRESSION");
+        JLabel menuDelete = new JLabel("Suppression");
         menuLabelFunction(menuDelete, new int[]{44, 14, 98, 17});
         panMenuDelete.add(menuDelete);
 
         JLabel menuDeleteIcon = new JLabel("");
-        menuDeleteIcon.setBounds(8, 8, 34, 29);
+        menuDeleteIcon.setBounds(8, 4, 37, 41);
         panMenuDelete.add(menuDeleteIcon);
-        ImageIcon deleteIconMenu = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/menu_sup.png")));
+        ImageIcon deleteIconMenu = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/delete.png")));
         menuDeleteIcon.setIcon(deleteIconMenu);
 
-        JPanel panMenuHome = new JPanel();
+        PanelRound panMenuHome = new PanelRound();
         panMenuHome.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -312,29 +311,29 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                panMenuHome.setBackground(Color.white);
+                panMenuHome.setBackground(DANGER);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                panMenuHome.setBackground(new Color(255, 140, 0));
+                panMenuHome.setBackground(menuBackground);
             }
         });
         menuPanelPosition(panMenuHome, 18);
         menu.add(panMenuHome);
 
 
-        JLabel menuHome = new JLabel("ACCUEIL");
+        JLabel menuHome = new JLabel("Accueil");
         menuLabelFunction(menuHome, new int[]{56, 14, 59, 17});
         panMenuHome.add(menuHome);
 
-        JLabel menuHomeIcon = new JLabel("New label");
-        menuHomeIcon.setBounds(8, 9, 36, 27);
+        JLabel menuHomeIcon = new JLabel("");
+        menuHomeIcon.setBounds(8, 4, 37, 41);
         panMenuHome.add(menuHomeIcon);
-        ImageIcon homeIconMenu = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/menu_home.png")));
+        ImageIcon homeIconMenu = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/homy.png")));
         menuHomeIcon.setIcon(homeIconMenu);
 
-        JPanel panMenuAutres = new JPanel();
+        PanelRound panMenuAutres = new PanelRound();
         panMenuAutres.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -343,35 +342,35 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                panMenuAutres.setBackground(Color.white);
+                panMenuAutres.setBackground(DANGER);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                panMenuAutres.setBackground(new Color(255, 140, 0));
+                panMenuAutres.setBackground(menuBackground);
             }
         });
         menuPanelPosition(panMenuAutres, 226);
         menu.add(panMenuAutres);
 
 
-        JLabel menuAutres = new JLabel("AUTRES");
+        JLabel menuAutres = new JLabel("Autres");
         menuLabelFunction(menuAutres, new int[]{43, 15, 83, 15});
         panMenuAutres.add(menuAutres);
 
         JLabel menuAutresIcon = new JLabel("");
         menuAutresIcon.setBounds(8, 6, 49, 33);
         panMenuAutres.add(menuAutresIcon);
-        ImageIcon autresMenuIcon = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/menu_autres_.png")));
+        ImageIcon autresMenuIcon = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/admin.png")));
         menuAutresIcon.setIcon(autresMenuIcon);
 
 
     }
 
 
-    public void menuPanelPosition(JPanel panel, int y) {
-        panel.setBorder(new BevelBorder(BevelBorder.RAISED));
-        panel.setBackground(new Color(255, 140, 0));
+    public void menuPanelPosition(PanelRound panel, int y) {
+        panel.setRound(30);
+        panel.setBackground(menuBackground);
         panel.setBounds(7, y, 160, 45);
         panel.setLayout(null);
     }
@@ -379,14 +378,12 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
     public void menuLabelFunction(JLabel label, int[] bounds) {
         label.setBounds(bounds[0], bounds[1], bounds[2], bounds[3]);
         label.setHorizontalAlignment(SwingConstants.CENTER);
-        label.setForeground(new Color(0, 0, 0));
-        label.setFont(new Font("Tahoma", Font.BOLD, 13));
+        label.setForeground(Color.WHITE);
+        label.setFont(MAIN_FONT);
     }
 
     public void panelHome() throws IOException {
-        JPanel home = new JPanel();
-        home.setForeground(new Color(220, 220, 220));
-        home.setBackground(new Color(250, 240, 230));
+        PanelRound home = new PanelRound();
         contenu.add(home, "home");
         home.setLayout(null);
 
@@ -405,12 +402,12 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
     }
 
     public void panelAdd() throws IOException {
-        JPanel panAdd = new JPanel();
+        PanelRound panAdd = new PanelRound();
         contenuPanel(panAdd);
         contenu.add(panAdd, "add");
 
-        JPanel formulaire = new JPanel();
-        formulaire.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+        PanelRound formulaire = new PanelRound();
+        panelConfig(formulaire);
         formulaire.setBounds(159, 64, 338, 332);
         panAdd.add(formulaire);
         formulaire.setLayout(null);
@@ -462,9 +459,9 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         ImageIcon imgAddForm = new ImageIcon(ImageIO.read(new File("src/main/java/com/lop/View/IMAGES/ajout_ev2.png")));
         iconAddForm.setIcon(imgAddForm);
 
-        JButton boutonAjout = new JButton("AJOUTER");
+        JButton boutonAjout = new JButton("Ajouter");
         boutonAjout.addActionListener(this::add);
-        boutonAjout.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+        buttonConfig(boutonAjout);
         boutonAjout.setBounds(383, 407, 114, 23);
         panAdd.add(boutonAjout);
 
@@ -481,13 +478,18 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
             }
 
         });
-        boutonRestore.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+        buttonConfig(boutonRestore);
         boutonRestore.setBounds(158, 407, 114, 23);
         panAdd.add(boutonRestore);
 
         JLabel addTitle = new JLabel(">> AJOUTER UN EVENEMENT");
         titleLabel(addTitle);
         panAdd.add(addTitle);
+    }
+
+    private void panelConfig(PanelRound formulaire) {
+        formulaire.setRound(20);
+        formulaire.setBackground(Color.white);
     }
 
     public void formTextField(JTextField tf, int y, String namePanel) {
@@ -498,25 +500,27 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
     }
 
     public void formLabel(JLabel label, int y, int width) {
-        label.setFont(new Font("Tahoma", Font.PLAIN, 13));
+        label.setFont(MAIN_FONT);
         label.setBounds(22, y, width, 15);
+        label.setForeground(Color.black);
     }
 
     public void titleLabel(JLabel lb) {
         lb.setHorizontalAlignment(SwingConstants.CENTER);
-        lb.setForeground(new Color(255, 140, 0));
+        lb.setForeground(menuBackground);
         lb.setFont(new Font("Comic Sans MS", Font.BOLD, 19));
         lb.setBounds(35, 11, 318, 42);
     }
 
     public void panelUpdate() {
-        JPanel panUpdate = new JPanel();
+        PanelRound panUpdate = new PanelRound();
         contenuPanel(panUpdate);
         contenu.add(panUpdate, "update");
 
-        JPanel formulaireUpdate = new JPanel();
+        PanelRound formulaireUpdate = new PanelRound();
+        panelConfig(formulaireUpdate);
         formulaireUpdate.setLayout(null);
-        formulaireUpdate.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+
         formulaireUpdate.setBounds(27, 124, 276, 284);
         panUpdate.add(formulaireUpdate);
 
@@ -596,10 +600,11 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         JButton boutonUpdate = new JButton("MODIFIER ...");
         boutonUpdate.addActionListener(this::update);
         boutonUpdate.setBounds(27, 419, 111, 23);
+        buttonConfig(boutonUpdate);
         panUpdate.add(boutonUpdate);
 
         JButton updateButtCancel = new JButton("ANNULER ...\r\n");
-        updateButtCancel.setBorder(new BevelBorder(BevelBorder.RAISED));
+        buttonConfig(updateButtCancel);
         updateButtCancel.addActionListener(e -> {
             updateNumSalle.setSelectedIndex(0);
             updateNumBloc.setSelectedIndex(0);
@@ -628,14 +633,19 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         rechercheUpdate.setColumns(10);
 
         JLabel lblNewLabel1 = new JLabel("Recherchez un évènement ici");
-        lblNewLabel1.setFont(new Font("Tahoma", Font.PLAIN, 13));
+        lblNewLabel1.setFont(MAIN_FONT);
         lblNewLabel1.setBounds(53, 66, 250, 14);
         panUpdate.add(lblNewLabel1);
 
     }
 
+    private void buttonConfig(JButton updateButtCancel) {
+        updateButtCancel.setBackground(menuBackground);
+        updateButtCancel.setForeground(Color.WHITE);
+    }
+
     public void panelDelete() {
-        JPanel panDelete = new JPanel();
+        PanelRound panDelete = new PanelRound();
         contenuPanel(panDelete);
         contenu.add(panDelete, "delete");
 
@@ -677,12 +687,14 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         scrollpaneDelete.setViewportView(tableDelete);
 
 
-        JButton btnDel = new JButton("SUPPRIMER\r\n");
+        JButton btnDel = new JButton("Supprimer");
         btnDel.addActionListener(this::delete);
+        buttonConfig(btnDel);
         btnDel.setBounds(32, 270, 132, 30);
         panDelete.add(btnDel);
 
-        JButton btnCancel = new JButton("ANNULER\r\n");
+        JButton btnCancel = new JButton("Annuler");
+        buttonConfig(btnCancel);
         btnCancel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -698,27 +710,26 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
     }
 
     public void panelAutres() {
-        JPanel panAutres = new JPanel();
+        PanelRound panAutres = new PanelRound();
         contenuPanel(panAutres);
         contenu.add(panAutres, "autres");
 
-        JPanel questions = new JPanel();
+        PanelRound questions = new PanelRound();
         questions.setBounds(66, 90, 533, 76);
         panAutres.add(questions);
         questions.setLayout(new CardLayout(0, 0));
         CardLayout cardlayoutQuestions = (CardLayout) questions.getLayout();
 
-        JPanel autresReq = new JPanel();
-        autresReq.setBackground(new Color(250, 240, 230));
+        PanelRound autresReq = new PanelRound();
         questions.add(autresReq, "autres");
 
-        JPanel reservataireDonne = new JPanel();
+        PanelRound reservataireDonne = new PanelRound();
         displayQuestionsPanel(reservataireDonne);
         questions.add(reservataireDonne, "reservataireDonne");
 
         JLabel lblReservId = new JLabel("Entrez l'ID du reservataire .");
         lblReservId.setFont(new Font("Tahoma", Font.PLAIN, 17));
-        lblReservId.setBackground(new Color(250, 240, 230));
+//        lblReservId.setBackground(new Color(250, 240, 230));
         lblReservId.setBounds(139, 11, 241, 21);
         reservataireDonne.add(lblReservId);
 
@@ -732,7 +743,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         buttReserveDonne.setBounds(408, 39, 89, 23);
         reservataireDonne.add(buttReserveDonne);
 
-        JPanel blocDonne = new JPanel();
+        PanelRound blocDonne = new PanelRound();
         displayQuestionsPanel(blocDonne);
         questions.add(blocDonne, "bloc_donne");
 
@@ -752,7 +763,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         buttBlocDonne.setBounds(408, 39, 89, 23);
         blocDonne.add(buttBlocDonne);
 
-        JPanel dateDonne = new JPanel();
+        PanelRound dateDonne = new PanelRound();
         displayQuestionsPanel(dateDonne);
         questions.add(dateDonne, "date_donne");
 
@@ -804,7 +815,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
             if (request.getSelectedIndex() == 2) {
                 cardlayoutQuestions.show(questions, "bloc_donne");
                 if(!this.textBlocDonne.getText().equals(""))
-                { Map<String, String> parameters = new HashMap();
+                { Map<String, String> parameters = new HashMap<>();
 
                 parameters.put("idBloc", this.textBlocDonne.getText());
                 Response response = this.controller.evtInBloc(new Request("Evenements dans un bloc", parameters));lecture(response);}
@@ -824,7 +835,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
             if (request.getSelectedIndex() == 4) {
                 cardlayoutQuestions.show(questions, "date_donne");
                 if(this.textDateDonne.getDate()!=null){
-                Map<String, String> parameters = new HashMap();
+                Map<String, String> parameters = new HashMap<>();
                 parameters.put("dayReservation", new SimpleDateFormat("yyyy-MM-dd").format(this.textDateDonne.getDate()));
                 Response response = this.controller.dayReservation(new Request("Reservation dun jour donne", parameters));
                 affichage(modelLecture,response);}
@@ -849,14 +860,11 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         panAutres.add(autreTitle);
     }
 
-    public void displayQuestionsPanel(JPanel panel) {
-        panel.setBackground(new Color(250, 240, 230));
+    public void displayQuestionsPanel(PanelRound panel) {
         panel.setLayout(null);
     }
 
-    public void contenuPanel(JPanel panel) {
-        panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
-        panel.setBackground(new Color(250, 240, 230));
+    public void contenuPanel(PanelRound panel) {
         panel.setLayout(null);
     }
 
@@ -872,18 +880,17 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
     public void delete(ActionEvent e) {
         if (tableDelete.getSelectedRow() < 0) {
-            //errorOccurred("veuillez au prealable selectionner l'evenement à supprimer");
             JOptionPane.showMessageDialog(null, "veuillez au prealable selectionner l'evenement à supprimer");
         } else {
 
-            Map<String, String> parameters = new HashMap();
+            Map<String, String> parameters = new HashMap<>();
             parameters.put("idEvent", deleteIdText.getText());
 
             Response response = controller.delete(new Request("Suppression d'un evenement", parameters));
             String r = response.getError();
 
             if (r != null) {
-                this.ErrorLog(r);
+                this.errorLog(r);
             }
 
             Response response2 = controller.getAllReservations();
@@ -906,7 +913,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         Response response = this.controller.update(new Request("Mise à jour d'un evenement", params));
         String r = response.getError();
         if (r != null) {
-            this.ErrorLog(r);
+            this.errorLog(r);
         }
         Response response1 = controller.getAllReservations();
         affichage(model, response1);
@@ -920,13 +927,13 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
     }
 
     public void listeSalleReservataire(ActionEvent e) {
-        Map<String, String> parameters = new HashMap();
+        Map<String, String> parameters = new HashMap<>();
         parameters.put("idReservataire", textReserveDonneId.getText());
         Response response = controller.listeSalleReservataire(new Request("Affichage des salles reservees par un reservataire", parameters));
         affichage(modelLecture, response);
         String r = response.getError();
         if (r != null) {
-            this.ErrorLog(r);
+            this.errorLog(r);
         }
 
     }
@@ -936,7 +943,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         if (textBlocDonne.getText().equals(""))
             JOptionPane.showMessageDialog(null, "veuillez entrer l'id du bloc ");
 
-        Map<String, String> parameters = new HashMap();
+        Map<String, String> parameters = new HashMap<>();
         parameters.put("idBloc", this.textBlocDonne.getText());
         Response response = this.controller.evtInBloc(new Request("Evenements dans un bloc", parameters));
         affichage(modelLecture, response);
@@ -944,7 +951,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
 
         //model lecture avec colonnes
         if (r != null) {
-            this.ErrorLog(r);
+            this.errorLog(r);
         }
     }
 
@@ -956,7 +963,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         affichage(modelLecture, response);
         String r = response.getError();
         if (r != null) {
-            this.ErrorLog(r);
+            this.errorLog(r);
         }
 
     }
@@ -967,13 +974,13 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
             errorOccurred("veuillez choisir la date");
 
         else {
-            Map<String, String> parameters = new HashMap();
+            Map<String, String> parameters = new HashMap<>();
             parameters.put("dayReservation", new SimpleDateFormat("yyyy-MM-dd").format(this.textDateDonne.getDate()));
             Response response = controller.dayReservation(new Request("Reservation dun jour donne", parameters));
             affichage(modelLecture, response);
             String r = response.getError();
             if (r != null) {
-                ErrorLog(r);
+                errorLog(r);
             }
         }
     }
@@ -985,11 +992,11 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         String r = response.getError();
 
         if (r != null) {
-            this.ErrorLog(r);
+            this.errorLog(r);
         }
     }
 
-    public void ErrorLog(String message) {
+    public void errorLog(String message) {
         try {
             FileHandler fh = new FileHandler("log.xml");
             logger.addHandler(fh);

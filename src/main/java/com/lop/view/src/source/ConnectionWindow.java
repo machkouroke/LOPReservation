@@ -102,14 +102,14 @@ public class ConnectionWindow extends JFrame {
         contentPanel.setLayout(new GridLayout(2, 2, 0, 20));
 
         //---- userNameLabel ----
-        userNameLabel.setText("Nom d'utilisateur");
-        userNameLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        userNameLabel.setText("Nom d'utilisateur:");
+        userNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
         contentPanel.add(userNameLabel);
         contentPanel.add(usernameInput);
 
         //---- passwordLabel ----
         passwordLabel.setText("Mot de Passe:");
-        passwordLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
         contentPanel.add(passwordLabel);
         contentPanel.add(passwordInput);
     }

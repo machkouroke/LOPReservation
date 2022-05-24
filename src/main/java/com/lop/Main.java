@@ -1,7 +1,8 @@
 package com.lop;
 
 
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialLighterIJTheme;
+
+import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubDarkIJTheme;
 
 import com.lop.controller.ConfigController;
 import com.lop.controller.Controller;
@@ -20,10 +21,8 @@ import java.lang.reflect.InvocationTargetException;
 public class Main {
     public static void main(String[] args) throws InterruptedException, InvocationTargetException {
 
-//        InitialisationBase b = new InitialisationBase();
-//        b.setVisible(true);
         try {
-            UIManager.setLookAndFeel(new FlatMaterialLighterIJTheme());
+            UIManager.setLookAndFeel(new FlatGitHubDarkIJTheme());
         } catch (Exception ex) {
             System.err.println("Failed to initialize LaF");
         }
