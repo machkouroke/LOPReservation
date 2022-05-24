@@ -8,7 +8,6 @@ package com.lop.view;
 
 import com.lop.communication.Request;
 import com.lop.controller.Controller;
-import com.lop.model.dao.Factory;
 import com.lop.view.src.source.MainWindow;
 
 import javax.imageio.ImageIO;
@@ -18,7 +17,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 /**
@@ -27,7 +25,7 @@ import java.util.Map;
 public class ConnectionWindow extends JFrame {
     private final transient Controller controller;
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
-    private JPanel panel1;
+    private JPanel welcomePanel;
     private JLabel welcome;
     private JPanel dialogPane;
     private JPanel contentPanel;
@@ -53,7 +51,7 @@ public class ConnectionWindow extends JFrame {
 
     private void initComponents() throws IOException {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-        panel1 = new JPanel();
+        welcomePanel = new JPanel();
         welcome = new JLabel();
         dialogPane = new JPanel();
         contentPanel = new JPanel();
@@ -67,64 +65,70 @@ public class ConnectionWindow extends JFrame {
         //======== this ========
         setMinimumSize(null);
         setMaximizedBounds(null);
-        File file = new File("test");
-        System.out.println(file.getAbsolutePath());
         setIconImage(ImageIO.read(new File("src/main/java/com/lop/View/picture/lop.png")));
         var contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
 
         //======== panel1 ========
-        {
-//            panel1.setBackground(Color.black);
-            panel1.setLayout(new CardLayout());
-
-            //---- welcome ----
-            welcome.setText("Bienvenue \u00e0 LOPReservation");
-            welcome.setHorizontalAlignment(SwingConstants.CENTER);
-            welcome.setAlignmentY(-2.5F);
-            panel1.add(welcome, "card1");
-        }
-        contentPane.add(panel1, BorderLayout.PAGE_START);
+        welcomePanel();
+        contentPane.add(welcomePanel, BorderLayout.PAGE_START);
 
         //======== dialogPane ========
-        {
-            dialogPane.setBorder(new EmptyBorder(12, 12, 12, 12));
-            dialogPane.setLayout(new BorderLayout(10, 0));
-
-            //======== contentPanel ========
-            {
-                contentPanel.setLayout(new GridLayout(2, 2, 0, 20));
-
-                //---- userNameLabel ----
-                userNameLabel.setText("Nom d'utilisateur");
-                userNameLabel.setHorizontalAlignment(SwingConstants.LEFT);
-                contentPanel.add(userNameLabel);
-                contentPanel.add(usernameInput);
-
-                //---- passwordLabel ----
-                passwordLabel.setText("Mot de Passe:");
-                passwordLabel.setHorizontalAlignment(SwingConstants.LEFT);
-                contentPanel.add(passwordLabel);
-                contentPanel.add(passwordInput);
-            }
-            dialogPane.add(contentPanel, BorderLayout.CENTER);
-
-            //======== buttonBar ========
-            {
-                buttonBar.setBorder(new EmptyBorder(12, 0, 0, 0));
-                buttonBar.setLayout(new GridLayout());
-
-                //---- connectButton ----
-                connectButton.setText("Connecter");
-                connectButton.addActionListener(this::authenticate);
-                buttonBar.add(connectButton);
-            }
-            dialogPane.add(buttonBar, BorderLayout.PAGE_END);
-        }
+        dialogPane();
         contentPane.add(dialogPane, BorderLayout.CENTER);
         pack();
         setLocationRelativeTo(getOwner());
-        // JFormDesigner - End of component initialization  //GEN-END:initComponents
+
+    }
+
+    private void dialogPane() {
+        dialogPane.setBorder(new EmptyBorder(12, 12, 12, 12));
+        dialogPane.setLayout(new BorderLayout(10, 0));
+
+        //======== contentPanel ========
+        contentPanel();
+        dialogPane.add(contentPanel, BorderLayout.CENTER);
+
+        //======== buttonBar ========
+        buttonBar();
+        dialogPane.add(buttonBar, BorderLayout.PAGE_END);
+    }
+
+    private void buttonBar() {
+        buttonBar.setBorder(new EmptyBorder(12, 0, 0, 0));
+        buttonBar.setLayout(new GridLayout());
+
+        //---- connectButton ----
+        connectButton.setText("Connecter");
+        connectButton.addActionListener(this::authenticate);
+        buttonBar.add(connectButton);
+    }
+
+    private void contentPanel() {
+        contentPanel.setLayout(new GridLayout(2, 2, 0, 20));
+
+        //---- userNameLabel ----
+        userNameLabel.setText("Nom d'utilisateur");
+        userNameLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        contentPanel.add(userNameLabel);
+        contentPanel.add(usernameInput);
+
+        //---- passwordLabel ----
+        passwordLabel.setText("Mot de Passe:");
+        passwordLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        contentPanel.add(passwordLabel);
+        contentPanel.add(passwordInput);
+    }
+
+    private void welcomePanel() {
+        welcomePanel.setBackground(Color.lightGray);
+        welcomePanel.setLayout(new CardLayout());
+
+        //---- welcome ----
+        welcome.setText("Bienvenue \u00e0 LOPReservation");
+        welcome.setHorizontalAlignment(SwingConstants.CENTER);
+        welcome.setAlignmentY(-2.5F);
+        welcomePanel.add(welcome, "card1");
     }
 
     public void myInit() {
