@@ -1,10 +1,9 @@
-package com.lop.view;
+package com.lop.view.src.source;
 
 
 
 import com.lop.communication.Request;
 import com.lop.controller.Controller;
-import com.lop.view.src.source.MainWindow;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -116,11 +115,11 @@ public class ConnectionWindow extends JFrame {
     }
 
     private void welcomePanel() {
-        welcomePanel.setBackground(Color.lightGray);
+
         welcomePanel.setLayout(new CardLayout());
 
         //---- welcome ----
-        welcome.setText("Bienvenue \u00e0 LOPReservation");
+        welcome.setText("Bienvenue sur LOPReservation");
         welcome.setHorizontalAlignment(SwingConstants.CENTER);
         welcome.setAlignmentY(-2.5F);
         welcomePanel.add(welcome, "card1");

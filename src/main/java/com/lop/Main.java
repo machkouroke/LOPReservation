@@ -1,19 +1,14 @@
 package com.lop;
 
 
-import com.formdev.flatlaf.intellijthemes.FlatSolarizedDarkIJTheme;
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubDarkIJTheme;
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubIJTheme;
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialDeepOceanContrastIJTheme;
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialLighterIJTheme;
 
 import com.lop.controller.ConfigController;
 import com.lop.controller.Controller;
 import com.lop.model.BaseLogin;
 import com.lop.model.dao.Factory;
-import com.lop.view.ConnectionWindow;
+import com.lop.view.src.source.ConnectionWindow;
 import com.lop.view.src.source.InitialisationBase;
-import com.lop.view.src.source.MainWindow;
 
 import javax.swing.*;
 
