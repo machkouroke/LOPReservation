@@ -1,10 +1,6 @@
 package com.lop.view;
 
 
-/*
- * Created by JFormDesigner on Fri Apr 22 18:04:36 WET 2022
- */
-
 
 import com.lop.communication.Request;
 import com.lop.controller.Controller;
@@ -20,11 +16,11 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * @author unknown
+ * @author Machkour Oke
  */
 public class ConnectionWindow extends JFrame {
     private final transient Controller controller;
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
+
     private JPanel welcomePanel;
     private JLabel welcome;
     private JPanel dialogPane;
@@ -36,7 +32,6 @@ public class ConnectionWindow extends JFrame {
     private JPanel buttonBar;
     private JButton connectButton;
 
-    // JFormDesigner - End of variables declaration  //GEN-END:variables
     public ConnectionWindow(Controller controller) {
         try {
             initComponents();
@@ -50,7 +45,7 @@ public class ConnectionWindow extends JFrame {
     }
 
     private void initComponents() throws IOException {
-        // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
+
         welcomePanel = new JPanel();
         welcome = new JLabel();
         dialogPane = new JPanel();
@@ -69,7 +64,7 @@ public class ConnectionWindow extends JFrame {
         var contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
 
-        //======== panel1 ========
+        //======== welcomePanel ========
         welcomePanel();
         contentPane.add(welcomePanel, BorderLayout.PAGE_START);
 
@@ -137,6 +132,9 @@ public class ConnectionWindow extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Authentifie l'utilisateur puis ouvre la fenêtre principale si l'utilisateur est vérifié
+     */
     public void authenticate(ActionEvent action) {
         Map<String, String> data = Map.of("userName", usernameInput.getText(),
                 "password", passwordInput.getText());
