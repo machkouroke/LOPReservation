@@ -20,9 +20,9 @@ import java.sql.SQLException;
  */
 public class Factory {
 
-    private String url;
-    private String name;
-    private String password;
+    private final String url;
+    private final String name;
+    private final String password;
 
     public Factory(String url, String name, String password) throws IOException, ClassNotFoundException, SQLException {
 
@@ -31,6 +31,7 @@ public class Factory {
             this.name = name;
             this.password = password;
 
+            /*Vérifie si la connexion est bien établie et jette une erreur dans le cas contraire*/
             getConnection();
 
             File machineName = new File("src/main/java/com/lop/controller/machine.dot");
