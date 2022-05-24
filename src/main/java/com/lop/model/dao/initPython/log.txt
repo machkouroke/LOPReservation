@@ -1,2 +1,0 @@
-****Configuration de la base****
-host: localhost, userName: root, password: momo

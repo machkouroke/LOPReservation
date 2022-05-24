@@ -1,8 +1,16 @@
 package com.lop.view.src.source;
 
+import com.lop.controller.ConfigController;
+import com.lop.controller.Controller;
+import com.lop.model.dao.Factory;
+import com.lop.view.ConnectionWindow;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.sql.SQLException;
 
 public class InitialisationBase extends JFrame {
     private JPanel contentPane;
@@ -10,7 +18,25 @@ public class InitialisationBase extends JFrame {
     private JTextField textUserName;
     private JTextField textPwd;
 
-    public InitialisationBase() {
+    public InitialisationBase() throws IOException, ClassNotFoundException {
+
+        init();
+//        if(ConfigController.firstTime()){
+//            setVisible(true);
+//        }
+//        else {
+//
+//        }
+
+    }
+
+    public void textF(JTextField tf,int y){
+        tf.setBounds(167, y, 227, 26);
+        contentPane.add(tf);
+        tf.setColumns(10);
+    }
+
+    public void init(){
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 438, 247);
@@ -47,6 +73,7 @@ public class InitialisationBase extends JFrame {
         buttEnter.setBorder(null);
         buttEnter.setBounds(24, 176, 370, 23);
         contentPane.add(buttEnter);
+        buttEnter.addActionListener(this::authenticate);
 
         JLabel lblNewLabel_3 = new JLabel("Nouveau ici ??\r\n");
         lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -58,9 +85,20 @@ public class InitialisationBase extends JFrame {
         contentPane.add(lblNewLabel_4);
     }
 
-    public void textF(JTextField tf,int y){
-        tf.setBounds(167, y, 227, 26);
-        contentPane.add(tf);
-        tf.setColumns(10);
+    public void authenticate(ActionEvent e){
+        String host = textHost.getText();
+        String username = textUserName.getText();
+        String pwd = textPwd.getText();
+
+        try {
+            Factory factory = new Factory(host,username,pwd);
+            Controller controller = new Controller(factory);
+            ConnectionWindow frame = new ConnectionWindow(controller);
+            frame.setVisible(true);
+        }catch (SQLException exception){
+            exception.printStackTrace();
+        }
+
     }
+
 }

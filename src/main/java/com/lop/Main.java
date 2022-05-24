@@ -10,6 +10,7 @@ import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMaterialLighte
 import com.lop.controller.Controller;
 import com.lop.model.dao.Factory;
 import com.lop.view.ConnectionWindow;
+import com.lop.view.src.source.InitialisationBase;
 import com.lop.view.src.source.MainWindow;
 
 import javax.swing.*;
@@ -20,7 +21,8 @@ import java.lang.reflect.InvocationTargetException;
 public class Main {
     public static void main(String[] args) throws InterruptedException, InvocationTargetException {
 
-
+//        InitialisationBase b = new InitialisationBase();
+//        b.setVisible(true);
         try {
             UIManager.setLookAndFeel(new FlatMaterialLighterIJTheme());
         } catch (Exception ex) {
