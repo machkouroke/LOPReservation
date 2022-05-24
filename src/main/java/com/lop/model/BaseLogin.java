@@ -1,5 +1,7 @@
 package com.lop.model;
 
-public record BaseLogin(String localhost, String username, String password) {
+import java.io.Serializable;
+
+public record BaseLogin(String localhost, String username, String password) implements Serializable {
 
 }

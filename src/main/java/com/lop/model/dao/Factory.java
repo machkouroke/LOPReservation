@@ -27,7 +27,7 @@ public class Factory {
     public Factory(String url, String name, String password) throws IOException, ClassNotFoundException, SQLException {
 
             ConfigController.baseInit(name, password);
-            this.url = url;
+            this.url = "jdbc:mysql://"+url+":3306/manager";
             this.name = name;
             this.password = password;
 

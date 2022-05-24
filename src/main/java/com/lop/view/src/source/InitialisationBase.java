@@ -83,8 +83,9 @@ public class InitialisationBase extends JFrame {
             Controller controller = new Controller(factory);
             ConnectionWindow frame = new ConnectionWindow(controller);
             frame.setVisible(true);
+            this.setVisible(false);
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            JOptionPane.showMessageDialog(this,exception.getMessage());
         } catch (IOException | ClassNotFoundException ex) {
             throw new RuntimeException(ex);
         }
