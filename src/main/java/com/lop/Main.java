@@ -35,11 +35,11 @@ public class Main {
         SwingUtilities.invokeAndWait(() -> {
             try {
                 if (ConfigController.firstTime()) {
-                    InitialisationBase frame = new InitialisationBase();
+                     new InitialisationBase();
                 } else {
                     FileInputStream fichier = new FileInputStream("src/main/java/com/lop/controller/dataBase.dot");
                     BaseLogin data = (BaseLogin) new ObjectInputStream(fichier).readObject();
-                    ConnectionWindow frame = new ConnectionWindow(new Controller(new Factory(
+                    new ConnectionWindow(new Controller(new Factory(
                             data.localhost(), data.username(),
                             data.password())));
 
