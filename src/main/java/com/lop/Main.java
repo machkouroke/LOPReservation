@@ -4,12 +4,15 @@ package com.lop;
 
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubDarkIJTheme;
 
+import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubIJTheme;
+import com.jthemedetecor.OsThemeDetector;
 import com.lop.controller.ConfigController;
 import com.lop.controller.Controller;
 import com.lop.model.BaseLogin;
 import com.lop.model.dao.Factory;
 import com.lop.view.src.source.ConnectionWindow;
 import com.lop.view.src.source.InitialisationBase;
+import org.apache.log4j.BasicConfigurator;
 
 import javax.swing.*;
 
@@ -22,7 +25,15 @@ public class Main {
     public static void main(String[] args) throws InterruptedException, InvocationTargetException {
 
         try {
-            UIManager.setLookAndFeel(new FlatGitHubDarkIJTheme());
+            BasicConfigurator.configure();
+            final OsThemeDetector detector = OsThemeDetector.getDetector();
+            final boolean isDarkThemeUsed = detector.isDark();
+            if (isDarkThemeUsed) {
+                UIManager.setLookAndFeel(new FlatGitHubDarkIJTheme());
+            } else {
+                UIManager.setLookAndFeel(new FlatGitHubIJTheme());
+            }
+
         } catch (Exception ex) {
             System.err.println("Failed to initialize LaF");
         }

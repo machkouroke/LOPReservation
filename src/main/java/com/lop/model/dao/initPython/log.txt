@@ -1,2 +1,6 @@
 ****Configuration de la base****
 host: localhost, userName: root, password: claudine
+Connection Réussi
+Erreur line 109: 1062 (23000): Duplicata du champ 'A' pour la clef 'PRIMARY'
+Erreur line 109: 1062 (23000): Duplicata du champ '1-A' pour la clef 'PRIMARY'
+Erreur line 109: 1062 (23000): Duplicata du champ '1' pour la clef 'PRIMARY'

@@ -195,7 +195,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         });
         menuQuit.setHorizontalAlignment(SwingConstants.CENTER);
         menuQuit.setForeground(Color.WHITE);
-        menuQuit.setFont(new Font("Tahoma", Font.BOLD, 13));
+        menuQuit.setFont(MAIN_FONT);
         menuQuit.setBackground(menuBackground);
         quitter.setBounds(7, 341, 160, 28);
 
@@ -650,7 +650,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         contenu.add(panDelete, "delete");
 
         JLabel idDelete = new JLabel("Entrez l'ID de l'evenement \r\n\u00E0 supprimer\r\n");
-        idDelete.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        idDelete.setFont(MAIN_FONT);
         idDelete.setBounds(22, 137, 306, 52);
         panDelete.add(idDelete);
 
@@ -728,7 +728,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         questions.add(reservataireDonne, "reservataireDonne");
 
         JLabel lblReservId = new JLabel("Entrez l'ID du reservataire .");
-        lblReservId.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        lblReservId.setFont(MAIN_FONT);
 //        lblReservId.setBackground(new Color(250, 240, 230));
         lblReservId.setBounds(139, 11, 241, 21);
         reservataireDonne.add(lblReservId);
@@ -748,7 +748,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         questions.add(blocDonne, "bloc_donne");
 
         JLabel lblBlocDonne = new JLabel("Entrez le numero du bloc");
-        lblBlocDonne.setFont(new Font("Tahoma", Font.PLAIN, 17));
+        lblBlocDonne.setFont(MAIN_FONT);
         lblBlocDonne.setHorizontalAlignment(SwingConstants.CENTER);
         lblBlocDonne.setBounds(151, 5, 196, 29);
         blocDonne.add(lblBlocDonne);
@@ -768,7 +768,7 @@ public class MainWindow extends JFrame implements ErrorListener, ViewToControlle
         questions.add(dateDonne, "date_donne");
 
         JLabel lblDateDonne = new JLabel("Selectionnez la date");
-        lblDateDonne.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblDateDonne.setFont(MAIN_FONT);
         lblDateDonne.setBounds(170, 5, 191, 28);
         dateDonne.add(lblDateDonne);
 
