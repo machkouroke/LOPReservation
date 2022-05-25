@@ -52,7 +52,7 @@ public class Main {
                 }
 
             } catch (Exception e) {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, e.getMessage());
             }
         });
 

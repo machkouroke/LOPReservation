@@ -103,13 +103,13 @@ public class ConnectionWindow extends JFrame {
 
         //---- userNameLabel ----
         userNameLabel.setText("Nom d'utilisateur:");
-        userNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        userNameLabel.setHorizontalAlignment(SwingConstants.LEFT);
         contentPanel.add(userNameLabel);
         contentPanel.add(usernameInput);
 
         //---- passwordLabel ----
         passwordLabel.setText("Mot de Passe:");
-        passwordLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        passwordLabel.setHorizontalAlignment(SwingConstants.LEFT);
         contentPanel.add(passwordLabel);
         contentPanel.add(passwordInput);
     }
