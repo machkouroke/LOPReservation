@@ -5,6 +5,7 @@ import java.util.Map;
 
 /**
  * Objet pour envoyer des informations depuis la vue
+ * @author Machkour Oke
  */
 public record Request(String message, Map<String, String> parameters) {
 

@@ -1,8 +1,8 @@
 package com.lop;
 
 
+import com.formdev.flatlaf.intellijthemes.FlatXcodeDarkIJTheme;
 
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubDarkIJTheme;
 
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatGitHubIJTheme;
 import com.jthemedetecor.OsThemeDetector;
@@ -20,7 +20,9 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.lang.reflect.InvocationTargetException;
 
-
+/**
+ * @author Morel Kouhossounon
+ */
 public class Main {
     public static void main(String[] args) throws InterruptedException, InvocationTargetException {
 
@@ -29,7 +31,7 @@ public class Main {
             final OsThemeDetector detector = OsThemeDetector.getDetector();
             final boolean isDarkThemeUsed = detector.isDark();
             if (isDarkThemeUsed) {
-                UIManager.setLookAndFeel(new FlatGitHubDarkIJTheme());
+                UIManager.setLookAndFeel(new FlatXcodeDarkIJTheme());
             } else {
                 UIManager.setLookAndFeel(new FlatGitHubIJTheme());
             }
@@ -41,7 +43,7 @@ public class Main {
         SwingUtilities.invokeAndWait(() -> {
             try {
                 if (ConfigController.firstTime()) {
-                     new InitialisationBase();
+                    new InitialisationBase();
                 } else {
                     FileInputStream fichier = new FileInputStream("src/main/java/com/lop/controller/dataBase.dot");
                     BaseLogin data = (BaseLogin) new ObjectInputStream(fichier).readObject();

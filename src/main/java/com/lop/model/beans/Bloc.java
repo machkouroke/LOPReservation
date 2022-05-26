@@ -1,5 +1,9 @@
 package com.lop.model.beans;
 
+/**
+ * Mot de passe de connexion de l'application incorrect
+ * @author Machkour Oke
+ */
 public class Bloc {
     private int idBloc;
     private String nomBoc;

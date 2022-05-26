@@ -8,6 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Objet pour recevoir des informations depuis la vue
+ * @author Machkour Oke
+ */
 public class Response {
     private final Map<String, String> attribute = new HashMap<>();
     private final List<List<String>> data = new ArrayList<>();

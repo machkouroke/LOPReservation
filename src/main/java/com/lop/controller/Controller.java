@@ -16,11 +16,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller principale il va se charger de gérer le flux de données
+ * @author Machkour Oke
+ */
 public class Controller implements ErrorInitiator {
     Factory factory;
     private final List<ErrorListener> listeners = new ArrayList<>();
-
-
 
     /**
      * @param factory Object permettant d'effectuer la connexion avec la base de données et ainsi d'effectuer
