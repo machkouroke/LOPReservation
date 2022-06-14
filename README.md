@@ -21,7 +21,7 @@ Application graphique Swing permettant la gestion des réservations d'une salle 
 
 ## Configuration
 - Au premier lancement le programme vas automatiquement le détecter puis vous demandez vos informations de bases de données
-![image](https://user-images.githubusercontent.com/40785379/173653902-bb9ff6f0-45b5-4fcb-81b9-191b06e417a3.png)
+![image](https://user-images.githubusercontent.com/40785379/173653902-bb9ff6f0-45b5-4fcb-81b9-191b06e417a3.png) <br>
 Une base de données manager sera crée avec une table reservataire contenant une liste fictif que vous pourriez modifier plus tard.
 
 - Dans la table user veuillez créer un utilisateur qui vas vous servir à la connection
